@@ -1,10 +1,38 @@
 /* *******************************************
               sticky notes
 ******************************************* */
+var globalStickyNoteCounter = 0;
 
-function newStickyLineItem(parentId, stickyNoteId, stickyItemId) {
+function newStickyNote(parentId) {
+    var elm = '<div id="note'+globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp mdl-color--amber-50">'+
+                '<div class="sticky-header-drawer mdl-card__title mdl-color--amber-200">'+
+                    '<h2 class="mdl-color-text--cyan sticky-editable" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="1">New Note</h2>'+
+                '</div>'+
+                '<div class="sticky-content-wrapper">'+
+                    '<div id="n'+globalStickyNoteCounter+'i2" class="sticky-note-content" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="2"></div>'+
+                '</div>'+
+                '<div class="sticky-footer-drawer mdl-color--amber-300">'+
+                    '<button class="mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
+                        '<i class="material-icons">delete</i>'+
+                    '</button>'+
+                '</div>'+
+            '</div>';
+
+    var parent = document.createElement('div');
+    parent.innerHTML = elm;
+    var newElm = parent.firstChild;
+    componentHandler.upgradeElement(newElm);
+    document.getElementById(parentId).appendChild(newElm);
+    globalStickyNoteCounter++;
+}
+
+function invokeEditableField(parentId, value, stickyNoteId, stickyItemId) {
+    var valueText = "";
+    if (value.length > 0) {
+        valueText = ' value="'+value+'"';
+    }
     var elm = '<div class="mdl-textfield mdl-js-textfield">'+
-                    '<input class="mdl-textfield__input" type="text" id="note'+stickyNoteId+'-item'+stickyItemId+'">'+
+                    '<input class="mdl-textfield__input" type="text" id="note'+stickyNoteId+'-item'+stickyItemId+'"'+valueText+'>'+
                     '<label class="mdl-textfield__label" for="note'+stickyNoteId+'-item'+stickyItemId+'">New item</label>'+
                 '</div>';
 
@@ -12,8 +40,13 @@ function newStickyLineItem(parentId, stickyNoteId, stickyItemId) {
     form.innerHTML = elm;
     var newElm = form.firstChild;
     componentHandler.upgradeElement(newElm);
-    document.getElementById(parentId).appendChild(form);
-    document.getElementById("note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
+    $("#"+parentId).html(form);
+    $("#"+parentId).addClass("sticky-editing");
+    $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
+    $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
+        $("#n"+stickyNoteId+"i"+stickyItemId).html($(this).val());
+        $("#n"+stickyNoteId+"i"+stickyItemId).removeClass("sticky-editing");
+    });
 }
 
 /* *******************************************
@@ -25,38 +58,23 @@ $(function() {
     ******************************************* */
     // sticky-note interaction
     var containers = $('.dropzone').toArray();
-    dragula(containers, {
-        isContainer: function (el) {
-            return false; // only elements in drake.containers will be taken into account
-        },
-        moves: function (el, source, handle, sibling) {
-            return true; // elements are always draggable by default
-        },
-        accepts: function (el, target, source, sibling) {
-            return true; // elements can be dropped in any of the `containers` by default
-        },
-        invalid: function (el, target) {
-            return false; // don't prevent any drags from initiating by default
-        },
-        direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
-        copy: false,                       // elements are moved by default, not copied
-        copySortSource: false,             // elements in copy-source containers can be reordered
-        revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
-        removeOnSpill: false,              // spilling will `.remove` the element, if this is true
-        mirrorContainer: document.body,    // set the element that gets mirror elements appended
-        ignoreInputTextSelection: true     // allows users to select input text, see details below
-    });
+    dragula(containers);
     /* *******************************************
                   sticky INTERACTIONS
     ******************************************* */
-    // ADD NEW EDITABLE LINE ON STICKY NOTE
+    // INVOKE EDITABLE LINE
     $('body').on('click', '.sticky-note-content', function() {
-        if (!$(this).attr("data-dirty")) { // fire only on empty line
-            newStickyLineItem($(this).attr("id"), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
-            var itemId = parseInt($(this).attr("data-item-id")) + 1;
-            // INSERT NEW EMPTY LINE
-            $(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
-            $(this).attr("data-dirty", "true"); // mark as dirty
+        if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
+            invokeEditableField($(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
+            if (!$(this).attr("data-dirty")) { // fire only on last line (add new one)   
+                var itemId = parseInt($(this).attr("data-item-id")) + 1;
+                // INSERT NEW EMPTY LINE
+                $(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
+                $(this).attr("data-dirty", "true"); // mark as dirty
+            }
         }
+    });
+    $("#add-note").click(function(event) {
+        newStickyNote("dz1");
     });
 });

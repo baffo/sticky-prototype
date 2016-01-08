@@ -16,6 +16,12 @@
 .sticky-note .sticky-footer-drawer:hover {
   max-height: 70px;
 }
+.sticky-note .sticky-header-drawer h2,
+.sticky-note .sticky-footer-drawer h2 {
+  margin: 0;
+  font-size: 25px;
+  line-height: 30px;
+}
 .sticky-note .sticky-header-drawer .mdl-textfield__input,
 .sticky-note .sticky-footer-drawer .mdl-textfield__input {
   font-size: 18px;
@@ -62,9 +68,9 @@
   padding: 0 16px;
 }
 .dropzone {
-  min-height: 500px;
+  min-height: 200px;
 }
-.dropzone.drop-target {
+.dropzone.mdl-cell {
   background: rgba(22, 22, 22, 0.05);
   border: 1px #cccccc dashed;
   -webkit-border-radius: 4px;
