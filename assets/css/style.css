@@ -1,0 +1,105 @@
+/* produces a square in IE8 and below!! */
+.sticky-note {
+  width: 95%;
+  margin: 10px auto 20px auto;
+}
+.sticky-note .sticky-header-drawer,
+.sticky-note .sticky-footer-drawer {
+  width: 100%;
+  max-height: 5px;
+  overflow: hidden;
+  -webkit-transition: max-height 0.8s;
+  -moz-transition: max-height 0.8s;
+  transition: max-height 0.8s;
+}
+.sticky-note .sticky-header-drawer:hover,
+.sticky-note .sticky-footer-drawer:hover {
+  max-height: 70px;
+}
+.sticky-note .sticky-header-drawer .mdl-textfield__input,
+.sticky-note .sticky-footer-drawer .mdl-textfield__input {
+  font-size: 18px;
+  font-weight: bold;
+}
+.sticky-note .sticky-footer-drawer {
+  bottom: 0;
+  position: absolute;
+}
+.sticky-note .spacer {
+  height: 70px;
+}
+.sticky-note .sticky-note-content,
+.sticky-note .sticky-header-drawer {
+  width: 100%;
+  border: none;
+  box-sizing: border-box;
+}
+.sticky-note .sticky-note-content form,
+.sticky-note .sticky-header-drawer form {
+  margin-bottom: 0;
+  padding: 0;
+  width: 100%;
+}
+.sticky-note .sticky-note-content form .mdl-textfield,
+.sticky-note .sticky-header-drawer form .mdl-textfield {
+  width: 100%;
+  padding: 0;
+}
+.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__input,
+.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__input {
+  border-bottom: none;
+}
+.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__label,
+.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__label {
+  top: 2px;
+}
+.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__label:after,
+.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__label:after {
+  bottom: 0;
+}
+.sticky-note .sticky-note-content {
+  min-height: 30px;
+  padding: 0 16px;
+}
+.dropzone {
+  min-height: 500px;
+}
+.dropzone.drop-target {
+  background: rgba(22, 22, 22, 0.05);
+  border: 1px #cccccc dashed;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -o-moz-border-radius: 4px;
+  -ms-moz-border-radius: 4px;
+  border-radius: 4px;
+}
+#add-note {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 100;
+}
+/* DRAGULA LIBRARY */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+/* END DRAGULA LIBRARY */

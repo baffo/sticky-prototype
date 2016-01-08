@@ -1,0 +1,94 @@
+.sticky-note {
+    width: 95%;
+    margin: 10px auto 20px auto;
+
+    .sticky-header-drawer, .sticky-footer-drawer {
+        width: 100%;
+        max-height: 5px;
+        overflow: hidden;
+        -webkit-transition: max-height 0.8s;
+        -moz-transition: max-height 0.8s;
+        transition: max-height 0.8s;
+        &:hover {
+            max-height: 70px;
+        }
+        .mdl-textfield__input {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+    .sticky-footer-drawer {
+        bottom: 0;
+        position: absolute;
+    }
+    .spacer {
+        height: 70px;
+    }
+    .sticky-note-content, .sticky-header-drawer { 
+        width: 100%;
+        border: none;
+        box-sizing: border-box;
+        
+        form {
+            margin-bottom: 0;
+            padding: 0;
+            width: 100%;
+            .mdl-textfield {
+                width: 100%;
+                padding: 0;
+                .mdl-textfield__input {
+                    border-bottom: none;    
+                }
+                .mdl-textfield__label {
+                    top: 2px;
+                    &:after {
+                        bottom:0;
+                    }
+                }
+            }
+        }
+    }
+    .sticky-note-content {
+        min-height: 30px;
+        padding: 0 16px;
+    }
+}
+.dropzone {
+    min-height: 500px;
+    &.drop-target {
+        background: rgba(22,22,22,0.05);
+        border: 1px #cccccc dashed;
+        .border-radius(4px);
+    }
+}
+#add-note {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 100;
+}
+/* DRAGULA LIBRARY */
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
+.gu-hide {
+    display: none !important;
+}
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
+/* END DRAGULA LIBRARY */
+

@@ -1,0 +1,161 @@
+.gradient(top, @color1, @color2) {
+  background: @color1;
+  background: -webkit-gradient(linear, left top, left bottom, from(@color1), to(@color2));
+  background: -webkit-linear-gradient(top, @color1, @color2);
+  background: -moz-linear-gradient(top, @color1, @color2);
+  background: -o-linear-gradient(top, @color1, @color2);
+  background: -ms-linear-gradient(top, @color1, @color2);
+  background: linear-gradient(top, @color1, @color2);
+}
+
+.gradient(@color1, @stop1, @color2, @stop2, @color3, @stop3) {
+  background: @color1;
+  -moz-background: linear-gradient(@color1 @stop1, @color2 @stop2, @color3 @stop3);
+  -webkit-background: linear-gradient(@color1 @stop1, @color2 @stop2, @color3 @stop3);
+  -o-background: linear-gradient(@color1 @stop1, @color2 @stop2, @color3 @stop3);
+  -ms-background: linear-gradient(@color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background: linear-gradient(@color1 @stop1, @color2 @stop2, @color3 @stop3);
+}
+
+.gradient (@color1, @stop1, @color2, @stop2) {
+  background-color: @color1;
+  background: linear-gradient(top, @color1 @stop1, @color2 @stop2);
+  background: -moz-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+  background: -webkit-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+  background: -o-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+  background: -ms-linear-gradient(top, @color1 @stop1, @color2 @stop2);
+  background: -webkit-gradient(linear, right top, right bottom, color-stop(@stop1, @color1), color-stop(@stop2, @color2));
+}
+
+.gradientImportant (@color1, @stop1, @color2, @stop2) {
+  background-color: @color1 !important;
+  background: linear-gradient(top, @color1 @stop1, @color2 @stop2) !important;
+  background: -moz-linear-gradient(top, @color1 @stop1, @color2 @stop2) !important;
+  background: -webkit-linear-gradient(top, @color1 @stop1, @color2 @stop2) !important;
+  background: -o-linear-gradient(top, @color1 @stop1, @color2 @stop2) !important;
+  background: -ms-linear-gradient(top, @color1 @stop1, @color2 @stop2) !important;
+  background: -webkit-gradient(linear, right top, right bottom, color-stop(@stop1, @color1), color-stop(@stop2, @color2)) !important;
+}
+
+.gradient3 (@color1, @stop1, @color2, @stop2, @color3, @stop3) {
+  background-color: @color1;
+  background:linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-moz-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-webkit-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-o-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-ms-linear-gradient(top, @color1 @stop1, @color2 @stop2, @color3 @stop3);
+  background:-webkit-gradient(linear, right top, right bottom, color-stop(@stop1, @color1), color-stop(@stop2, @color2), color-stop(@stop3, @color3));
+}
+
+.background-size(@length-x, @length-y) {
+  -moz-background-size: @length-x @length-y;
+  -webkit-background-size: @length-x @length-y;
+  -o-background-size: @length-x @length-y;
+  -ms-background-size: @length-x @length-y;
+  background-size: @length-x @length-y;
+}
+
+.text-shadow(@h-shadow, @v-shadow, @blur, @color) {
+  -moz-text-shadow: @h-shadow @v-shadow @blur @color;
+  -webkit-text-shadow: @h-shadow @v-shadow @blur @color;
+  -o-text-shadow: @h-shadow @v-shadow @blur @color;
+  -ms-text-shadow: @h-shadow @v-shadow @blur @color;
+  text-shadow: @h-shadow @v-shadow @blur @color;
+}
+
+.text-shadow(...) {
+  -moz-text-shadow: @arguments;
+  -webkit-text-shadow: @arguments;
+  -o-text-shadow: @arguments;
+  -ms-text-shadow: @arguments;
+  text-shadow: @arguments;
+}
+
+.text_shadow (...) {
+  text-shadow: ~"@{arguments}";
+  -webkit-text-shadow: ~"@{arguments}";
+  -moz-text-shadow: ~"@{arguments}";
+  -o-text-shadow: ~"@{arguments}";
+  -ms-text-shadow: ~"@{arguments}";
+}
+
+
+.box-sizing(@type: border-box) {
+  -moz-box-sizing: @type;
+  -webkit-box-sizing: @type;
+  -o-box-sizing: @type;
+  -ms-box-sizing: @type;
+  box-sizing: @type;
+}
+
+.box-shadow(@value) when(isstring(@value)){
+  -moz-box-shadow: ~"@(value)";
+  -webkit-box-shadow: ~"@(value)";
+  -o-box-shadow: ~"@(value)";
+  -ms-box-shadow: ~"@(value)";
+  box-shadow: ~"@(value)";
+}
+
+.box-shadow(@h-shadow, @v-shadow, @blur, @color) {
+  -moz-box-shadow: @arguments;
+  -webkit-box-shadow: @arguments;
+  -o-box-shadow: @arguments;
+  -ms-box-shadow: @arguments;
+  box-shadow: @arguments;
+}
+
+.box-shadow(@h-shadow, @v-shadow, @blur, @spread, @color, @xset: outset) {
+  -moz-box-shadow: @h-shadow, @v-shadow, @blur, @spread, @color, @xset; 
+  -webkit-box-shadow: @h-shadow, @v-shadow, @blur, @spread, @color, @xset; 
+  -o-box-shadow: @h-shadow, @v-shadow, @blur, @spread, @color, @xset; 
+  -ms-box-shadow: @h-shadow, @v-shadow, @blur, @spread, @color, @xset; 
+  box-shadow: @h-shadow, @v-shadow, @blur, @spread, @color, @xset; 
+}
+
+.box-shadow(...) {
+  -webkit-box-shadow: ~"@{arguments}";
+  -moz-box-shadow: ~"@{arguments}";
+  -o-box-shadow: ~"@{arguments}";
+  -ms-box-shadow: ~"@{arguments}";
+  box-shadow: ~"@{arguments}";
+}
+
+.border-radius(@value) when (isstring(@value)) {
+    -moz-border-radius: ~"@{value}";
+    -webkit-border-radius: ~"@{value}";
+    -o-border-radius: ~"@{value}";
+    -ms-border-radius: ~"@{value}";
+    border-radius: ~"@{value}";
+}
+.border-radius(@radius) when (isnumber(@radius)){
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    -o-moz-border-radius: @radius;
+    -ms-moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.border-radius(@left-top, @right-top, @right-bottom, @left-bottom) {
+    -moz-border-radius: @arguments;
+    -webkit-border-radius: @arguments;
+    -o-border-radius: @arguments;
+    -ms-border-radius: @arguments;
+    border-radius: @arguments;
+}
+
+.border_radius(...) {
+  border-radius: ~"@{arguments}"; 
+  -webkit-border-radius: ~"@{arguments}";
+  -moz-border-radius: ~"@{arguments}";
+  -o-border-radius: ~"@{arguments}";
+  -ms-border-radius: ~"@{arguments}";
+}
+
+/* produces a square in IE8 and below!! */
+.circle(@radius, @border, @innerColor, @outerColor) {
+    background: @innerColor;
+    width: @radius;
+    height: @radius;
+    border-radius: 50%;
+    border: @border solid @outerColor;
+}
