@@ -3,7 +3,7 @@
 ******************************************* */
 var globalStickyNoteCounter = 0;
 var fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
-var noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: "New Item"}};
+var noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
 /* ------------------------------------------
             sanitize String
 ------------------------------------------- */
@@ -193,6 +193,15 @@ $(function() {
         container.className += ' drop-target';
     }).on('out', function (el, container) {
         container.className = container.className.replace(' drop-target', '');
+    }).on('drop', function (el, container) {
+        var note = new Firebase(fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
+        note.update({
+            column: $(container).attr("data-column")
+        }, function(error) {
+            if (error) {
+                console.log("Data could not be saved." + error);
+            }
+        });
     });
     /* *******************************************
               sticky-note INTERACTIONS
