@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 			separator: ';',
 		},
 		dist: {
-			src: ['assets/js/material.min.js', 'assets/js/dragula.min.js', 'assets/js/main.js'],
+			src: ['assets/js/material.js', 'assets/js/dragula.js', 'assets/js/main.js'],
 			dest: 'assets/js/sticky.js',
 		},
 	},
@@ -40,6 +40,6 @@ module.exports = function(grunt) {
 
   // task(s).
   grunt.registerTask('build', ['concat:dist', 'uglify', 'less:dist']);
-  grunt.registerTask('test', ['less:dist']);
+  grunt.registerTask('devel', ['concat:dist', 'less:dist']);
   grunt.registerTask('default', ['build']);
 };

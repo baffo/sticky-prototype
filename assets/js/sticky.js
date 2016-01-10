@@ -1,28 +1,4788 @@
+;(function() {
+"use strict";
+
 /**
- * material-design-lite - Material Design Components in CSS, JS and HTML
- * @version v1.0.6
- * @license Apache-2.0
- * @copyright 2015 Google, Inc.
- * @link https://github.com/google/material-design-lite
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-!function(){"use strict";function e(e,t){if(e){if(t.element_.classList.contains(t.CssClasses_.MDL_JS_RIPPLE_EFFECT)){var s=document.createElement("span");s.classList.add(t.CssClasses_.MDL_RIPPLE_CONTAINER),s.classList.add(t.CssClasses_.MDL_JS_RIPPLE_EFFECT);var i=document.createElement("span");i.classList.add(t.CssClasses_.MDL_RIPPLE),s.appendChild(i),e.appendChild(s)}e.addEventListener("click",function(s){s.preventDefault();var i=e.href.split("#")[1],n=t.element_.querySelector("#"+i);t.resetTabState_(),t.resetPanelState_(),e.classList.add(t.CssClasses_.ACTIVE_CLASS),n.classList.add(t.CssClasses_.ACTIVE_CLASS)})}}function t(e,t,s,i){if(i.tabBar_.classList.contains(i.CssClasses_.JS_RIPPLE_EFFECT)){var n=document.createElement("span");n.classList.add(i.CssClasses_.RIPPLE_CONTAINER),n.classList.add(i.CssClasses_.JS_RIPPLE_EFFECT);var a=document.createElement("span");a.classList.add(i.CssClasses_.RIPPLE),n.appendChild(a),e.appendChild(n)}e.addEventListener("click",function(n){n.preventDefault();var a=e.href.split("#")[1],l=i.content_.querySelector("#"+a);i.resetTabState_(t),i.resetPanelState_(s),e.classList.add(i.CssClasses_.IS_ACTIVE),l.classList.add(i.CssClasses_.IS_ACTIVE)})}var s={upgradeDom:function(e,t){},upgradeElement:function(e,t){},upgradeElements:function(e){},upgradeAllRegistered:function(){},registerUpgradedCallback:function(e,t){},register:function(e){},downgradeElements:function(e){}};s=function(){function e(e,t){for(var s=0;s<p.length;s++)if(p[s].className===e)return"undefined"!=typeof t&&(p[s]=t),p[s];return!1}function t(e){var t=e.getAttribute("data-upgraded");return null===t?[""]:t.split(",")}function s(e,s){var i=t(e);return-1!==i.indexOf(s)}function i(t,s){if("undefined"==typeof t&&"undefined"==typeof s)for(var a=0;a<p.length;a++)i(p[a].className,p[a].cssClass);else{var l=t;if("undefined"==typeof s){var o=e(l);o&&(s=o.cssClass)}for(var r=document.querySelectorAll("."+s),d=0;d<r.length;d++)n(r[d],l)}}function n(i,n){if(!("object"==typeof i&&i instanceof Element))throw new Error("Invalid argument provided to upgrade MDL element.");var a=t(i),l=[];if(n)s(i,n)||l.push(e(n));else{var o=i.classList;p.forEach(function(e){o.contains(e.cssClass)&&-1===l.indexOf(e)&&!s(i,e.className)&&l.push(e)})}for(var r,d=0,_=l.length;_>d;d++){if(r=l[d],!r)throw new Error("Unable to find a registered component for the given class.");a.push(r.className),i.setAttribute("data-upgraded",a.join(","));var h=new r.classConstructor(i);h[C]=r,c.push(h);for(var u=0,m=r.callbacks.length;m>u;u++)r.callbacks[u](i);r.widget&&(i[r.className]=h);var E=document.createEvent("Events");E.initEvent("mdl-componentupgraded",!0,!0),i.dispatchEvent(E)}}function a(e){Array.isArray(e)||(e="function"==typeof e.item?Array.prototype.slice.call(e):[e]);for(var t,s=0,i=e.length;i>s;s++)t=e[s],t instanceof HTMLElement&&(n(t),t.children.length>0&&a(t.children))}function l(t){var s="undefined"==typeof t.widget&&"undefined"==typeof t.widget,i=!0;s||(i=t.widget||t.widget);var n={classConstructor:t.constructor||t.constructor,className:t.classAsString||t.classAsString,cssClass:t.cssClass||t.cssClass,widget:i,callbacks:[]};if(p.forEach(function(e){if(e.cssClass===n.cssClass)throw new Error("The provided cssClass has already been registered: "+e.cssClass);if(e.className===n.className)throw new Error("The provided className has already been registered")}),t.constructor.prototype.hasOwnProperty(C))throw new Error("MDL component classes must not have "+C+" defined as a property.");var a=e(t.classAsString,n);a||p.push(n)}function o(t,s){var i=e(t);i&&i.callbacks.push(s)}function r(){for(var e=0;e<p.length;e++)i(p[e].className)}function d(e){for(var t=0;t<c.length;t++){var s=c[t];if(s.element_===e)return s}}function _(e){if(e&&e[C].classConstructor.prototype.hasOwnProperty(u)){e[u]();var t=c.indexOf(e);c.splice(t,1);var s=e.element_.getAttribute("data-upgraded").split(","),i=s.indexOf(e[C].classAsString);s.splice(i,1),e.element_.setAttribute("data-upgraded",s.join(","));var n=document.createEvent("Events");n.initEvent("mdl-componentdowngraded",!0,!0),e.element_.dispatchEvent(n)}}function h(e){var t=function(e){_(d(e))};if(e instanceof Array||e instanceof NodeList)for(var s=0;s<e.length;s++)t(e[s]);else{if(!(e instanceof Node))throw new Error("Invalid argument provided to downgrade MDL nodes.");t(e)}}var p=[],c=[],u="mdlDowngrade",C="mdlComponentConfigInternal_";return{upgradeDom:i,upgradeElement:n,upgradeElements:a,upgradeAllRegistered:r,registerUpgradedCallback:o,register:l,downgradeElements:h}}(),s.ComponentConfigPublic,s.ComponentConfig,s.Component,s.upgradeDom=s.upgradeDom,s.upgradeElement=s.upgradeElement,s.upgradeElements=s.upgradeElements,s.upgradeAllRegistered=s.upgradeAllRegistered,s.registerUpgradedCallback=s.registerUpgradedCallback,s.register=s.register,s.downgradeElements=s.downgradeElements,window.componentHandler=s,window.componentHandler=s,window.addEventListener("load",function(){"classList"in document.createElement("div")&&"querySelector"in document&&"addEventListener"in window&&Array.prototype.forEach?(document.documentElement.classList.add("mdl-js"),s.upgradeAllRegistered()):(s.upgradeElement=function(){},s.register=function(){})}),Date.now||(Date.now=function(){return(new Date).getTime()},Date.now=Date.now);for(var i=["webkit","moz"],n=0;n<i.length&&!window.requestAnimationFrame;++n){var a=i[n];window.requestAnimationFrame=window[a+"RequestAnimationFrame"],window.cancelAnimationFrame=window[a+"CancelAnimationFrame"]||window[a+"CancelRequestAnimationFrame"],window.requestAnimationFrame=window.requestAnimationFrame,window.cancelAnimationFrame=window.cancelAnimationFrame}if(/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent)||!window.requestAnimationFrame||!window.cancelAnimationFrame){var l=0;window.requestAnimationFrame=function(e){var t=Date.now(),s=Math.max(l+16,t);return setTimeout(function(){e(l=s)},s-t)},window.cancelAnimationFrame=clearTimeout,window.requestAnimationFrame=window.requestAnimationFrame,window.cancelAnimationFrame=window.cancelAnimationFrame}var o=function(e){this.element_=e,this.init()};window.MaterialButton=o,o.prototype.Constant_={},o.prototype.CssClasses_={RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_CONTAINER:"mdl-button__ripple-container",RIPPLE:"mdl-ripple"},o.prototype.blurHandler_=function(e){e&&this.element_.blur()},o.prototype.disable=function(){this.element_.disabled=!0},o.prototype.disable=o.prototype.disable,o.prototype.enable=function(){this.element_.disabled=!1},o.prototype.enable=o.prototype.enable,o.prototype.init=function(){if(this.element_){if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){var e=document.createElement("span");e.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleElement_=document.createElement("span"),this.rippleElement_.classList.add(this.CssClasses_.RIPPLE),e.appendChild(this.rippleElement_),this.boundRippleBlurHandler=this.blurHandler_.bind(this),this.rippleElement_.addEventListener("mouseup",this.boundRippleBlurHandler),this.element_.appendChild(e)}this.boundButtonBlurHandler=this.blurHandler_.bind(this),this.element_.addEventListener("mouseup",this.boundButtonBlurHandler),this.element_.addEventListener("mouseleave",this.boundButtonBlurHandler)}},o.prototype.mdlDowngrade_=function(){this.rippleElement_&&this.rippleElement_.removeEventListener("mouseup",this.boundRippleBlurHandler),this.element_.removeEventListener("mouseup",this.boundButtonBlurHandler),this.element_.removeEventListener("mouseleave",this.boundButtonBlurHandler)},o.prototype.mdlDowngrade=o.prototype.mdlDowngrade_,o.prototype.mdlDowngrade=o.prototype.mdlDowngrade,s.register({constructor:o,classAsString:"MaterialButton",cssClass:"mdl-js-button",widget:!0});var r=function(e){this.element_=e,this.init()};window.MaterialCheckbox=r,r.prototype.Constant_={TINY_TIMEOUT:.001},r.prototype.CssClasses_={INPUT:"mdl-checkbox__input",BOX_OUTLINE:"mdl-checkbox__box-outline",FOCUS_HELPER:"mdl-checkbox__focus-helper",TICK_OUTLINE:"mdl-checkbox__tick-outline",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-checkbox__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked",IS_UPGRADED:"is-upgraded"},r.prototype.onChange_=function(e){this.updateClasses_()},r.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},r.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},r.prototype.onMouseUp_=function(e){this.blur_()},r.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},r.prototype.blur_=function(){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},r.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},r.prototype.checkToggleState=r.prototype.checkToggleState,r.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},r.prototype.checkDisabled=r.prototype.checkDisabled,r.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},r.prototype.disable=r.prototype.disable,r.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},r.prototype.enable=r.prototype.enable,r.prototype.check=function(){this.inputElement_.checked=!0,this.updateClasses_()},r.prototype.check=r.prototype.check,r.prototype.uncheck=function(){this.inputElement_.checked=!1,this.updateClasses_()},r.prototype.uncheck=r.prototype.uncheck,r.prototype.init=function(){if(this.element_){this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT);var e=document.createElement("span");e.classList.add(this.CssClasses_.BOX_OUTLINE);var t=document.createElement("span");t.classList.add(this.CssClasses_.FOCUS_HELPER);var s=document.createElement("span");if(s.classList.add(this.CssClasses_.TICK_OUTLINE),e.appendChild(s),this.element_.appendChild(t),this.element_.appendChild(e),this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.boundRippleMouseUp=this.onMouseUp_.bind(this),this.rippleContainerElement_.addEventListener("mouseup",this.boundRippleMouseUp);var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(i),this.element_.appendChild(this.rippleContainerElement_)}this.boundInputOnChange=this.onChange_.bind(this),this.boundInputOnFocus=this.onFocus_.bind(this),this.boundInputOnBlur=this.onBlur_.bind(this),this.boundElementMouseUp=this.onMouseUp_.bind(this),this.inputElement_.addEventListener("change",this.boundInputOnChange),this.inputElement_.addEventListener("focus",this.boundInputOnFocus),this.inputElement_.addEventListener("blur",this.boundInputOnBlur),this.element_.addEventListener("mouseup",this.boundElementMouseUp),this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},r.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundRippleMouseUp),this.inputElement_.removeEventListener("change",this.boundInputOnChange),this.inputElement_.removeEventListener("focus",this.boundInputOnFocus),this.inputElement_.removeEventListener("blur",this.boundInputOnBlur),this.element_.removeEventListener("mouseup",this.boundElementMouseUp)},r.prototype.mdlDowngrade=r.prototype.mdlDowngrade_,r.prototype.mdlDowngrade=r.prototype.mdlDowngrade,s.register({constructor:r,classAsString:"MaterialCheckbox",cssClass:"mdl-js-checkbox",widget:!0});var d=function(e){this.element_=e,this.init()};window.MaterialIconToggle=d,d.prototype.Constant_={TINY_TIMEOUT:.001},d.prototype.CssClasses_={INPUT:"mdl-icon-toggle__input",JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-icon-toggle__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked"},d.prototype.onChange_=function(e){this.updateClasses_()},d.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},d.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},d.prototype.onMouseUp_=function(e){this.blur_()},d.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},d.prototype.blur_=function(){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},d.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},d.prototype.checkToggleState=d.prototype.checkToggleState,d.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},d.prototype.checkDisabled=d.prototype.checkDisabled,d.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},d.prototype.disable=d.prototype.disable,d.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},d.prototype.enable=d.prototype.enable,d.prototype.check=function(){this.inputElement_.checked=!0,this.updateClasses_()},d.prototype.check=d.prototype.check,d.prototype.uncheck=function(){this.inputElement_.checked=!1,this.updateClasses_()},d.prototype.uncheck=d.prototype.uncheck,d.prototype.init=function(){if(this.element_){if(this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT),this.element_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.JS_RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.boundRippleMouseUp=this.onMouseUp_.bind(this),this.rippleContainerElement_.addEventListener("mouseup",this.boundRippleMouseUp);var e=document.createElement("span");e.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(e),this.element_.appendChild(this.rippleContainerElement_)}this.boundInputOnChange=this.onChange_.bind(this),this.boundInputOnFocus=this.onFocus_.bind(this),this.boundInputOnBlur=this.onBlur_.bind(this),this.boundElementOnMouseUp=this.onMouseUp_.bind(this),this.inputElement_.addEventListener("change",this.boundInputOnChange),this.inputElement_.addEventListener("focus",this.boundInputOnFocus),this.inputElement_.addEventListener("blur",this.boundInputOnBlur),this.element_.addEventListener("mouseup",this.boundElementOnMouseUp),this.updateClasses_(),this.element_.classList.add("is-upgraded")}},d.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundRippleMouseUp),this.inputElement_.removeEventListener("change",this.boundInputOnChange),this.inputElement_.removeEventListener("focus",this.boundInputOnFocus),this.inputElement_.removeEventListener("blur",this.boundInputOnBlur),this.element_.removeEventListener("mouseup",this.boundElementOnMouseUp)},d.prototype.mdlDowngrade=d.prototype.mdlDowngrade_,d.prototype.mdlDowngrade=d.prototype.mdlDowngrade,s.register({constructor:d,classAsString:"MaterialIconToggle",cssClass:"mdl-js-icon-toggle",widget:!0});var _=function(e){this.element_=e,this.init()};window.MaterialMenu=_,_.prototype.Constant_={TRANSITION_DURATION_SECONDS:.3,TRANSITION_DURATION_FRACTION:.8,CLOSE_TIMEOUT:150},_.prototype.Keycodes_={ENTER:13,ESCAPE:27,SPACE:32,UP_ARROW:38,DOWN_ARROW:40},_.prototype.CssClasses_={CONTAINER:"mdl-menu__container",OUTLINE:"mdl-menu__outline",ITEM:"mdl-menu__item",ITEM_RIPPLE_CONTAINER:"mdl-menu__item-ripple-container",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE:"mdl-ripple",IS_UPGRADED:"is-upgraded",IS_VISIBLE:"is-visible",IS_ANIMATING:"is-animating",BOTTOM_LEFT:"mdl-menu--bottom-left",BOTTOM_RIGHT:"mdl-menu--bottom-right",TOP_LEFT:"mdl-menu--top-left",TOP_RIGHT:"mdl-menu--top-right",UNALIGNED:"mdl-menu--unaligned"},_.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.classList.add(this.CssClasses_.CONTAINER),this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_),this.container_=e;var t=document.createElement("div");t.classList.add(this.CssClasses_.OUTLINE),this.outline_=t,e.insertBefore(t,this.element_);var s=this.element_.getAttribute("for"),i=null;s&&(i=document.getElementById(s),i&&(this.forElement_=i,i.addEventListener("click",this.handleForClick_.bind(this)),i.addEventListener("keydown",this.handleForKeyboardEvent_.bind(this))));var n=this.element_.querySelectorAll("."+this.CssClasses_.ITEM);this.boundItemKeydown_=this.handleItemKeyboardEvent_.bind(this),this.boundItemClick_=this.handleItemClick_.bind(this);for(var a=0;a<n.length;a++)n[a].addEventListener("click",this.boundItemClick_),n[a].tabIndex="-1",n[a].addEventListener("keydown",this.boundItemKeydown_);if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT))for(this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),a=0;a<n.length;a++){var l=n[a],o=document.createElement("span");o.classList.add(this.CssClasses_.ITEM_RIPPLE_CONTAINER);var r=document.createElement("span");r.classList.add(this.CssClasses_.RIPPLE),o.appendChild(r),l.appendChild(o),l.classList.add(this.CssClasses_.RIPPLE_EFFECT)}this.element_.classList.contains(this.CssClasses_.BOTTOM_LEFT)&&this.outline_.classList.add(this.CssClasses_.BOTTOM_LEFT),this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)&&this.outline_.classList.add(this.CssClasses_.BOTTOM_RIGHT),this.element_.classList.contains(this.CssClasses_.TOP_LEFT)&&this.outline_.classList.add(this.CssClasses_.TOP_LEFT),this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)&&this.outline_.classList.add(this.CssClasses_.TOP_RIGHT),this.element_.classList.contains(this.CssClasses_.UNALIGNED)&&this.outline_.classList.add(this.CssClasses_.UNALIGNED),e.classList.add(this.CssClasses_.IS_UPGRADED)}},_.prototype.handleForClick_=function(e){if(this.element_&&this.forElement_){var t=this.forElement_.getBoundingClientRect(),s=this.forElement_.parentElement.getBoundingClientRect();this.element_.classList.contains(this.CssClasses_.UNALIGNED)||(this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)?(this.container_.style.right=s.right-t.right+"px",this.container_.style.top=this.forElement_.offsetTop+this.forElement_.offsetHeight+"px"):this.element_.classList.contains(this.CssClasses_.TOP_LEFT)?(this.container_.style.left=this.forElement_.offsetLeft+"px",this.container_.style.bottom=s.bottom-t.top+"px"):this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?(this.container_.style.right=s.right-t.right+"px",this.container_.style.bottom=s.bottom-t.top+"px"):(this.container_.style.left=this.forElement_.offsetLeft+"px",this.container_.style.top=this.forElement_.offsetTop+this.forElement_.offsetHeight+"px"))}this.toggle(e)},_.prototype.handleForKeyboardEvent_=function(e){if(this.element_&&this.container_&&this.forElement_){var t=this.element_.querySelectorAll("."+this.CssClasses_.ITEM+":not([disabled])");t&&t.length>0&&this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)&&(e.keyCode===this.Keycodes_.UP_ARROW?(e.preventDefault(),t[t.length-1].focus()):e.keyCode===this.Keycodes_.DOWN_ARROW&&(e.preventDefault(),t[0].focus()))}},_.prototype.handleItemKeyboardEvent_=function(e){if(this.element_&&this.container_){var t=this.element_.querySelectorAll("."+this.CssClasses_.ITEM+":not([disabled])");if(t&&t.length>0&&this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)){var s=Array.prototype.slice.call(t).indexOf(e.target);if(e.keyCode===this.Keycodes_.UP_ARROW)e.preventDefault(),s>0?t[s-1].focus():t[t.length-1].focus();else if(e.keyCode===this.Keycodes_.DOWN_ARROW)e.preventDefault(),t.length>s+1?t[s+1].focus():t[0].focus();else if(e.keyCode===this.Keycodes_.SPACE||e.keyCode===this.Keycodes_.ENTER){e.preventDefault();var i=new MouseEvent("mousedown");e.target.dispatchEvent(i),i=new MouseEvent("mouseup"),e.target.dispatchEvent(i),e.target.click()}else e.keyCode===this.Keycodes_.ESCAPE&&(e.preventDefault(),this.hide())}}},_.prototype.handleItemClick_=function(e){e.target.hasAttribute("disabled")?e.stopPropagation():(this.closing_=!0,window.setTimeout(function(e){this.hide(),this.closing_=!1}.bind(this),this.Constant_.CLOSE_TIMEOUT))},_.prototype.applyClip_=function(e,t){this.element_.classList.contains(this.CssClasses_.UNALIGNED)?this.element_.style.clip="":this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)?this.element_.style.clip="rect(0 "+t+"px 0 "+t+"px)":this.element_.classList.contains(this.CssClasses_.TOP_LEFT)?this.element_.style.clip="rect("+e+"px 0 "+e+"px 0)":this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?this.element_.style.clip="rect("+e+"px "+t+"px "+e+"px "+t+"px)":this.element_.style.clip=""},_.prototype.addAnimationEndListener_=function(){var e=function(){this.element_.removeEventListener("transitionend",e),this.element_.removeEventListener("webkitTransitionEnd",e),this.element_.classList.remove(this.CssClasses_.IS_ANIMATING)}.bind(this);this.element_.addEventListener("transitionend",e),this.element_.addEventListener("webkitTransitionEnd",e)},_.prototype.show=function(e){if(this.element_&&this.container_&&this.outline_){var t=this.element_.getBoundingClientRect().height,s=this.element_.getBoundingClientRect().width;this.container_.style.width=s+"px",this.container_.style.height=t+"px",this.outline_.style.width=s+"px",this.outline_.style.height=t+"px";for(var i=this.Constant_.TRANSITION_DURATION_SECONDS*this.Constant_.TRANSITION_DURATION_FRACTION,n=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),a=0;a<n.length;a++){var l=null;l=this.element_.classList.contains(this.CssClasses_.TOP_LEFT)||this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?(t-n[a].offsetTop-n[a].offsetHeight)/t*i+"s":n[a].offsetTop/t*i+"s",n[a].style.transitionDelay=l}this.applyClip_(t,s),window.requestAnimationFrame(function(){this.element_.classList.add(this.CssClasses_.IS_ANIMATING),this.element_.style.clip="rect(0 "+s+"px "+t+"px 0)",this.container_.classList.add(this.CssClasses_.IS_VISIBLE)}.bind(this)),this.addAnimationEndListener_();var o=function(t){t===e||this.closing_||t.target.parentNode===this.element_||(document.removeEventListener("click",o),this.hide())}.bind(this);document.addEventListener("click",o)}},_.prototype.show=_.prototype.show,_.prototype.hide=function(){if(this.element_&&this.container_&&this.outline_){for(var e=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),t=0;t<e.length;t++)e[t].style.transitionDelay=null;var s=this.element_.getBoundingClientRect(),i=s.height,n=s.width;this.element_.classList.add(this.CssClasses_.IS_ANIMATING),this.applyClip_(i,n),this.container_.classList.remove(this.CssClasses_.IS_VISIBLE),this.addAnimationEndListener_()}},_.prototype.hide=_.prototype.hide,_.prototype.toggle=function(e){this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)?this.hide():this.show(e)},_.prototype.toggle=_.prototype.toggle,_.prototype.mdlDowngrade_=function(){for(var e=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),t=0;t<e.length;t++)e[t].removeEventListener("click",this.boundItemClick_),e[t].removeEventListener("keydown",this.boundItemKeydown_)},_.prototype.mdlDowngrade=_.prototype.mdlDowngrade_,_.prototype.mdlDowngrade=_.prototype.mdlDowngrade,s.register({constructor:_,classAsString:"MaterialMenu",cssClass:"mdl-js-menu",widget:!0});var h=function(e){this.element_=e,this.init()};window.MaterialProgress=h,h.prototype.Constant_={},h.prototype.CssClasses_={INDETERMINATE_CLASS:"mdl-progress__indeterminate"},h.prototype.setProgress=function(e){this.element_.classList.contains(this.CssClasses_.INDETERMINATE_CLASS)||(this.progressbar_.style.width=e+"%")},h.prototype.setProgress=h.prototype.setProgress,h.prototype.setBuffer=function(e){this.bufferbar_.style.width=e+"%",this.auxbar_.style.width=100-e+"%"},h.prototype.setBuffer=h.prototype.setBuffer,h.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.className="progressbar bar bar1",this.element_.appendChild(e),this.progressbar_=e,e=document.createElement("div"),e.className="bufferbar bar bar2",this.element_.appendChild(e),this.bufferbar_=e,e=document.createElement("div"),e.className="auxbar bar bar3",this.element_.appendChild(e),this.auxbar_=e,this.progressbar_.style.width="0%",this.bufferbar_.style.width="100%",this.auxbar_.style.width="0%",this.element_.classList.add("is-upgraded")}},h.prototype.mdlDowngrade_=function(){for(;this.element_.firstChild;)this.element_.removeChild(this.element_.firstChild)},h.prototype.mdlDowngrade=h.prototype.mdlDowngrade_,h.prototype.mdlDowngrade=h.prototype.mdlDowngrade,s.register({constructor:h,classAsString:"MaterialProgress",cssClass:"mdl-js-progress",widget:!0});var p=function(e){this.element_=e,this.init()};window.MaterialRadio=p,p.prototype.Constant_={TINY_TIMEOUT:.001},p.prototype.CssClasses_={IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked",IS_UPGRADED:"is-upgraded",JS_RADIO:"mdl-js-radio",RADIO_BTN:"mdl-radio__button",RADIO_OUTER_CIRCLE:"mdl-radio__outer-circle",RADIO_INNER_CIRCLE:"mdl-radio__inner-circle",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-radio__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple"},p.prototype.onChange_=function(e){for(var t=document.getElementsByClassName(this.CssClasses_.JS_RADIO),s=0;s<t.length;s++){var i=t[s].querySelector("."+this.CssClasses_.RADIO_BTN);i.getAttribute("name")===this.btnElement_.getAttribute("name")&&t[s].MaterialRadio.updateClasses_()}},p.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},p.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},p.prototype.onMouseup_=function(e){this.blur_()},p.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},p.prototype.blur_=function(){window.setTimeout(function(){this.btnElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},p.prototype.checkDisabled=function(){this.btnElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},p.prototype.checkDisabled=p.prototype.checkDisabled,p.prototype.checkToggleState=function(){this.btnElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},p.prototype.checkToggleState=p.prototype.checkToggleState,p.prototype.disable=function(){this.btnElement_.disabled=!0,this.updateClasses_()},p.prototype.disable=p.prototype.disable,p.prototype.enable=function(){this.btnElement_.disabled=!1,this.updateClasses_()},p.prototype.enable=p.prototype.enable,p.prototype.check=function(){this.btnElement_.checked=!0,this.updateClasses_()},p.prototype.check=p.prototype.check,p.prototype.uncheck=function(){this.btnElement_.checked=!1,this.updateClasses_()},p.prototype.uncheck=p.prototype.uncheck,p.prototype.init=function(){if(this.element_){this.btnElement_=this.element_.querySelector("."+this.CssClasses_.RADIO_BTN),this.boundChangeHandler_=this.onChange_.bind(this),this.boundFocusHandler_=this.onChange_.bind(this),this.boundBlurHandler_=this.onBlur_.bind(this),this.boundMouseUpHandler_=this.onMouseup_.bind(this);var e=document.createElement("span");e.classList.add(this.CssClasses_.RADIO_OUTER_CIRCLE);var t=document.createElement("span");t.classList.add(this.CssClasses_.RADIO_INNER_CIRCLE),this.element_.appendChild(e),this.element_.appendChild(t);var s;if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),s=document.createElement("span"),s.classList.add(this.CssClasses_.RIPPLE_CONTAINER),s.classList.add(this.CssClasses_.RIPPLE_EFFECT),s.classList.add(this.CssClasses_.RIPPLE_CENTER),s.addEventListener("mouseup",this.boundMouseUpHandler_);var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),s.appendChild(i),this.element_.appendChild(s)}this.btnElement_.addEventListener("change",this.boundChangeHandler_),this.btnElement_.addEventListener("focus",this.boundFocusHandler_),this.btnElement_.addEventListener("blur",this.boundBlurHandler_),this.element_.addEventListener("mouseup",this.boundMouseUpHandler_),this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},p.prototype.mdlDowngrade_=function(){var e=this.element_.querySelector("."+this.CssClasses_.RIPPLE_CONTAINER);this.btnElement_.removeEventListener("change",this.boundChangeHandler_),this.btnElement_.removeEventListener("focus",this.boundFocusHandler_),this.btnElement_.removeEventListener("blur",this.boundBlurHandler_),this.element_.removeEventListener("mouseup",this.boundMouseUpHandler_),e&&(e.removeEventListener("mouseup",this.boundMouseUpHandler_),this.element_.removeChild(e))},p.prototype.mdlDowngrade=p.prototype.mdlDowngrade_,p.prototype.mdlDowngrade=p.prototype.mdlDowngrade,s.register({constructor:p,classAsString:"MaterialRadio",cssClass:"mdl-js-radio",widget:!0});var c=function(e){this.element_=e,this.isIE_=window.navigator.msPointerEnabled,this.init()};window.MaterialSlider=c,c.prototype.Constant_={},c.prototype.CssClasses_={IE_CONTAINER:"mdl-slider__ie-container",SLIDER_CONTAINER:"mdl-slider__container",BACKGROUND_FLEX:"mdl-slider__background-flex",BACKGROUND_LOWER:"mdl-slider__background-lower",BACKGROUND_UPPER:"mdl-slider__background-upper",IS_LOWEST_VALUE:"is-lowest-value",IS_UPGRADED:"is-upgraded"},c.prototype.onInput_=function(e){this.updateValueStyles_()},c.prototype.onChange_=function(e){this.updateValueStyles_()},c.prototype.onMouseUp_=function(e){e.target.blur()},c.prototype.onContainerMouseDown_=function(e){if(e.target===this.element_.parentElement){e.preventDefault();var t=new MouseEvent("mousedown",{target:e.target,buttons:e.buttons,clientX:e.clientX,clientY:this.element_.getBoundingClientRect().y});this.element_.dispatchEvent(t)}},c.prototype.updateValueStyles_=function(){var e=(this.element_.value-this.element_.min)/(this.element_.max-this.element_.min);0===e?this.element_.classList.add(this.CssClasses_.IS_LOWEST_VALUE):this.element_.classList.remove(this.CssClasses_.IS_LOWEST_VALUE),this.isIE_||(this.backgroundLower_.style.flex=e,this.backgroundLower_.style.webkitFlex=e,this.backgroundUpper_.style.flex=1-e,this.backgroundUpper_.style.webkitFlex=1-e)},c.prototype.disable=function(){this.element_.disabled=!0},c.prototype.disable=c.prototype.disable,c.prototype.enable=function(){this.element_.disabled=!1},c.prototype.enable=c.prototype.enable,c.prototype.change=function(e){"undefined"!=typeof e&&(this.element_.value=e),this.updateValueStyles_()},c.prototype.change=c.prototype.change,c.prototype.init=function(){if(this.element_){if(this.isIE_){var e=document.createElement("div");e.classList.add(this.CssClasses_.IE_CONTAINER),
-this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_)}else{var t=document.createElement("div");t.classList.add(this.CssClasses_.SLIDER_CONTAINER),this.element_.parentElement.insertBefore(t,this.element_),this.element_.parentElement.removeChild(this.element_),t.appendChild(this.element_);var s=document.createElement("div");s.classList.add(this.CssClasses_.BACKGROUND_FLEX),t.appendChild(s),this.backgroundLower_=document.createElement("div"),this.backgroundLower_.classList.add(this.CssClasses_.BACKGROUND_LOWER),s.appendChild(this.backgroundLower_),this.backgroundUpper_=document.createElement("div"),this.backgroundUpper_.classList.add(this.CssClasses_.BACKGROUND_UPPER),s.appendChild(this.backgroundUpper_)}this.boundInputHandler=this.onInput_.bind(this),this.boundChangeHandler=this.onChange_.bind(this),this.boundMouseUpHandler=this.onMouseUp_.bind(this),this.boundContainerMouseDownHandler=this.onContainerMouseDown_.bind(this),this.element_.addEventListener("input",this.boundInputHandler),this.element_.addEventListener("change",this.boundChangeHandler),this.element_.addEventListener("mouseup",this.boundMouseUpHandler),this.element_.parentElement.addEventListener("mousedown",this.boundContainerMouseDownHandler),this.updateValueStyles_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},c.prototype.mdlDowngrade_=function(){this.element_.removeEventListener("input",this.boundInputHandler),this.element_.removeEventListener("change",this.boundChangeHandler),this.element_.removeEventListener("mouseup",this.boundMouseUpHandler),this.element_.parentElement.removeEventListener("mousedown",this.boundContainerMouseDownHandler)},c.prototype.mdlDowngrade=c.prototype.mdlDowngrade_,c.prototype.mdlDowngrade=c.prototype.mdlDowngrade,s.register({constructor:c,classAsString:"MaterialSlider",cssClass:"mdl-js-slider",widget:!0});var u=function(e){this.element_=e,this.init()};window.MaterialSpinner=u,u.prototype.Constant_={MDL_SPINNER_LAYER_COUNT:4},u.prototype.CssClasses_={MDL_SPINNER_LAYER:"mdl-spinner__layer",MDL_SPINNER_CIRCLE_CLIPPER:"mdl-spinner__circle-clipper",MDL_SPINNER_CIRCLE:"mdl-spinner__circle",MDL_SPINNER_GAP_PATCH:"mdl-spinner__gap-patch",MDL_SPINNER_LEFT:"mdl-spinner__left",MDL_SPINNER_RIGHT:"mdl-spinner__right"},u.prototype.createLayer=function(e){var t=document.createElement("div");t.classList.add(this.CssClasses_.MDL_SPINNER_LAYER),t.classList.add(this.CssClasses_.MDL_SPINNER_LAYER+"-"+e);var s=document.createElement("div");s.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER),s.classList.add(this.CssClasses_.MDL_SPINNER_LEFT);var i=document.createElement("div");i.classList.add(this.CssClasses_.MDL_SPINNER_GAP_PATCH);var n=document.createElement("div");n.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER),n.classList.add(this.CssClasses_.MDL_SPINNER_RIGHT);for(var a=[s,i,n],l=0;l<a.length;l++){var o=document.createElement("div");o.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE),a[l].appendChild(o)}t.appendChild(s),t.appendChild(i),t.appendChild(n),this.element_.appendChild(t)},u.prototype.createLayer=u.prototype.createLayer,u.prototype.stop=function(){this.element_.classList.remove("is-active")},u.prototype.stop=u.prototype.stop,u.prototype.start=function(){this.element_.classList.add("is-active")},u.prototype.start=u.prototype.start,u.prototype.init=function(){if(this.element_){for(var e=1;e<=this.Constant_.MDL_SPINNER_LAYER_COUNT;e++)this.createLayer(e);this.element_.classList.add("is-upgraded")}},s.register({constructor:u,classAsString:"MaterialSpinner",cssClass:"mdl-js-spinner",widget:!0});var C=function(e){this.element_=e,this.init()};window.MaterialSwitch=C,C.prototype.Constant_={TINY_TIMEOUT:.001},C.prototype.CssClasses_={INPUT:"mdl-switch__input",TRACK:"mdl-switch__track",THUMB:"mdl-switch__thumb",FOCUS_HELPER:"mdl-switch__focus-helper",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-switch__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked"},C.prototype.onChange_=function(e){this.updateClasses_()},C.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},C.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},C.prototype.onMouseUp_=function(e){this.blur_()},C.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},C.prototype.blur_=function(){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},C.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},C.prototype.checkDisabled=C.prototype.checkDisabled,C.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},C.prototype.checkToggleState=C.prototype.checkToggleState,C.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},C.prototype.disable=C.prototype.disable,C.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},C.prototype.enable=C.prototype.enable,C.prototype.on=function(){this.inputElement_.checked=!0,this.updateClasses_()},C.prototype.on=C.prototype.on,C.prototype.off=function(){this.inputElement_.checked=!1,this.updateClasses_()},C.prototype.off=C.prototype.off,C.prototype.init=function(){if(this.element_){this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT);var e=document.createElement("div");e.classList.add(this.CssClasses_.TRACK);var t=document.createElement("div");t.classList.add(this.CssClasses_.THUMB);var s=document.createElement("span");if(s.classList.add(this.CssClasses_.FOCUS_HELPER),t.appendChild(s),this.element_.appendChild(e),this.element_.appendChild(t),this.boundMouseUpHandler=this.onMouseUp_.bind(this),this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.rippleContainerElement_.addEventListener("mouseup",this.boundMouseUpHandler);var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(i),this.element_.appendChild(this.rippleContainerElement_)}this.boundChangeHandler=this.onChange_.bind(this),this.boundFocusHandler=this.onFocus_.bind(this),this.boundBlurHandler=this.onBlur_.bind(this),this.inputElement_.addEventListener("change",this.boundChangeHandler),this.inputElement_.addEventListener("focus",this.boundFocusHandler),this.inputElement_.addEventListener("blur",this.boundBlurHandler),this.element_.addEventListener("mouseup",this.boundMouseUpHandler),this.updateClasses_(),this.element_.classList.add("is-upgraded")}},C.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundMouseUpHandler),this.inputElement_.removeEventListener("change",this.boundChangeHandler),this.inputElement_.removeEventListener("focus",this.boundFocusHandler),this.inputElement_.removeEventListener("blur",this.boundBlurHandler),this.element_.removeEventListener("mouseup",this.boundMouseUpHandler)},C.prototype.mdlDowngrade=C.prototype.mdlDowngrade_,C.prototype.mdlDowngrade=C.prototype.mdlDowngrade,s.register({constructor:C,classAsString:"MaterialSwitch",cssClass:"mdl-js-switch",widget:!0});var m=function(e){this.element_=e,this.init()};window.MaterialTabs=m,m.prototype.Constant_={},m.prototype.CssClasses_={TAB_CLASS:"mdl-tabs__tab",PANEL_CLASS:"mdl-tabs__panel",ACTIVE_CLASS:"is-active",UPGRADED_CLASS:"is-upgraded",MDL_JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",MDL_RIPPLE_CONTAINER:"mdl-tabs__ripple-container",MDL_RIPPLE:"mdl-ripple",MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events"},m.prototype.initTabs_=function(){this.element_.classList.contains(this.CssClasses_.MDL_JS_RIPPLE_EFFECT)&&this.element_.classList.add(this.CssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS),this.tabs_=this.element_.querySelectorAll("."+this.CssClasses_.TAB_CLASS),this.panels_=this.element_.querySelectorAll("."+this.CssClasses_.PANEL_CLASS);for(var t=0;t<this.tabs_.length;t++)new e(this.tabs_[t],this);this.element_.classList.add(this.CssClasses_.UPGRADED_CLASS)},m.prototype.resetTabState_=function(){for(var e=0;e<this.tabs_.length;e++)this.tabs_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)},m.prototype.resetPanelState_=function(){for(var e=0;e<this.panels_.length;e++)this.panels_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)},m.prototype.init=function(){this.element_&&this.initTabs_()},s.register({constructor:m,classAsString:"MaterialTabs",cssClass:"mdl-js-tabs"});var E=function(e){this.element_=e,this.maxRows=this.Constant_.NO_MAX_ROWS,this.init()};window.MaterialTextfield=E,E.prototype.Constant_={NO_MAX_ROWS:-1,MAX_ROWS_ATTRIBUTE:"maxrows"},E.prototype.CssClasses_={LABEL:"mdl-textfield__label",INPUT:"mdl-textfield__input",IS_DIRTY:"is-dirty",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_INVALID:"is-invalid",IS_UPGRADED:"is-upgraded"},E.prototype.onKeyDown_=function(e){var t=e.target.value.split("\n").length;13===e.keyCode&&t>=this.maxRows&&e.preventDefault()},E.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},E.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},E.prototype.updateClasses_=function(){this.checkDisabled(),this.checkValidity(),this.checkDirty()},E.prototype.checkDisabled=function(){this.input_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},E.prototype.checkDisabled=E.prototype.checkDisabled,E.prototype.checkValidity=function(){this.input_.validity&&(this.input_.validity.valid?this.element_.classList.remove(this.CssClasses_.IS_INVALID):this.element_.classList.add(this.CssClasses_.IS_INVALID))},E.prototype.checkValidity=E.prototype.checkValidity,E.prototype.checkDirty=function(){this.input_.value&&this.input_.value.length>0?this.element_.classList.add(this.CssClasses_.IS_DIRTY):this.element_.classList.remove(this.CssClasses_.IS_DIRTY)},E.prototype.checkDirty=E.prototype.checkDirty,E.prototype.disable=function(){this.input_.disabled=!0,this.updateClasses_()},E.prototype.disable=E.prototype.disable,E.prototype.enable=function(){this.input_.disabled=!1,this.updateClasses_()},E.prototype.enable=E.prototype.enable,E.prototype.change=function(e){this.input_.value=e||"",this.updateClasses_()},E.prototype.change=E.prototype.change,E.prototype.init=function(){if(this.element_&&(this.label_=this.element_.querySelector("."+this.CssClasses_.LABEL),this.input_=this.element_.querySelector("."+this.CssClasses_.INPUT),this.input_)){this.input_.hasAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE)&&(this.maxRows=parseInt(this.input_.getAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE),10),isNaN(this.maxRows)&&(this.maxRows=this.Constant_.NO_MAX_ROWS)),this.boundUpdateClassesHandler=this.updateClasses_.bind(this),this.boundFocusHandler=this.onFocus_.bind(this),this.boundBlurHandler=this.onBlur_.bind(this),this.input_.addEventListener("input",this.boundUpdateClassesHandler),this.input_.addEventListener("focus",this.boundFocusHandler),this.input_.addEventListener("blur",this.boundBlurHandler),this.maxRows!==this.Constant_.NO_MAX_ROWS&&(this.boundKeyDownHandler=this.onKeyDown_.bind(this),this.input_.addEventListener("keydown",this.boundKeyDownHandler));var e=this.element_.classList.contains(this.CssClasses_.IS_INVALID);this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED),e&&this.element_.classList.add(this.CssClasses_.IS_INVALID)}},E.prototype.mdlDowngrade_=function(){this.input_.removeEventListener("input",this.boundUpdateClassesHandler),this.input_.removeEventListener("focus",this.boundFocusHandler),this.input_.removeEventListener("blur",this.boundBlurHandler),this.boundKeyDownHandler&&this.input_.removeEventListener("keydown",this.boundKeyDownHandler)},E.prototype.mdlDowngrade=E.prototype.mdlDowngrade_,E.prototype.mdlDowngrade=E.prototype.mdlDowngrade,s.register({constructor:E,classAsString:"MaterialTextfield",cssClass:"mdl-js-textfield",widget:!0});var L=function(e){this.element_=e,this.init()};window.MaterialTooltip=L,L.prototype.Constant_={},L.prototype.CssClasses_={IS_ACTIVE:"is-active"},L.prototype.handleMouseEnter_=function(e){e.stopPropagation();var t=e.target.getBoundingClientRect(),s=t.left+t.width/2,i=-1*(this.element_.offsetWidth/2);0>s+i?(this.element_.style.left=0,this.element_.style.marginLeft=0):(this.element_.style.left=s+"px",this.element_.style.marginLeft=i+"px"),this.element_.style.top=t.top+t.height+10+"px",this.element_.classList.add(this.CssClasses_.IS_ACTIVE),window.addEventListener("scroll",this.boundMouseLeaveHandler,!1),window.addEventListener("touchmove",this.boundMouseLeaveHandler,!1)},L.prototype.handleMouseLeave_=function(e){e.stopPropagation(),this.element_.classList.remove(this.CssClasses_.IS_ACTIVE),window.removeEventListener("scroll",this.boundMouseLeaveHandler),window.removeEventListener("touchmove",this.boundMouseLeaveHandler,!1)},L.prototype.init=function(){if(this.element_){var e=this.element_.getAttribute("for");e&&(this.forElement_=document.getElementById(e)),this.forElement_&&(this.forElement_.hasAttribute("tabindex")||this.forElement_.setAttribute("tabindex","0"),this.boundMouseEnterHandler=this.handleMouseEnter_.bind(this),this.boundMouseLeaveHandler=this.handleMouseLeave_.bind(this),this.forElement_.addEventListener("mouseenter",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("click",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("blur",this.boundMouseLeaveHandler),this.forElement_.addEventListener("touchstart",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("mouseleave",this.boundMouseLeaveHandler))}},L.prototype.mdlDowngrade_=function(){this.forElement_&&(this.forElement_.removeEventListener("mouseenter",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("click",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("touchstart",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("mouseleave",this.boundMouseLeaveHandler))},L.prototype.mdlDowngrade=L.prototype.mdlDowngrade_,L.prototype.mdlDowngrade=L.prototype.mdlDowngrade,s.register({constructor:L,classAsString:"MaterialTooltip",cssClass:"mdl-tooltip"});var I=function(e){this.element_=e,this.init()};window.MaterialLayout=I,I.prototype.Constant_={MAX_WIDTH:"(max-width: 1024px)",TAB_SCROLL_PIXELS:100,MENU_ICON:"menu",CHEVRON_LEFT:"chevron_left",CHEVRON_RIGHT:"chevron_right"},I.prototype.Mode_={STANDARD:0,SEAMED:1,WATERFALL:2,SCROLL:3},I.prototype.CssClasses_={CONTAINER:"mdl-layout__container",HEADER:"mdl-layout__header",DRAWER:"mdl-layout__drawer",CONTENT:"mdl-layout__content",DRAWER_BTN:"mdl-layout__drawer-button",ICON:"material-icons",JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_CONTAINER:"mdl-layout__tab-ripple-container",RIPPLE:"mdl-ripple",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",HEADER_SEAMED:"mdl-layout__header--seamed",HEADER_WATERFALL:"mdl-layout__header--waterfall",HEADER_SCROLL:"mdl-layout__header--scroll",FIXED_HEADER:"mdl-layout--fixed-header",OBFUSCATOR:"mdl-layout__obfuscator",TAB_BAR:"mdl-layout__tab-bar",TAB_CONTAINER:"mdl-layout__tab-bar-container",TAB:"mdl-layout__tab",TAB_BAR_BUTTON:"mdl-layout__tab-bar-button",TAB_BAR_LEFT_BUTTON:"mdl-layout__tab-bar-left-button",TAB_BAR_RIGHT_BUTTON:"mdl-layout__tab-bar-right-button",PANEL:"mdl-layout__tab-panel",HAS_DRAWER:"has-drawer",HAS_TABS:"has-tabs",HAS_SCROLLING_HEADER:"has-scrolling-header",CASTING_SHADOW:"is-casting-shadow",IS_COMPACT:"is-compact",IS_SMALL_SCREEN:"is-small-screen",IS_DRAWER_OPEN:"is-visible",IS_ACTIVE:"is-active",IS_UPGRADED:"is-upgraded",IS_ANIMATING:"is-animating",ON_LARGE_SCREEN:"mdl-layout--large-screen-only",ON_SMALL_SCREEN:"mdl-layout--small-screen-only"},I.prototype.contentScrollHandler_=function(){this.header_.classList.contains(this.CssClasses_.IS_ANIMATING)||(this.content_.scrollTop>0&&!this.header_.classList.contains(this.CssClasses_.IS_COMPACT)?(this.header_.classList.add(this.CssClasses_.CASTING_SHADOW),this.header_.classList.add(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING)):this.content_.scrollTop<=0&&this.header_.classList.contains(this.CssClasses_.IS_COMPACT)&&(this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW),this.header_.classList.remove(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING)))},I.prototype.screenSizeHandler_=function(){this.screenSizeMediaQuery_.matches?this.element_.classList.add(this.CssClasses_.IS_SMALL_SCREEN):(this.element_.classList.remove(this.CssClasses_.IS_SMALL_SCREEN),this.drawer_&&(this.drawer_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN),this.obfuscator_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN)))},I.prototype.drawerToggleHandler_=function(){this.drawer_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN),this.obfuscator_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN)},I.prototype.headerTransitionEndHandler_=function(){this.header_.classList.remove(this.CssClasses_.IS_ANIMATING)},I.prototype.headerClickHandler_=function(){this.header_.classList.contains(this.CssClasses_.IS_COMPACT)&&(this.header_.classList.remove(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING))},I.prototype.resetTabState_=function(e){for(var t=0;t<e.length;t++)e[t].classList.remove(this.CssClasses_.IS_ACTIVE)},I.prototype.resetPanelState_=function(e){for(var t=0;t<e.length;t++)e[t].classList.remove(this.CssClasses_.IS_ACTIVE)},I.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.classList.add(this.CssClasses_.CONTAINER),this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_);for(var s=this.element_.childNodes,i=s.length,n=0;i>n;n++){var a=s[n];a.classList&&a.classList.contains(this.CssClasses_.HEADER)&&(this.header_=a),a.classList&&a.classList.contains(this.CssClasses_.DRAWER)&&(this.drawer_=a),a.classList&&a.classList.contains(this.CssClasses_.CONTENT)&&(this.content_=a)}this.header_&&(this.tabBar_=this.header_.querySelector("."+this.CssClasses_.TAB_BAR));var l=this.Mode_.STANDARD;if(this.header_&&(this.header_.classList.contains(this.CssClasses_.HEADER_SEAMED)?l=this.Mode_.SEAMED:this.header_.classList.contains(this.CssClasses_.HEADER_WATERFALL)?(l=this.Mode_.WATERFALL,this.header_.addEventListener("transitionend",this.headerTransitionEndHandler_.bind(this)),this.header_.addEventListener("click",this.headerClickHandler_.bind(this))):this.header_.classList.contains(this.CssClasses_.HEADER_SCROLL)&&(l=this.Mode_.SCROLL,e.classList.add(this.CssClasses_.HAS_SCROLLING_HEADER)),l===this.Mode_.STANDARD?(this.header_.classList.add(this.CssClasses_.CASTING_SHADOW),this.tabBar_&&this.tabBar_.classList.add(this.CssClasses_.CASTING_SHADOW)):l===this.Mode_.SEAMED||l===this.Mode_.SCROLL?(this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW),this.tabBar_&&this.tabBar_.classList.remove(this.CssClasses_.CASTING_SHADOW)):l===this.Mode_.WATERFALL&&(this.content_.addEventListener("scroll",this.contentScrollHandler_.bind(this)),this.contentScrollHandler_())),this.drawer_){var o=this.element_.querySelector("."+this.CssClasses_.DRAWER_BTN);if(!o){o=document.createElement("div"),o.classList.add(this.CssClasses_.DRAWER_BTN);var r=document.createElement("i");r.classList.add(this.CssClasses_.ICON),r.textContent=this.Constant_.MENU_ICON,o.appendChild(r)}this.drawer_.classList.contains(this.CssClasses_.ON_LARGE_SCREEN)?o.classList.add(this.CssClasses_.ON_LARGE_SCREEN):this.drawer_.classList.contains(this.CssClasses_.ON_SMALL_SCREEN)&&o.classList.add(this.CssClasses_.ON_SMALL_SCREEN),o.addEventListener("click",this.drawerToggleHandler_.bind(this)),this.element_.classList.add(this.CssClasses_.HAS_DRAWER),this.element_.classList.contains(this.CssClasses_.FIXED_HEADER)?this.header_.insertBefore(o,this.header_.firstChild):this.element_.insertBefore(o,this.content_);var d=document.createElement("div");d.classList.add(this.CssClasses_.OBFUSCATOR),this.element_.appendChild(d),d.addEventListener("click",this.drawerToggleHandler_.bind(this)),this.obfuscator_=d}if(this.screenSizeMediaQuery_=window.matchMedia(this.Constant_.MAX_WIDTH),this.screenSizeMediaQuery_.addListener(this.screenSizeHandler_.bind(this)),this.screenSizeHandler_(),this.header_&&this.tabBar_){this.element_.classList.add(this.CssClasses_.HAS_TABS);var _=document.createElement("div");_.classList.add(this.CssClasses_.TAB_CONTAINER),this.header_.insertBefore(_,this.tabBar_),this.header_.removeChild(this.tabBar_);var h=document.createElement("div");h.classList.add(this.CssClasses_.TAB_BAR_BUTTON),h.classList.add(this.CssClasses_.TAB_BAR_LEFT_BUTTON);var p=document.createElement("i");p.classList.add(this.CssClasses_.ICON),p.textContent=this.Constant_.CHEVRON_LEFT,h.appendChild(p),h.addEventListener("click",function(){this.tabBar_.scrollLeft-=this.Constant_.TAB_SCROLL_PIXELS}.bind(this));var c=document.createElement("div");c.classList.add(this.CssClasses_.TAB_BAR_BUTTON),c.classList.add(this.CssClasses_.TAB_BAR_RIGHT_BUTTON);var u=document.createElement("i");u.classList.add(this.CssClasses_.ICON),u.textContent=this.Constant_.CHEVRON_RIGHT,c.appendChild(u),c.addEventListener("click",function(){this.tabBar_.scrollLeft+=this.Constant_.TAB_SCROLL_PIXELS}.bind(this)),_.appendChild(h),_.appendChild(this.tabBar_),_.appendChild(c);var C=function(){this.tabBar_.scrollLeft>0?h.classList.add(this.CssClasses_.IS_ACTIVE):h.classList.remove(this.CssClasses_.IS_ACTIVE),this.tabBar_.scrollLeft<this.tabBar_.scrollWidth-this.tabBar_.offsetWidth?c.classList.add(this.CssClasses_.IS_ACTIVE):c.classList.remove(this.CssClasses_.IS_ACTIVE)}.bind(this);this.tabBar_.addEventListener("scroll",C),C(),this.tabBar_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)&&this.tabBar_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);for(var m=this.tabBar_.querySelectorAll("."+this.CssClasses_.TAB),E=this.content_.querySelectorAll("."+this.CssClasses_.PANEL),L=0;L<m.length;L++)new t(m[L],m,E,this)}this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},s.register({constructor:I,classAsString:"MaterialLayout",cssClass:"mdl-js-layout"});var f=function(e){this.element_=e,this.init()};window.MaterialDataTable=f,f.prototype.Constant_={},f.prototype.CssClasses_={DATA_TABLE:"mdl-data-table",SELECTABLE:"mdl-data-table--selectable",SELECT_ELEMENT:"mdl-data-table__select",IS_SELECTED:"is-selected",IS_UPGRADED:"is-upgraded"},f.prototype.selectRow_=function(e,t,s){return t?function(){e.checked?t.classList.add(this.CssClasses_.IS_SELECTED):t.classList.remove(this.CssClasses_.IS_SELECTED)}.bind(this):s?function(){var t,i;if(e.checked)for(t=0;t<s.length;t++)i=s[t].querySelector("td").querySelector(".mdl-checkbox"),i.MaterialCheckbox.check(),s[t].classList.add(this.CssClasses_.IS_SELECTED);else for(t=0;t<s.length;t++)i=s[t].querySelector("td").querySelector(".mdl-checkbox"),i.MaterialCheckbox.uncheck(),s[t].classList.remove(this.CssClasses_.IS_SELECTED)}.bind(this):void 0},f.prototype.createCheckbox_=function(e,t){var i=document.createElement("label"),n=["mdl-checkbox","mdl-js-checkbox","mdl-js-ripple-effect",this.CssClasses_.SELECT_ELEMENT];i.className=n.join(" ");var a=document.createElement("input");return a.type="checkbox",a.classList.add("mdl-checkbox__input"),a.addEventListener("change",this.selectRow_(a,e,t)),i.appendChild(a),s.upgradeElement(i,"MaterialCheckbox"),i},f.prototype.init=function(){if(this.element_){var e=this.element_.querySelector("th"),t=this.element_.querySelector("tbody").querySelectorAll("tr");if(this.element_.classList.contains(this.CssClasses_.SELECTABLE)){var s=document.createElement("th"),i=this.createCheckbox_(null,t);s.appendChild(i),e.parentElement.insertBefore(s,e);for(var n=0;n<t.length;n++){var a=t[n].querySelector("td");if(a){var l=document.createElement("td"),o=this.createCheckbox_(t[n]);l.appendChild(o),t[n].insertBefore(l,a)}}}this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},s.register({constructor:f,classAsString:"MaterialDataTable",cssClass:"mdl-js-data-table"});var b=function(e){this.element_=e,this.init()};window.MaterialRipple=b,b.prototype.Constant_={INITIAL_SCALE:"scale(0.0001, 0.0001)",INITIAL_SIZE:"1px",INITIAL_OPACITY:"0.4",FINAL_OPACITY:"0",FINAL_SCALE:""},b.prototype.CssClasses_={RIPPLE_CENTER:"mdl-ripple--center",RIPPLE_EFFECT_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE:"mdl-ripple",IS_ANIMATING:"is-animating",IS_VISIBLE:"is-visible"},b.prototype.downHandler_=function(e){if(!this.rippleElement_.style.width&&!this.rippleElement_.style.height){var t=this.element_.getBoundingClientRect();this.boundHeight=t.height,this.boundWidth=t.width,this.rippleSize_=2*Math.sqrt(t.width*t.width+t.height*t.height)+2,this.rippleElement_.style.width=this.rippleSize_+"px",this.rippleElement_.style.height=this.rippleSize_+"px"}if(this.rippleElement_.classList.add(this.CssClasses_.IS_VISIBLE),"mousedown"===e.type&&this.ignoringMouseDown_)this.ignoringMouseDown_=!1;else{"touchstart"===e.type&&(this.ignoringMouseDown_=!0);var s=this.getFrameCount();if(s>0)return;this.setFrameCount(1);var i,n,a=e.currentTarget.getBoundingClientRect();if(0===e.clientX&&0===e.clientY)i=Math.round(a.width/2),n=Math.round(a.height/2);else{var l=e.clientX?e.clientX:e.touches[0].clientX,o=e.clientY?e.clientY:e.touches[0].clientY;i=Math.round(l-a.left),n=Math.round(o-a.top)}this.setRippleXY(i,n),this.setRippleStyles(!0),window.requestAnimationFrame(this.animFrameHandler.bind(this))}},b.prototype.upHandler_=function(e){e&&2!==e.detail&&this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE),window.setTimeout(function(){this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE)}.bind(this),0)},b.prototype.init=function(){if(this.element_){var e=this.element_.classList.contains(this.CssClasses_.RIPPLE_CENTER);this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)||(this.rippleElement_=this.element_.querySelector("."+this.CssClasses_.RIPPLE),this.frameCount_=0,this.rippleSize_=0,this.x_=0,this.y_=0,this.ignoringMouseDown_=!1,this.boundDownHandler=this.downHandler_.bind(this),this.element_.addEventListener("mousedown",this.boundDownHandler),this.element_.addEventListener("touchstart",this.boundDownHandler),this.boundUpHandler=this.upHandler_.bind(this),this.element_.addEventListener("mouseup",this.boundUpHandler),this.element_.addEventListener("mouseleave",this.boundUpHandler),this.element_.addEventListener("touchend",this.boundUpHandler),this.element_.addEventListener("blur",this.boundUpHandler),this.getFrameCount=function(){return this.frameCount_},this.setFrameCount=function(e){this.frameCount_=e},this.getRippleElement=function(){return this.rippleElement_},this.setRippleXY=function(e,t){this.x_=e,this.y_=t},this.setRippleStyles=function(t){if(null!==this.rippleElement_){var s,i,n,a="translate("+this.x_+"px, "+this.y_+"px)";t?(i=this.Constant_.INITIAL_SCALE,n=this.Constant_.INITIAL_SIZE):(i=this.Constant_.FINAL_SCALE,n=this.rippleSize_+"px",e&&(a="translate("+this.boundWidth/2+"px, "+this.boundHeight/2+"px)")),s="translate(-50%, -50%) "+a+i,this.rippleElement_.style.webkitTransform=s,this.rippleElement_.style.msTransform=s,this.rippleElement_.style.transform=s,t?this.rippleElement_.classList.remove(this.CssClasses_.IS_ANIMATING):this.rippleElement_.classList.add(this.CssClasses_.IS_ANIMATING)}},this.animFrameHandler=function(){this.frameCount_-->0?window.requestAnimationFrame(this.animFrameHandler.bind(this)):this.setRippleStyles(!1)})}},b.prototype.mdlDowngrade_=function(){this.element_.removeEventListener("mousedown",this.boundDownHandler),this.element_.removeEventListener("touchstart",this.boundDownHandler),this.element_.removeEventListener("mouseup",this.boundUpHandler),this.element_.removeEventListener("mouseleave",this.boundUpHandler),this.element_.removeEventListener("touchend",this.boundUpHandler),this.element_.removeEventListener("blur",this.boundUpHandler)},b.prototype.mdlDowngrade=b.prototype.mdlDowngrade_,b.prototype.mdlDowngrade=b.prototype.mdlDowngrade,s.register({constructor:b,classAsString:"MaterialRipple",cssClass:"mdl-js-ripple-effect",widget:!1})}();
-//# sourceMappingURL=material.min.js.map
-;!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var n;n="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this,n.dragula=e()}}(function(){return function e(n,t,r){function o(u,c){if(!t[u]){if(!n[u]){var a="function"==typeof require&&require;if(!c&&a)return a(u,!0);if(i)return i(u,!0);var f=new Error("Cannot find module '"+u+"'");throw f.code="MODULE_NOT_FOUND",f}var l=t[u]={exports:{}};n[u][0].call(l.exports,function(e){var t=n[u][1][e];return o(t?t:e)},l,l.exports,e,n,t,r)}return t[u].exports}for(var i="function"==typeof require&&require,u=0;u<r.length;u++)o(r[u]);return o}({1:[function(e,n,t){"use strict";function r(e){var n=u[e];return n?n.lastIndex=0:u[e]=n=new RegExp(c+e+a,"g"),n}function o(e,n){var t=e.className;t.length?r(n).test(t)||(e.className+=" "+n):e.className=n}function i(e,n){e.className=e.className.replace(r(n)," ").trim()}var u={},c="(?:^|\\s)",a="(?:\\s|$)";n.exports={add:o,rm:i}},{}],2:[function(e,n,t){(function(t){"use strict";function r(e,n){function t(e){return-1!==le.containers.indexOf(e)||fe.isContainer(e)}function r(e){var n=e?"remove":"add";o(S,n,"mousedown",N),o(S,n,"mouseup",L)}function c(e){var n=e?"remove":"add";o(S,n,"mousemove",T)}function m(e){var n=e?"remove":"add";w[n](S,"selectstart",O),w[n](S,"click",O)}function h(){r(!0),L({})}function O(e){ce&&e.preventDefault()}function N(e){ne=e.clientX,te=e.clientY;var n=1!==i(e)||e.metaKey||e.ctrlKey;if(!n){var t=e.target,r=X(t);r&&(ce=r,c(),"mousedown"===e.type&&(p(t)?t.focus():e.preventDefault()))}}function T(e){if(ce){if(0===i(e))return void L({});if(void 0===e.clientX||e.clientX!==ne||void 0===e.clientY||e.clientY!==te){if(fe.ignoreInputTextSelection){var n=y("clientX",e),t=y("clientY",e),r=x.elementFromPoint(n,t);if(p(r))return}var o=ce;c(!0),m(),D(),B(o);var a=u(W);Z=y("pageX",e)-a.left,ee=y("pageY",e)-a.top,E.add(ie||W,"gu-transit"),K(),U(e)}}}function X(e){if(!(le.dragging&&J||t(e))){for(var n=e;v(e)&&t(v(e))===!1;){if(fe.invalid(e,n))return;if(e=v(e),!e)return}var r=v(e);if(r&&!fe.invalid(e,n)){var o=fe.moves(e,r,n,g(e));if(o)return{item:e,source:r}}}}function Y(e){var n=X(e);n&&B(n)}function B(e){$(e.item,e.source)&&(ie=e.item.cloneNode(!0),le.emit("cloned",ie,e.item,"copy")),Q=e.source,W=e.item,re=oe=g(e.item),le.dragging=!0,le.emit("drag",W,Q)}function P(){return!1}function D(){if(le.dragging){var e=ie||W;R(e,v(e))}}function I(){ce=!1,c(!0),m(!0)}function L(e){if(I(),le.dragging){var n=ie||W,t=y("clientX",e),r=y("clientY",e),o=a(J,t,r),i=q(o,t,r);i&&(ie&&fe.copySortSource||!ie||i!==Q)?R(n,i):fe.removeOnSpill?A():M()}}function R(e,n){var t=v(e);ie&&fe.copySortSource&&n===Q&&t.removeChild(W),k(n)?le.emit("cancel",e,Q,Q):le.emit("drop",e,n,Q,oe),j()}function A(){if(le.dragging){var e=ie||W,n=v(e);n&&n.removeChild(e),le.emit(ie?"cancel":"remove",e,n,Q),j()}}function M(e){if(le.dragging){var n=arguments.length>0?e:fe.revertOnSpill,t=ie||W,r=v(t);r===Q&&ie&&r.removeChild(ie);var o=k(r);o===!1&&!ie&&n&&Q.insertBefore(t,re),o||n?le.emit("cancel",t,Q,Q):le.emit("drop",t,r,Q,oe),j()}}function j(){var e=ie||W;I(),z(),e&&E.rm(e,"gu-transit"),ue&&clearTimeout(ue),le.dragging=!1,ae&&le.emit("out",e,ae,Q),le.emit("dragend",e),Q=W=ie=re=oe=ue=ae=null}function k(e,n){var t;return t=void 0!==n?n:J?oe:g(ie||W),e===Q&&t===re}function q(e,n,r){function o(){var o=t(i);if(o===!1)return!1;var u=H(i,e),c=V(i,u,n,r),a=k(i,c);return a?!0:fe.accepts(W,i,Q,c)}for(var i=e;i&&!o();)i=v(i);return i}function U(e){function n(e){le.emit(e,f,ae,Q)}function t(){s&&n("over")}function r(){ae&&n("out")}if(J){e.preventDefault();var o=y("clientX",e),i=y("clientY",e),u=o-Z,c=i-ee;J.style.left=u+"px",J.style.top=c+"px";var f=ie||W,l=a(J,o,i),d=q(l,o,i),s=null!==d&&d!==ae;(s||null===d)&&(r(),ae=d,t());var p=v(f);if(d===Q&&ie&&!fe.copySortSource)return void(p&&p.removeChild(f));var m,h=H(d,l);if(null!==h)m=V(d,h,o,i);else{if(fe.revertOnSpill!==!0||ie)return void(ie&&p&&p.removeChild(f));m=re,d=Q}(null===m||m!==f&&m!==g(f)&&m!==oe)&&(oe=m,d.insertBefore(f,m),le.emit("shadow",f,d,Q))}}function _(e){E.rm(e,"gu-hide")}function F(e){le.dragging&&E.add(e,"gu-hide")}function K(){if(!J){var e=W.getBoundingClientRect();J=W.cloneNode(!0),J.style.width=d(e)+"px",J.style.height=s(e)+"px",E.rm(J,"gu-transit"),E.add(J,"gu-mirror"),fe.mirrorContainer.appendChild(J),o(S,"add","mousemove",U),E.add(fe.mirrorContainer,"gu-unselectable"),le.emit("cloned",J,W,"mirror")}}function z(){J&&(E.rm(fe.mirrorContainer,"gu-unselectable"),o(S,"remove","mousemove",U),v(J).removeChild(J),J=null)}function H(e,n){for(var t=n;t!==e&&v(t)!==e;)t=v(t);return t===S?null:t}function V(e,n,t,r){function o(){var n,o,i,u=e.children.length;for(n=0;u>n;n++){if(o=e.children[n],i=o.getBoundingClientRect(),c&&i.left>t)return o;if(!c&&i.top>r)return o}return null}function i(){var e=n.getBoundingClientRect();return u(c?t>e.left+d(e)/2:r>e.top+s(e)/2)}function u(e){return e?g(n):n}var c="horizontal"===fe.direction,a=n!==e?i():o();return a}function $(e,n){return"boolean"==typeof fe.copy?fe.copy:fe.copy(e,n)}var G=arguments.length;1===G&&Array.isArray(e)===!1&&(n=e,e=[]);var J,Q,W,Z,ee,ne,te,re,oe,ie,ue,ce,ae=null,fe=n||{};void 0===fe.moves&&(fe.moves=l),void 0===fe.accepts&&(fe.accepts=l),void 0===fe.invalid&&(fe.invalid=P),void 0===fe.containers&&(fe.containers=e||[]),void 0===fe.isContainer&&(fe.isContainer=f),void 0===fe.copy&&(fe.copy=!1),void 0===fe.copySortSource&&(fe.copySortSource=!1),void 0===fe.revertOnSpill&&(fe.revertOnSpill=!1),void 0===fe.removeOnSpill&&(fe.removeOnSpill=!1),void 0===fe.direction&&(fe.direction="vertical"),void 0===fe.ignoreInputTextSelection&&(fe.ignoreInputTextSelection=!0),void 0===fe.mirrorContainer&&(fe.mirrorContainer=C);var le=b({containers:fe.containers,start:Y,end:D,cancel:M,remove:A,destroy:h,dragging:!1});return fe.removeOnSpill===!0&&le.on("over",_).on("out",F),r(),le}function o(e,n,r,o){var i={mouseup:"touchend",mousedown:"touchstart",mousemove:"touchmove"},u={mouseup:"pointerup",mousedown:"pointerdown",mousemove:"pointermove"},c={mouseup:"MSPointerUp",mousedown:"MSPointerDown",mousemove:"MSPointerMove"};t.navigator.pointerEnabled?w[n](e,u[r],o):t.navigator.msPointerEnabled?w[n](e,c[r],o):(w[n](e,i[r],o),w[n](e,r,o))}function i(e){if(void 0!==e.touches)return e.touches.length;if(void 0!==e.buttons)return e.buttons;if(void 0!==e.which)return e.which;var n=e.button;return void 0!==n?1&n?1:2&n?3:4&n?2:0:void 0}function u(e){var n=e.getBoundingClientRect();return{left:n.left+c("scrollLeft","pageXOffset"),top:n.top+c("scrollTop","pageYOffset")}}function c(e,n){return"undefined"!=typeof t[n]?t[n]:S.clientHeight?S[e]:C[e]}function a(e,n,t){var r,o=e||{},i=o.className;return o.className+=" gu-hide",r=x.elementFromPoint(n,t),o.className=i,r}function f(){return!1}function l(){return!0}function d(e){return e.width||e.right-e.left}function s(e){return e.height||e.bottom-e.top}function v(e){return e.parentNode===x?null:e.parentNode}function p(e){return"INPUT"===e.tagName||"TEXTAREA"===e.tagName||"SELECT"===e.tagName||m(e)}function m(e){return e?"false"===e.contentEditable?!1:"true"===e.contentEditable?!0:m(v(e)):!1}function g(e){function n(){var n=e;do n=n.nextSibling;while(n&&1!==n.nodeType);return n}return e.nextElementSibling||n()}function h(e){return e.targetTouches&&e.targetTouches.length?e.targetTouches[0]:e.changedTouches&&e.changedTouches.length?e.changedTouches[0]:e}function y(e,n){var t=h(n),r={pageX:"clientX",pageY:"clientY"};return e in r&&!(e in t)&&r[e]in t&&(e=r[e]),t[e]}var b=e("contra/emitter"),w=e("crossvent"),E=e("./classes"),x=document,S=x.documentElement,C=x.body;n.exports=r}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./classes":1,"contra/emitter":4,crossvent:8}],3:[function(e,n,t){"use strict";var r=e("ticky");n.exports=function(e,n,t){e&&r(function(){e.apply(t||null,n||[])})}},{ticky:6}],4:[function(e,n,t){"use strict";var r=e("atoa"),o=e("./debounce");n.exports=function(e,n){var t=n||{},i={};return void 0===e&&(e={}),e.on=function(n,t){return i[n]?i[n].push(t):i[n]=[t],e},e.once=function(n,t){return t._once=!0,e.on(n,t),e},e.off=function(n,t){var r=arguments.length;if(1===r)delete i[n];else if(0===r)i={};else{var o=i[n];if(!o)return e;o.splice(o.indexOf(t),1)}return e},e.emit=function(){var n=r(arguments);return e.emitterSnapshot(n.shift()).apply(this,n)},e.emitterSnapshot=function(n){var u=(i[n]||[]).slice(0);return function(){var i=r(arguments),c=this||e;if("error"===n&&t["throws"]!==!1&&!u.length)throw 1===i.length?i[0]:i;return u.forEach(function(r){t.async?o(r,i,c):r.apply(c,i),r._once&&e.off(n,r)}),e}},e}},{"./debounce":3,atoa:5}],5:[function(e,n,t){n.exports=function(e,n){return Array.prototype.slice.call(e,n)}},{}],6:[function(e,n,t){var r,o="function"==typeof setImmediate;r=o?function(e){setImmediate(e)}:function(e){setTimeout(e,0)},n.exports=r},{}],7:[function(e,n,t){(function(e){function t(){try{var e=new r("cat",{detail:{foo:"bar"}});return"cat"===e.type&&"bar"===e.detail.foo}catch(n){}return!1}var r=e.CustomEvent;n.exports=t()?r:"function"==typeof document.createEvent?function(e,n){var t=document.createEvent("CustomEvent");return n?t.initCustomEvent(e,n.bubbles,n.cancelable,n.detail):t.initCustomEvent(e,!1,!1,void 0),t}:function(e,n){var t=document.createEventObject();return t.type=e,n?(t.bubbles=Boolean(n.bubbles),t.cancelable=Boolean(n.cancelable),t.detail=n.detail):(t.bubbles=!1,t.cancelable=!1,t.detail=void 0),t}}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}],8:[function(e,n,t){(function(t){"use strict";function r(e,n,t,r){return e.addEventListener(n,t,r)}function o(e,n,t){return e.attachEvent("on"+n,f(e,n,t))}function i(e,n,t,r){return e.removeEventListener(n,t,r)}function u(e,n,t){var r=l(e,n,t);return r?e.detachEvent("on"+n,r):void 0}function c(e,n,t){function r(){var e;return p.createEvent?(e=p.createEvent("Event"),e.initEvent(n,!0,!0)):p.createEventObject&&(e=p.createEventObject()),e}function o(){return new s(n,{detail:t})}var i=-1===v.indexOf(n)?o():r();e.dispatchEvent?e.dispatchEvent(i):e.fireEvent("on"+n,i)}function a(e,n,r){return function(n){var o=n||t.event;o.target=o.target||o.srcElement,o.preventDefault=o.preventDefault||function(){o.returnValue=!1},o.stopPropagation=o.stopPropagation||function(){o.cancelBubble=!0},o.which=o.which||o.keyCode,r.call(e,o)}}function f(e,n,t){var r=l(e,n,t)||a(e,n,t);return h.push({wrapper:r,element:e,type:n,fn:t}),r}function l(e,n,t){var r=d(e,n,t);if(r){var o=h[r].wrapper;return h.splice(r,1),o}}function d(e,n,t){var r,o;for(r=0;r<h.length;r++)if(o=h[r],o.element===e&&o.type===n&&o.fn===t)return r}var s=e("custom-event"),v=e("./eventmap"),p=t.document,m=r,g=i,h=[];t.addEventListener||(m=o,g=u),n.exports={add:m,remove:g,fabricate:c}}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{"./eventmap":9,"custom-event":7}],9:[function(e,n,t){(function(e){"use strict";var t=[],r="",o=/^on/;for(r in e)o.test(r)&&t.push(r.slice(2));n.exports=t}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}]},{},[2])(2)});;/* *******************************************
+
+/**
+ * A component handler interface using the revealing module design pattern.
+ * More details on this design pattern here:
+ * https://github.com/jasonmayes/mdl-component-design-pattern
+ *
+ * @author Jason Mayes.
+ */
+/* exported componentHandler */
+
+// Pre-defining the componentHandler interface, for closure documentation and
+// static verification.
+var componentHandler = {
+  /**
+   * Searches existing DOM for elements of our component type and upgrades them
+   * if they have not already been upgraded.
+   *
+   * @param {string=} optJsClass the programatic name of the element class we
+   * need to create a new instance of.
+   * @param {string=} optCssClass the name of the CSS class elements of this
+   * type will have.
+   */
+  upgradeDom: function(optJsClass, optCssClass) {},
+  /**
+   * Upgrades a specific element rather than all in the DOM.
+   *
+   * @param {!Element} element The element we wish to upgrade.
+   * @param {string=} optJsClass Optional name of the class we want to upgrade
+   * the element to.
+   */
+  upgradeElement: function(element, optJsClass) {},
+  /**
+   * Upgrades a specific list of elements rather than all in the DOM.
+   *
+   * @param {!Element|!Array<!Element>|!NodeList|!HTMLCollection} elements
+   * The elements we wish to upgrade.
+   */
+  upgradeElements: function(elements) {},
+  /**
+   * Upgrades all registered components found in the current DOM. This is
+   * automatically called on window load.
+   */
+  upgradeAllRegistered: function() {},
+  /**
+   * Allows user to be alerted to any upgrades that are performed for a given
+   * component type
+   *
+   * @param {string} jsClass The class name of the MDL component we wish
+   * to hook into for any upgrades performed.
+   * @param {function(!HTMLElement)} callback The function to call upon an
+   * upgrade. This function should expect 1 parameter - the HTMLElement which
+   * got upgraded.
+   */
+  registerUpgradedCallback: function(jsClass, callback) {},
+  /**
+   * Registers a class for future use and attempts to upgrade existing DOM.
+   *
+   * @param {componentHandler.ComponentConfigPublic} config the registration configuration
+   */
+  register: function(config) {},
+  /**
+   * Downgrade either a given node, an array of nodes, or a NodeList.
+   *
+   * @param {!Node|!Array<!Node>|!NodeList} nodes
+   */
+  downgradeElements: function(nodes) {}
+};
+
+componentHandler = (function() {
+  'use strict';
+
+  /** @type {!Array<componentHandler.ComponentConfig>} */
+  var registeredComponents_ = [];
+
+  /** @type {!Array<componentHandler.Component>} */
+  var createdComponents_ = [];
+
+  var downgradeMethod_ = 'mdlDowngrade';
+  var componentConfigProperty_ = 'mdlComponentConfigInternal_';
+
+  /**
+   * Searches registered components for a class we are interested in using.
+   * Optionally replaces a match with passed object if specified.
+   *
+   * @param {string} name The name of a class we want to use.
+   * @param {componentHandler.ComponentConfig=} optReplace Optional object to replace match with.
+   * @return {!Object|boolean}
+   * @private
+   */
+  function findRegisteredClass_(name, optReplace) {
+    for (var i = 0; i < registeredComponents_.length; i++) {
+      if (registeredComponents_[i].className === name) {
+        if (typeof optReplace !== 'undefined') {
+          registeredComponents_[i] = optReplace;
+        }
+        return registeredComponents_[i];
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns an array of the classNames of the upgraded classes on the element.
+   *
+   * @param {!Element} element The element to fetch data from.
+   * @return {!Array<string>}
+   * @private
+   */
+  function getUpgradedListOfElement_(element) {
+    var dataUpgraded = element.getAttribute('data-upgraded');
+    // Use `['']` as default value to conform the `,name,name...` style.
+    return dataUpgraded === null ? [''] : dataUpgraded.split(',');
+  }
+
+  /**
+   * Returns true if the given element has already been upgraded for the given
+   * class.
+   *
+   * @param {!Element} element The element we want to check.
+   * @param {string} jsClass The class to check for.
+   * @returns {boolean}
+   * @private
+   */
+  function isElementUpgraded_(element, jsClass) {
+    var upgradedList = getUpgradedListOfElement_(element);
+    return upgradedList.indexOf(jsClass) !== -1;
+  }
+
+  /**
+   * Searches existing DOM for elements of our component type and upgrades them
+   * if they have not already been upgraded.
+   *
+   * @param {string=} optJsClass the programatic name of the element class we
+   * need to create a new instance of.
+   * @param {string=} optCssClass the name of the CSS class elements of this
+   * type will have.
+   */
+  function upgradeDomInternal(optJsClass, optCssClass) {
+    if (typeof optJsClass === 'undefined' &&
+        typeof optCssClass === 'undefined') {
+      for (var i = 0; i < registeredComponents_.length; i++) {
+        upgradeDomInternal(registeredComponents_[i].className,
+            registeredComponents_[i].cssClass);
+      }
+    } else {
+      var jsClass = /** @type {string} */ (optJsClass);
+      if (typeof optCssClass === 'undefined') {
+        var registeredClass = findRegisteredClass_(jsClass);
+        if (registeredClass) {
+          optCssClass = registeredClass.cssClass;
+        }
+      }
+
+      var elements = document.querySelectorAll('.' + optCssClass);
+      for (var n = 0; n < elements.length; n++) {
+        upgradeElementInternal(elements[n], jsClass);
+      }
+    }
+  }
+
+  /**
+   * Upgrades a specific element rather than all in the DOM.
+   *
+   * @param {!Element} element The element we wish to upgrade.
+   * @param {string=} optJsClass Optional name of the class we want to upgrade
+   * the element to.
+   */
+  function upgradeElementInternal(element, optJsClass) {
+    // Verify argument type.
+    if (!(typeof element === 'object' && element instanceof Element)) {
+      throw new Error('Invalid argument provided to upgrade MDL element.');
+    }
+    var upgradedList = getUpgradedListOfElement_(element);
+    var classesToUpgrade = [];
+    // If jsClass is not provided scan the registered components to find the
+    // ones matching the element's CSS classList.
+    if (!optJsClass) {
+      var classList = element.classList;
+      registeredComponents_.forEach(function(component) {
+        // Match CSS & Not to be upgraded & Not upgraded.
+        if (classList.contains(component.cssClass) &&
+            classesToUpgrade.indexOf(component) === -1 &&
+            !isElementUpgraded_(element, component.className)) {
+          classesToUpgrade.push(component);
+        }
+      });
+    } else if (!isElementUpgraded_(element, optJsClass)) {
+      classesToUpgrade.push(findRegisteredClass_(optJsClass));
+    }
+
+    // Upgrade the element for each classes.
+    for (var i = 0, n = classesToUpgrade.length, registeredClass; i < n; i++) {
+      registeredClass = classesToUpgrade[i];
+      if (registeredClass) {
+        // Mark element as upgraded.
+        upgradedList.push(registeredClass.className);
+        element.setAttribute('data-upgraded', upgradedList.join(','));
+        var instance = new registeredClass.classConstructor(element);
+        instance[componentConfigProperty_] = registeredClass;
+        createdComponents_.push(instance);
+        // Call any callbacks the user has registered with this component type.
+        for (var j = 0, m = registeredClass.callbacks.length; j < m; j++) {
+          registeredClass.callbacks[j](element);
+        }
+
+        if (registeredClass.widget) {
+          // Assign per element instance for control over API
+          element[registeredClass.className] = instance;
+        }
+      } else {
+        throw new Error(
+          'Unable to find a registered component for the given class.');
+      }
+
+      var ev = document.createEvent('Events');
+      ev.initEvent('mdl-componentupgraded', true, true);
+      element.dispatchEvent(ev);
+    }
+  }
+
+  /**
+   * Upgrades a specific list of elements rather than all in the DOM.
+   *
+   * @param {!Element|!Array<!Element>|!NodeList|!HTMLCollection} elements
+   * The elements we wish to upgrade.
+   */
+  function upgradeElementsInternal(elements) {
+    if (!Array.isArray(elements)) {
+      if (typeof elements.item === 'function') {
+        elements = Array.prototype.slice.call(/** @type {Array} */ (elements));
+      } else {
+        elements = [elements];
+      }
+    }
+    for (var i = 0, n = elements.length, element; i < n; i++) {
+      element = elements[i];
+      if (element instanceof HTMLElement) {
+        upgradeElementInternal(element);
+        if (element.children.length > 0) {
+          upgradeElementsInternal(element.children);
+        }
+      }
+    }
+  }
+
+  /**
+   * Registers a class for future use and attempts to upgrade existing DOM.
+   *
+   * @param {componentHandler.ComponentConfigPublic} config
+   */
+  function registerInternal(config) {
+    // In order to support both Closure-compiled and uncompiled code accessing
+    // this method, we need to allow for both the dot and array syntax for
+    // property access. You'll therefore see the `foo.bar || foo['bar']`
+    // pattern repeated across this method.
+    var widgetMissing = (typeof config.widget === 'undefined' &&
+        typeof config['widget'] === 'undefined');
+    var widget = true;
+
+    if (!widgetMissing) {
+      widget = config.widget || config['widget'];
+    }
+
+    var newConfig = /** @type {componentHandler.ComponentConfig} */ ({
+      classConstructor: config.constructor || config['constructor'],
+      className: config.classAsString || config['classAsString'],
+      cssClass: config.cssClass || config['cssClass'],
+      widget: widget,
+      callbacks: []
+    });
+
+    registeredComponents_.forEach(function(item) {
+      if (item.cssClass === newConfig.cssClass) {
+        throw new Error('The provided cssClass has already been registered: ' + item.cssClass);
+      }
+      if (item.className === newConfig.className) {
+        throw new Error('The provided className has already been registered');
+      }
+    });
+
+    if (config.constructor.prototype
+        .hasOwnProperty(componentConfigProperty_)) {
+      throw new Error(
+          'MDL component classes must not have ' + componentConfigProperty_ +
+          ' defined as a property.');
+    }
+
+    var found = findRegisteredClass_(config.classAsString, newConfig);
+
+    if (!found) {
+      registeredComponents_.push(newConfig);
+    }
+  }
+
+  /**
+   * Allows user to be alerted to any upgrades that are performed for a given
+   * component type
+   *
+   * @param {string} jsClass The class name of the MDL component we wish
+   * to hook into for any upgrades performed.
+   * @param {function(!HTMLElement)} callback The function to call upon an
+   * upgrade. This function should expect 1 parameter - the HTMLElement which
+   * got upgraded.
+   */
+  function registerUpgradedCallbackInternal(jsClass, callback) {
+    var regClass = findRegisteredClass_(jsClass);
+    if (regClass) {
+      regClass.callbacks.push(callback);
+    }
+  }
+
+  /**
+   * Upgrades all registered components found in the current DOM. This is
+   * automatically called on window load.
+   */
+  function upgradeAllRegisteredInternal() {
+    for (var n = 0; n < registeredComponents_.length; n++) {
+      upgradeDomInternal(registeredComponents_[n].className);
+    }
+  }
+
+  /**
+   * Finds a created component by a given DOM node.
+   *
+   * @param {!Node} node
+   * @return {*}
+   */
+  function findCreatedComponentByNodeInternal(node) {
+    for (var n = 0; n < createdComponents_.length; n++) {
+      var component = createdComponents_[n];
+      if (component.element_ === node) {
+        return component;
+      }
+    }
+  }
+
+  /**
+   * Check the component for the downgrade method.
+   * Execute if found.
+   * Remove component from createdComponents list.
+   *
+   * @param {*} component
+   */
+  function deconstructComponentInternal(component) {
+    if (component &&
+        component[componentConfigProperty_]
+          .classConstructor.prototype
+          .hasOwnProperty(downgradeMethod_)) {
+      component[downgradeMethod_]();
+      var componentIndex = createdComponents_.indexOf(component);
+      createdComponents_.splice(componentIndex, 1);
+
+      var upgrades = component.element_.getAttribute('data-upgraded').split(',');
+      var componentPlace = upgrades.indexOf(
+          component[componentConfigProperty_].classAsString);
+      upgrades.splice(componentPlace, 1);
+      component.element_.setAttribute('data-upgraded', upgrades.join(','));
+
+      var ev = document.createEvent('Events');
+      ev.initEvent('mdl-componentdowngraded', true, true);
+      component.element_.dispatchEvent(ev);
+    }
+  }
+
+  /**
+   * Downgrade either a given node, an array of nodes, or a NodeList.
+   *
+   * @param {!Node|!Array<!Node>|!NodeList} nodes
+   */
+  function downgradeNodesInternal(nodes) {
+    /**
+     * Auxiliary function to downgrade a single node.
+     * @param  {!Node} node the node to be downgraded
+     */
+    var downgradeNode = function(node) {
+      deconstructComponentInternal(findCreatedComponentByNodeInternal(node));
+    };
+    if (nodes instanceof Array || nodes instanceof NodeList) {
+      for (var n = 0; n < nodes.length; n++) {
+        downgradeNode(nodes[n]);
+      }
+    } else if (nodes instanceof Node) {
+      downgradeNode(nodes);
+    } else {
+      throw new Error('Invalid argument provided to downgrade MDL nodes.');
+    }
+  }
+
+  // Now return the functions that should be made public with their publicly
+  // facing names...
+  return {
+    upgradeDom: upgradeDomInternal,
+    upgradeElement: upgradeElementInternal,
+    upgradeElements: upgradeElementsInternal,
+    upgradeAllRegistered: upgradeAllRegisteredInternal,
+    registerUpgradedCallback: registerUpgradedCallbackInternal,
+    register: registerInternal,
+    downgradeElements: downgradeNodesInternal
+  };
+})();
+
+/**
+ * Describes the type of a registered component type managed by
+ * componentHandler. Provided for benefit of the Closure compiler.
+ *
+ * @typedef {{
+ *   constructor: Function,
+ *   classAsString: string,
+ *   cssClass: string,
+ *   widget: (string|boolean|undefined)
+ * }}
+ */
+componentHandler.ComponentConfigPublic;  // jshint ignore:line
+
+/**
+ * Describes the type of a registered component type managed by
+ * componentHandler. Provided for benefit of the Closure compiler.
+ *
+ * @typedef {{
+ *   constructor: !Function,
+ *   className: string,
+ *   cssClass: string,
+ *   widget: (string|boolean),
+ *   callbacks: !Array<function(!HTMLElement)>
+ * }}
+ */
+componentHandler.ComponentConfig;  // jshint ignore:line
+
+/**
+ * Created component (i.e., upgraded element) type as managed by
+ * componentHandler. Provided for benefit of the Closure compiler.
+ *
+ * @typedef {{
+ *   element_: !HTMLElement,
+ *   className: string,
+ *   classAsString: string,
+ *   cssClass: string,
+ *   widget: string
+ * }}
+ */
+componentHandler.Component;  // jshint ignore:line
+
+// Export all symbols, for the benefit of Closure compiler.
+// No effect on uncompiled code.
+componentHandler['upgradeDom'] = componentHandler.upgradeDom;
+componentHandler['upgradeElement'] = componentHandler.upgradeElement;
+componentHandler['upgradeElements'] = componentHandler.upgradeElements;
+componentHandler['upgradeAllRegistered'] =
+    componentHandler.upgradeAllRegistered;
+componentHandler['registerUpgradedCallback'] =
+    componentHandler.registerUpgradedCallback;
+componentHandler['register'] = componentHandler.register;
+componentHandler['downgradeElements'] = componentHandler.downgradeElements;
+window.componentHandler = componentHandler;
+window['componentHandler'] = componentHandler;
+
+window.addEventListener('load', function() {
+  'use strict';
+
+  /**
+   * Performs a "Cutting the mustard" test. If the browser supports the features
+   * tested, adds a mdl-js class to the <html> element. It then upgrades all MDL
+   * components requiring JavaScript.
+   */
+  if ('classList' in document.createElement('div') &&
+      'querySelector' in document &&
+      'addEventListener' in window && Array.prototype.forEach) {
+    document.documentElement.classList.add('mdl-js');
+    componentHandler.upgradeAllRegistered();
+  } else {
+    /**
+     * Dummy function to avoid JS errors.
+     */
+    componentHandler.upgradeElement = function() {};
+    /**
+     * Dummy function to avoid JS errors.
+     */
+    componentHandler.register = function() {};
+  }
+});
+
+// Source: https://github.com/darius/requestAnimationFrame/blob/master/requestAnimationFrame.js
+// Adapted from https://gist.github.com/paulirish/1579671 which derived from
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+// requestAnimationFrame polyfill by Erik Möller.
+// Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavič, Darius Bacon
+// MIT license
+if (!Date.now) {
+    /**
+   * Date.now polyfill.
+   * @return {number} the current Date
+   */
+    Date.now = function () {
+        return new Date().getTime();
+    };
+    Date['now'] = Date.now;
+}
+var vendors = [
+    'webkit',
+    'moz'
+];
+for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+    var vp = vendors[i];
+    window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame'];
+    window['requestAnimationFrame'] = window.requestAnimationFrame;
+    window['cancelAnimationFrame'] = window.cancelAnimationFrame;
+}
+if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+    var lastTime = 0;
+    /**
+   * requestAnimationFrame polyfill.
+   * @param  {!Function} callback the callback function.
+   */
+    window.requestAnimationFrame = function (callback) {
+        var now = Date.now();
+        var nextTime = Math.max(lastTime + 16, now);
+        return setTimeout(function () {
+            callback(lastTime = nextTime);
+        }, nextTime - now);
+    };
+    window.cancelAnimationFrame = clearTimeout;
+    window['requestAnimationFrame'] = window.requestAnimationFrame;
+    window['cancelAnimationFrame'] = window.cancelAnimationFrame;
+}
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Button MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialButton = function MaterialButton(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialButton'] = MaterialButton;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialButton.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialButton.prototype.CssClasses_ = {
+    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_CONTAINER: 'mdl-button__ripple-container',
+    RIPPLE: 'mdl-ripple'
+};
+/**
+   * Handle blur of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialButton.prototype.blurHandler_ = function (event) {
+    if (event) {
+        this.element_.blur();
+    }
+};
+// Public methods.
+/**
+   * Disable button.
+   *
+   * @public
+   */
+MaterialButton.prototype.disable = function () {
+    this.element_.disabled = true;
+};
+MaterialButton.prototype['disable'] = MaterialButton.prototype.disable;
+/**
+   * Enable button.
+   *
+   * @public
+   */
+MaterialButton.prototype.enable = function () {
+    this.element_.disabled = false;
+};
+MaterialButton.prototype['enable'] = MaterialButton.prototype.enable;
+/**
+   * Initialize element.
+   */
+MaterialButton.prototype.init = function () {
+    if (this.element_) {
+        if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+            var rippleContainer = document.createElement('span');
+            rippleContainer.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+            this.rippleElement_ = document.createElement('span');
+            this.rippleElement_.classList.add(this.CssClasses_.RIPPLE);
+            rippleContainer.appendChild(this.rippleElement_);
+            this.boundRippleBlurHandler = this.blurHandler_.bind(this);
+            this.rippleElement_.addEventListener('mouseup', this.boundRippleBlurHandler);
+            this.element_.appendChild(rippleContainer);
+        }
+        this.boundButtonBlurHandler = this.blurHandler_.bind(this);
+        this.element_.addEventListener('mouseup', this.boundButtonBlurHandler);
+        this.element_.addEventListener('mouseleave', this.boundButtonBlurHandler);
+    }
+};
+/**
+   * Downgrade the element.
+   *
+   * @private
+   */
+MaterialButton.prototype.mdlDowngrade_ = function () {
+    if (this.rippleElement_) {
+        this.rippleElement_.removeEventListener('mouseup', this.boundRippleBlurHandler);
+    }
+    this.element_.removeEventListener('mouseup', this.boundButtonBlurHandler);
+    this.element_.removeEventListener('mouseleave', this.boundButtonBlurHandler);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialButton.prototype.mdlDowngrade = MaterialButton.prototype.mdlDowngrade_;
+MaterialButton.prototype['mdlDowngrade'] = MaterialButton.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialButton,
+    classAsString: 'MaterialButton',
+    cssClass: 'mdl-js-button',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Checkbox MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialCheckbox = function MaterialCheckbox(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialCheckbox'] = MaterialCheckbox;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialCheckbox.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialCheckbox.prototype.CssClasses_ = {
+    INPUT: 'mdl-checkbox__input',
+    BOX_OUTLINE: 'mdl-checkbox__box-outline',
+    FOCUS_HELPER: 'mdl-checkbox__focus-helper',
+    TICK_OUTLINE: 'mdl-checkbox__tick-outline',
+    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE_CONTAINER: 'mdl-checkbox__ripple-container',
+    RIPPLE_CENTER: 'mdl-ripple--center',
+    RIPPLE: 'mdl-ripple',
+    IS_FOCUSED: 'is-focused',
+    IS_DISABLED: 'is-disabled',
+    IS_CHECKED: 'is-checked',
+    IS_UPGRADED: 'is-upgraded'
+};
+/**
+   * Handle change of state.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialCheckbox.prototype.onChange_ = function (event) {
+    this.updateClasses_();
+};
+/**
+   * Handle focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialCheckbox.prototype.onFocus_ = function (event) {
+    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle lost focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialCheckbox.prototype.onBlur_ = function (event) {
+    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle mouseup.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialCheckbox.prototype.onMouseUp_ = function (event) {
+    this.blur_();
+};
+/**
+   * Handle class updates.
+   *
+   * @private
+   */
+MaterialCheckbox.prototype.updateClasses_ = function () {
+    this.checkDisabled();
+    this.checkToggleState();
+};
+/**
+   * Add blur.
+   *
+   * @private
+   */
+MaterialCheckbox.prototype.blur_ = function () {
+    // TODO: figure out why there's a focus event being fired after our blur,
+    // so that we can avoid this hack.
+    window.setTimeout(function () {
+        this.inputElement_.blur();
+    }.bind(this), this.Constant_.TINY_TIMEOUT);
+};
+// Public methods.
+/**
+   * Check the inputs toggle state and update display.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.checkToggleState = function () {
+    if (this.inputElement_.checked) {
+        this.element_.classList.add(this.CssClasses_.IS_CHECKED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
+    }
+};
+MaterialCheckbox.prototype['checkToggleState'] = MaterialCheckbox.prototype.checkToggleState;
+/**
+   * Check the inputs disabled state and update display.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.checkDisabled = function () {
+    if (this.inputElement_.disabled) {
+        this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    }
+};
+MaterialCheckbox.prototype['checkDisabled'] = MaterialCheckbox.prototype.checkDisabled;
+/**
+   * Disable checkbox.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.disable = function () {
+    this.inputElement_.disabled = true;
+    this.updateClasses_();
+};
+MaterialCheckbox.prototype['disable'] = MaterialCheckbox.prototype.disable;
+/**
+   * Enable checkbox.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.enable = function () {
+    this.inputElement_.disabled = false;
+    this.updateClasses_();
+};
+MaterialCheckbox.prototype['enable'] = MaterialCheckbox.prototype.enable;
+/**
+   * Check checkbox.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.check = function () {
+    this.inputElement_.checked = true;
+    this.updateClasses_();
+};
+MaterialCheckbox.prototype['check'] = MaterialCheckbox.prototype.check;
+/**
+   * Uncheck checkbox.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.uncheck = function () {
+    this.inputElement_.checked = false;
+    this.updateClasses_();
+};
+MaterialCheckbox.prototype['uncheck'] = MaterialCheckbox.prototype.uncheck;
+/**
+   * Initialize element.
+   */
+MaterialCheckbox.prototype.init = function () {
+    if (this.element_) {
+        this.inputElement_ = this.element_.querySelector('.' + this.CssClasses_.INPUT);
+        var boxOutline = document.createElement('span');
+        boxOutline.classList.add(this.CssClasses_.BOX_OUTLINE);
+        var tickContainer = document.createElement('span');
+        tickContainer.classList.add(this.CssClasses_.FOCUS_HELPER);
+        var tickOutline = document.createElement('span');
+        tickOutline.classList.add(this.CssClasses_.TICK_OUTLINE);
+        boxOutline.appendChild(tickOutline);
+        this.element_.appendChild(tickContainer);
+        this.element_.appendChild(boxOutline);
+        if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+            this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            this.rippleContainerElement_ = document.createElement('span');
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER);
+            this.boundRippleMouseUp = this.onMouseUp_.bind(this);
+            this.rippleContainerElement_.addEventListener('mouseup', this.boundRippleMouseUp);
+            var ripple = document.createElement('span');
+            ripple.classList.add(this.CssClasses_.RIPPLE);
+            this.rippleContainerElement_.appendChild(ripple);
+            this.element_.appendChild(this.rippleContainerElement_);
+        }
+        this.boundInputOnChange = this.onChange_.bind(this);
+        this.boundInputOnFocus = this.onFocus_.bind(this);
+        this.boundInputOnBlur = this.onBlur_.bind(this);
+        this.boundElementMouseUp = this.onMouseUp_.bind(this);
+        this.inputElement_.addEventListener('change', this.boundInputOnChange);
+        this.inputElement_.addEventListener('focus', this.boundInputOnFocus);
+        this.inputElement_.addEventListener('blur', this.boundInputOnBlur);
+        this.element_.addEventListener('mouseup', this.boundElementMouseUp);
+        this.updateClasses_();
+        this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+/**
+   * Downgrade the component.
+   *
+   * @private
+   */
+MaterialCheckbox.prototype.mdlDowngrade_ = function () {
+    if (this.rippleContainerElement_) {
+        this.rippleContainerElement_.removeEventListener('mouseup', this.boundRippleMouseUp);
+    }
+    this.inputElement_.removeEventListener('change', this.boundInputOnChange);
+    this.inputElement_.removeEventListener('focus', this.boundInputOnFocus);
+    this.inputElement_.removeEventListener('blur', this.boundInputOnBlur);
+    this.element_.removeEventListener('mouseup', this.boundElementMouseUp);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialCheckbox.prototype.mdlDowngrade = MaterialCheckbox.prototype.mdlDowngrade_;
+MaterialCheckbox.prototype['mdlDowngrade'] = MaterialCheckbox.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialCheckbox,
+    classAsString: 'MaterialCheckbox',
+    cssClass: 'mdl-js-checkbox',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for icon toggle MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialIconToggle = function MaterialIconToggle(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialIconToggle'] = MaterialIconToggle;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialIconToggle.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialIconToggle.prototype.CssClasses_ = {
+    INPUT: 'mdl-icon-toggle__input',
+    JS_RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE_CONTAINER: 'mdl-icon-toggle__ripple-container',
+    RIPPLE_CENTER: 'mdl-ripple--center',
+    RIPPLE: 'mdl-ripple',
+    IS_FOCUSED: 'is-focused',
+    IS_DISABLED: 'is-disabled',
+    IS_CHECKED: 'is-checked'
+};
+/**
+   * Handle change of state.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialIconToggle.prototype.onChange_ = function (event) {
+    this.updateClasses_();
+};
+/**
+   * Handle focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialIconToggle.prototype.onFocus_ = function (event) {
+    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle lost focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialIconToggle.prototype.onBlur_ = function (event) {
+    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle mouseup.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialIconToggle.prototype.onMouseUp_ = function (event) {
+    this.blur_();
+};
+/**
+   * Handle class updates.
+   *
+   * @private
+   */
+MaterialIconToggle.prototype.updateClasses_ = function () {
+    this.checkDisabled();
+    this.checkToggleState();
+};
+/**
+   * Add blur.
+   *
+   * @private
+   */
+MaterialIconToggle.prototype.blur_ = function () {
+    // TODO: figure out why there's a focus event being fired after our blur,
+    // so that we can avoid this hack.
+    window.setTimeout(function () {
+        this.inputElement_.blur();
+    }.bind(this), this.Constant_.TINY_TIMEOUT);
+};
+// Public methods.
+/**
+   * Check the inputs toggle state and update display.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.checkToggleState = function () {
+    if (this.inputElement_.checked) {
+        this.element_.classList.add(this.CssClasses_.IS_CHECKED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
+    }
+};
+MaterialIconToggle.prototype['checkToggleState'] = MaterialIconToggle.prototype.checkToggleState;
+/**
+   * Check the inputs disabled state and update display.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.checkDisabled = function () {
+    if (this.inputElement_.disabled) {
+        this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    }
+};
+MaterialIconToggle.prototype['checkDisabled'] = MaterialIconToggle.prototype.checkDisabled;
+/**
+   * Disable icon toggle.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.disable = function () {
+    this.inputElement_.disabled = true;
+    this.updateClasses_();
+};
+MaterialIconToggle.prototype['disable'] = MaterialIconToggle.prototype.disable;
+/**
+   * Enable icon toggle.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.enable = function () {
+    this.inputElement_.disabled = false;
+    this.updateClasses_();
+};
+MaterialIconToggle.prototype['enable'] = MaterialIconToggle.prototype.enable;
+/**
+   * Check icon toggle.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.check = function () {
+    this.inputElement_.checked = true;
+    this.updateClasses_();
+};
+MaterialIconToggle.prototype['check'] = MaterialIconToggle.prototype.check;
+/**
+   * Uncheck icon toggle.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.uncheck = function () {
+    this.inputElement_.checked = false;
+    this.updateClasses_();
+};
+MaterialIconToggle.prototype['uncheck'] = MaterialIconToggle.prototype.uncheck;
+/**
+   * Initialize element.
+   */
+MaterialIconToggle.prototype.init = function () {
+    if (this.element_) {
+        this.inputElement_ = this.element_.querySelector('.' + this.CssClasses_.INPUT);
+        if (this.element_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)) {
+            this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            this.rippleContainerElement_ = document.createElement('span');
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.JS_RIPPLE_EFFECT);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER);
+            this.boundRippleMouseUp = this.onMouseUp_.bind(this);
+            this.rippleContainerElement_.addEventListener('mouseup', this.boundRippleMouseUp);
+            var ripple = document.createElement('span');
+            ripple.classList.add(this.CssClasses_.RIPPLE);
+            this.rippleContainerElement_.appendChild(ripple);
+            this.element_.appendChild(this.rippleContainerElement_);
+        }
+        this.boundInputOnChange = this.onChange_.bind(this);
+        this.boundInputOnFocus = this.onFocus_.bind(this);
+        this.boundInputOnBlur = this.onBlur_.bind(this);
+        this.boundElementOnMouseUp = this.onMouseUp_.bind(this);
+        this.inputElement_.addEventListener('change', this.boundInputOnChange);
+        this.inputElement_.addEventListener('focus', this.boundInputOnFocus);
+        this.inputElement_.addEventListener('blur', this.boundInputOnBlur);
+        this.element_.addEventListener('mouseup', this.boundElementOnMouseUp);
+        this.updateClasses_();
+        this.element_.classList.add('is-upgraded');
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialIconToggle.prototype.mdlDowngrade_ = function () {
+    if (this.rippleContainerElement_) {
+        this.rippleContainerElement_.removeEventListener('mouseup', this.boundRippleMouseUp);
+    }
+    this.inputElement_.removeEventListener('change', this.boundInputOnChange);
+    this.inputElement_.removeEventListener('focus', this.boundInputOnFocus);
+    this.inputElement_.removeEventListener('blur', this.boundInputOnBlur);
+    this.element_.removeEventListener('mouseup', this.boundElementOnMouseUp);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialIconToggle.prototype.mdlDowngrade = MaterialIconToggle.prototype.mdlDowngrade_;
+MaterialIconToggle.prototype['mdlDowngrade'] = MaterialIconToggle.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialIconToggle,
+    classAsString: 'MaterialIconToggle',
+    cssClass: 'mdl-js-icon-toggle',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for dropdown MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialMenu = function MaterialMenu(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialMenu'] = MaterialMenu;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialMenu.prototype.Constant_ = {
+    // Total duration of the menu animation.
+    TRANSITION_DURATION_SECONDS: 0.3,
+    // The fraction of the total duration we want to use for menu item animations.
+    TRANSITION_DURATION_FRACTION: 0.8,
+    // How long the menu stays open after choosing an option (so the user can see
+    // the ripple).
+    CLOSE_TIMEOUT: 150
+};
+/**
+   * Keycodes, for code readability.
+   *
+   * @enum {number}
+   * @private
+   */
+MaterialMenu.prototype.Keycodes_ = {
+    ENTER: 13,
+    ESCAPE: 27,
+    SPACE: 32,
+    UP_ARROW: 38,
+    DOWN_ARROW: 40
+};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialMenu.prototype.CssClasses_ = {
+    CONTAINER: 'mdl-menu__container',
+    OUTLINE: 'mdl-menu__outline',
+    ITEM: 'mdl-menu__item',
+    ITEM_RIPPLE_CONTAINER: 'mdl-menu__item-ripple-container',
+    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE: 'mdl-ripple',
+    // Statuses
+    IS_UPGRADED: 'is-upgraded',
+    IS_VISIBLE: 'is-visible',
+    IS_ANIMATING: 'is-animating',
+    // Alignment options
+    BOTTOM_LEFT: 'mdl-menu--bottom-left',
+    // This is the default.
+    BOTTOM_RIGHT: 'mdl-menu--bottom-right',
+    TOP_LEFT: 'mdl-menu--top-left',
+    TOP_RIGHT: 'mdl-menu--top-right',
+    UNALIGNED: 'mdl-menu--unaligned'
+};
+/**
+   * Initialize element.
+   */
+MaterialMenu.prototype.init = function () {
+    if (this.element_) {
+        // Create container for the menu.
+        var container = document.createElement('div');
+        container.classList.add(this.CssClasses_.CONTAINER);
+        this.element_.parentElement.insertBefore(container, this.element_);
+        this.element_.parentElement.removeChild(this.element_);
+        container.appendChild(this.element_);
+        this.container_ = container;
+        // Create outline for the menu (shadow and background).
+        var outline = document.createElement('div');
+        outline.classList.add(this.CssClasses_.OUTLINE);
+        this.outline_ = outline;
+        container.insertBefore(outline, this.element_);
+        // Find the "for" element and bind events to it.
+        var forElId = this.element_.getAttribute('for');
+        var forEl = null;
+        if (forElId) {
+            forEl = document.getElementById(forElId);
+            if (forEl) {
+                this.forElement_ = forEl;
+                forEl.addEventListener('click', this.handleForClick_.bind(this));
+                forEl.addEventListener('keydown', this.handleForKeyboardEvent_.bind(this));
+            }
+        }
+        var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM);
+        this.boundItemKeydown_ = this.handleItemKeyboardEvent_.bind(this);
+        this.boundItemClick_ = this.handleItemClick_.bind(this);
+        for (var i = 0; i < items.length; i++) {
+            // Add a listener to each menu item.
+            items[i].addEventListener('click', this.boundItemClick_);
+            // Add a tab index to each menu item.
+            items[i].tabIndex = '-1';
+            // Add a keyboard listener to each menu item.
+            items[i].addEventListener('keydown', this.boundItemKeydown_);
+        }
+        // Add ripple classes to each item, if the user has enabled ripples.
+        if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+            this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            for (i = 0; i < items.length; i++) {
+                var item = items[i];
+                var rippleContainer = document.createElement('span');
+                rippleContainer.classList.add(this.CssClasses_.ITEM_RIPPLE_CONTAINER);
+                var ripple = document.createElement('span');
+                ripple.classList.add(this.CssClasses_.RIPPLE);
+                rippleContainer.appendChild(ripple);
+                item.appendChild(rippleContainer);
+                item.classList.add(this.CssClasses_.RIPPLE_EFFECT);
+            }
+        }
+        // Copy alignment classes to the container, so the outline can use them.
+        if (this.element_.classList.contains(this.CssClasses_.BOTTOM_LEFT)) {
+            this.outline_.classList.add(this.CssClasses_.BOTTOM_LEFT);
+        }
+        if (this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
+            this.outline_.classList.add(this.CssClasses_.BOTTOM_RIGHT);
+        }
+        if (this.element_.classList.contains(this.CssClasses_.TOP_LEFT)) {
+            this.outline_.classList.add(this.CssClasses_.TOP_LEFT);
+        }
+        if (this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+            this.outline_.classList.add(this.CssClasses_.TOP_RIGHT);
+        }
+        if (this.element_.classList.contains(this.CssClasses_.UNALIGNED)) {
+            this.outline_.classList.add(this.CssClasses_.UNALIGNED);
+        }
+        container.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+/**
+   * Handles a click on the "for" element, by positioning the menu and then
+   * toggling it.
+   *
+   * @param {Event} evt The event that fired.
+   * @private
+   */
+MaterialMenu.prototype.handleForClick_ = function (evt) {
+    if (this.element_ && this.forElement_) {
+        var rect = this.forElement_.getBoundingClientRect();
+        var forRect = this.forElement_.parentElement.getBoundingClientRect();
+        if (this.element_.classList.contains(this.CssClasses_.UNALIGNED)) {
+        } else if (this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
+            // Position below the "for" element, aligned to its right.
+            this.container_.style.right = forRect.right - rect.right + 'px';
+            this.container_.style.top = this.forElement_.offsetTop + this.forElement_.offsetHeight + 'px';
+        } else if (this.element_.classList.contains(this.CssClasses_.TOP_LEFT)) {
+            // Position above the "for" element, aligned to its left.
+            this.container_.style.left = this.forElement_.offsetLeft + 'px';
+            this.container_.style.bottom = forRect.bottom - rect.top + 'px';
+        } else if (this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+            // Position above the "for" element, aligned to its right.
+            this.container_.style.right = forRect.right - rect.right + 'px';
+            this.container_.style.bottom = forRect.bottom - rect.top + 'px';
+        } else {
+            // Default: position below the "for" element, aligned to its left.
+            this.container_.style.left = this.forElement_.offsetLeft + 'px';
+            this.container_.style.top = this.forElement_.offsetTop + this.forElement_.offsetHeight + 'px';
+        }
+    }
+    this.toggle(evt);
+};
+/**
+   * Handles a keyboard event on the "for" element.
+   *
+   * @param {Event} evt The event that fired.
+   * @private
+   */
+MaterialMenu.prototype.handleForKeyboardEvent_ = function (evt) {
+    if (this.element_ && this.container_ && this.forElement_) {
+        var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM + ':not([disabled])');
+        if (items && items.length > 0 && this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)) {
+            if (evt.keyCode === this.Keycodes_.UP_ARROW) {
+                evt.preventDefault();
+                items[items.length - 1].focus();
+            } else if (evt.keyCode === this.Keycodes_.DOWN_ARROW) {
+                evt.preventDefault();
+                items[0].focus();
+            }
+        }
+    }
+};
+/**
+   * Handles a keyboard event on an item.
+   *
+   * @param {Event} evt The event that fired.
+   * @private
+   */
+MaterialMenu.prototype.handleItemKeyboardEvent_ = function (evt) {
+    if (this.element_ && this.container_) {
+        var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM + ':not([disabled])');
+        if (items && items.length > 0 && this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)) {
+            var currentIndex = Array.prototype.slice.call(items).indexOf(evt.target);
+            if (evt.keyCode === this.Keycodes_.UP_ARROW) {
+                evt.preventDefault();
+                if (currentIndex > 0) {
+                    items[currentIndex - 1].focus();
+                } else {
+                    items[items.length - 1].focus();
+                }
+            } else if (evt.keyCode === this.Keycodes_.DOWN_ARROW) {
+                evt.preventDefault();
+                if (items.length > currentIndex + 1) {
+                    items[currentIndex + 1].focus();
+                } else {
+                    items[0].focus();
+                }
+            } else if (evt.keyCode === this.Keycodes_.SPACE || evt.keyCode === this.Keycodes_.ENTER) {
+                evt.preventDefault();
+                // Send mousedown and mouseup to trigger ripple.
+                var e = new MouseEvent('mousedown');
+                evt.target.dispatchEvent(e);
+                e = new MouseEvent('mouseup');
+                evt.target.dispatchEvent(e);
+                // Send click.
+                evt.target.click();
+            } else if (evt.keyCode === this.Keycodes_.ESCAPE) {
+                evt.preventDefault();
+                this.hide();
+            }
+        }
+    }
+};
+/**
+   * Handles a click event on an item.
+   *
+   * @param {Event} evt The event that fired.
+   * @private
+   */
+MaterialMenu.prototype.handleItemClick_ = function (evt) {
+    if (evt.target.hasAttribute('disabled')) {
+        evt.stopPropagation();
+    } else {
+        // Wait some time before closing menu, so the user can see the ripple.
+        this.closing_ = true;
+        window.setTimeout(function (evt) {
+            this.hide();
+            this.closing_ = false;
+        }.bind(this), this.Constant_.CLOSE_TIMEOUT);
+    }
+};
+/**
+   * Calculates the initial clip (for opening the menu) or final clip (for closing
+   * it), and applies it. This allows us to animate from or to the correct point,
+   * that is, the point it's aligned to in the "for" element.
+   *
+   * @param {number} height Height of the clip rectangle
+   * @param {number} width Width of the clip rectangle
+   * @private
+   */
+MaterialMenu.prototype.applyClip_ = function (height, width) {
+    if (this.element_.classList.contains(this.CssClasses_.UNALIGNED)) {
+        // Do not clip.
+        this.element_.style.clip = '';
+    } else if (this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)) {
+        // Clip to the top right corner of the menu.
+        this.element_.style.clip = 'rect(0 ' + width + 'px ' + '0 ' + width + 'px)';
+    } else if (this.element_.classList.contains(this.CssClasses_.TOP_LEFT)) {
+        // Clip to the bottom left corner of the menu.
+        this.element_.style.clip = 'rect(' + height + 'px 0 ' + height + 'px 0)';
+    } else if (this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+        // Clip to the bottom right corner of the menu.
+        this.element_.style.clip = 'rect(' + height + 'px ' + width + 'px ' + height + 'px ' + width + 'px)';
+    } else {
+        // Default: do not clip (same as clipping to the top left corner).
+        this.element_.style.clip = '';
+    }
+};
+/**
+   * Adds an event listener to clean up after the animation ends.
+   *
+   * @private
+   */
+MaterialMenu.prototype.addAnimationEndListener_ = function () {
+    var cleanup = function () {
+        this.element_.removeEventListener('transitionend', cleanup);
+        this.element_.removeEventListener('webkitTransitionEnd', cleanup);
+        this.element_.classList.remove(this.CssClasses_.IS_ANIMATING);
+    }.bind(this);
+    // Remove animation class once the transition is done.
+    this.element_.addEventListener('transitionend', cleanup);
+    this.element_.addEventListener('webkitTransitionEnd', cleanup);
+};
+/**
+   * Displays the menu.
+   *
+   * @public
+   */
+MaterialMenu.prototype.show = function (evt) {
+    if (this.element_ && this.container_ && this.outline_) {
+        // Measure the inner element.
+        var height = this.element_.getBoundingClientRect().height;
+        var width = this.element_.getBoundingClientRect().width;
+        // Apply the inner element's size to the container and outline.
+        this.container_.style.width = width + 'px';
+        this.container_.style.height = height + 'px';
+        this.outline_.style.width = width + 'px';
+        this.outline_.style.height = height + 'px';
+        var transitionDuration = this.Constant_.TRANSITION_DURATION_SECONDS * this.Constant_.TRANSITION_DURATION_FRACTION;
+        // Calculate transition delays for individual menu items, so that they fade
+        // in one at a time.
+        var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM);
+        for (var i = 0; i < items.length; i++) {
+            var itemDelay = null;
+            if (this.element_.classList.contains(this.CssClasses_.TOP_LEFT) || this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)) {
+                itemDelay = (height - items[i].offsetTop - items[i].offsetHeight) / height * transitionDuration + 's';
+            } else {
+                itemDelay = items[i].offsetTop / height * transitionDuration + 's';
+            }
+            items[i].style.transitionDelay = itemDelay;
+        }
+        // Apply the initial clip to the text before we start animating.
+        this.applyClip_(height, width);
+        // Wait for the next frame, turn on animation, and apply the final clip.
+        // Also make it visible. This triggers the transitions.
+        window.requestAnimationFrame(function () {
+            this.element_.classList.add(this.CssClasses_.IS_ANIMATING);
+            this.element_.style.clip = 'rect(0 ' + width + 'px ' + height + 'px 0)';
+            this.container_.classList.add(this.CssClasses_.IS_VISIBLE);
+        }.bind(this));
+        // Clean up after the animation is complete.
+        this.addAnimationEndListener_();
+        // Add a click listener to the document, to close the menu.
+        var callback = function (e) {
+            // Check to see if the document is processing the same event that
+            // displayed the menu in the first place. If so, do nothing.
+            // Also check to see if the menu is in the process of closing itself, and
+            // do nothing in that case.
+            // Also check if the clicked element is a menu item
+            // if so, do nothing.
+            if (e !== evt && !this.closing_ && e.target.parentNode !== this.element_) {
+                document.removeEventListener('click', callback);
+                this.hide();
+            }
+        }.bind(this);
+        document.addEventListener('click', callback);
+    }
+};
+MaterialMenu.prototype['show'] = MaterialMenu.prototype.show;
+/**
+   * Hides the menu.
+   *
+   * @public
+   */
+MaterialMenu.prototype.hide = function () {
+    if (this.element_ && this.container_ && this.outline_) {
+        var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM);
+        // Remove all transition delays; menu items fade out concurrently.
+        for (var i = 0; i < items.length; i++) {
+            items[i].style.transitionDelay = null;
+        }
+        // Measure the inner element.
+        var rect = this.element_.getBoundingClientRect();
+        var height = rect.height;
+        var width = rect.width;
+        // Turn on animation, and apply the final clip. Also make invisible.
+        // This triggers the transitions.
+        this.element_.classList.add(this.CssClasses_.IS_ANIMATING);
+        this.applyClip_(height, width);
+        this.container_.classList.remove(this.CssClasses_.IS_VISIBLE);
+        // Clean up after the animation is complete.
+        this.addAnimationEndListener_();
+    }
+};
+MaterialMenu.prototype['hide'] = MaterialMenu.prototype.hide;
+/**
+   * Displays or hides the menu, depending on current state.
+   *
+   * @public
+   */
+MaterialMenu.prototype.toggle = function (evt) {
+    if (this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)) {
+        this.hide();
+    } else {
+        this.show(evt);
+    }
+};
+MaterialMenu.prototype['toggle'] = MaterialMenu.prototype.toggle;
+/**
+   * Downgrade the component.
+   *
+   * @private
+   */
+MaterialMenu.prototype.mdlDowngrade_ = function () {
+    var items = this.element_.querySelectorAll('.' + this.CssClasses_.ITEM);
+    for (var i = 0; i < items.length; i++) {
+        items[i].removeEventListener('click', this.boundItemClick_);
+        items[i].removeEventListener('keydown', this.boundItemKeydown_);
+    }
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialMenu.prototype.mdlDowngrade = MaterialMenu.prototype.mdlDowngrade_;
+MaterialMenu.prototype['mdlDowngrade'] = MaterialMenu.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialMenu,
+    classAsString: 'MaterialMenu',
+    cssClass: 'mdl-js-menu',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Progress MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialProgress = function MaterialProgress(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialProgress'] = MaterialProgress;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialProgress.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialProgress.prototype.CssClasses_ = { INDETERMINATE_CLASS: 'mdl-progress__indeterminate' };
+/**
+   * Set the current progress of the progressbar.
+   *
+   * @param {number} p Percentage of the progress (0-100)
+   * @public
+   */
+MaterialProgress.prototype.setProgress = function (p) {
+    if (this.element_.classList.contains(this.CssClasses_.INDETERMINATE_CLASS)) {
+        return;
+    }
+    this.progressbar_.style.width = p + '%';
+};
+MaterialProgress.prototype['setProgress'] = MaterialProgress.prototype.setProgress;
+/**
+   * Set the current progress of the buffer.
+   *
+   * @param {number} p Percentage of the buffer (0-100)
+   * @public
+   */
+MaterialProgress.prototype.setBuffer = function (p) {
+    this.bufferbar_.style.width = p + '%';
+    this.auxbar_.style.width = 100 - p + '%';
+};
+MaterialProgress.prototype['setBuffer'] = MaterialProgress.prototype.setBuffer;
+/**
+   * Initialize element.
+   */
+MaterialProgress.prototype.init = function () {
+    if (this.element_) {
+        var el = document.createElement('div');
+        el.className = 'progressbar bar bar1';
+        this.element_.appendChild(el);
+        this.progressbar_ = el;
+        el = document.createElement('div');
+        el.className = 'bufferbar bar bar2';
+        this.element_.appendChild(el);
+        this.bufferbar_ = el;
+        el = document.createElement('div');
+        el.className = 'auxbar bar bar3';
+        this.element_.appendChild(el);
+        this.auxbar_ = el;
+        this.progressbar_.style.width = '0%';
+        this.bufferbar_.style.width = '100%';
+        this.auxbar_.style.width = '0%';
+        this.element_.classList.add('is-upgraded');
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialProgress.prototype.mdlDowngrade_ = function () {
+    while (this.element_.firstChild) {
+        this.element_.removeChild(this.element_.firstChild);
+    }
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialProgress.prototype.mdlDowngrade = MaterialProgress.prototype.mdlDowngrade_;
+MaterialProgress.prototype['mdlDowngrade'] = MaterialProgress.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialProgress,
+    classAsString: 'MaterialProgress',
+    cssClass: 'mdl-js-progress',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Radio MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialRadio = function MaterialRadio(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialRadio'] = MaterialRadio;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialRadio.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialRadio.prototype.CssClasses_ = {
+    IS_FOCUSED: 'is-focused',
+    IS_DISABLED: 'is-disabled',
+    IS_CHECKED: 'is-checked',
+    IS_UPGRADED: 'is-upgraded',
+    JS_RADIO: 'mdl-js-radio',
+    RADIO_BTN: 'mdl-radio__button',
+    RADIO_OUTER_CIRCLE: 'mdl-radio__outer-circle',
+    RADIO_INNER_CIRCLE: 'mdl-radio__inner-circle',
+    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE_CONTAINER: 'mdl-radio__ripple-container',
+    RIPPLE_CENTER: 'mdl-ripple--center',
+    RIPPLE: 'mdl-ripple'
+};
+/**
+   * Handle change of state.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRadio.prototype.onChange_ = function (event) {
+    // Since other radio buttons don't get change events, we need to look for
+    // them to update their classes.
+    var radios = document.getElementsByClassName(this.CssClasses_.JS_RADIO);
+    for (var i = 0; i < radios.length; i++) {
+        var button = radios[i].querySelector('.' + this.CssClasses_.RADIO_BTN);
+        // Different name == different group, so no point updating those.
+        if (button.getAttribute('name') === this.btnElement_.getAttribute('name')) {
+            radios[i]['MaterialRadio'].updateClasses_();
+        }
+    }
+};
+/**
+   * Handle focus.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRadio.prototype.onFocus_ = function (event) {
+    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle lost focus.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRadio.prototype.onBlur_ = function (event) {
+    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle mouseup.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRadio.prototype.onMouseup_ = function (event) {
+    this.blur_();
+};
+/**
+   * Update classes.
+   *
+   * @private
+   */
+MaterialRadio.prototype.updateClasses_ = function () {
+    this.checkDisabled();
+    this.checkToggleState();
+};
+/**
+   * Add blur.
+   *
+   * @private
+   */
+MaterialRadio.prototype.blur_ = function () {
+    // TODO: figure out why there's a focus event being fired after our blur,
+    // so that we can avoid this hack.
+    window.setTimeout(function () {
+        this.btnElement_.blur();
+    }.bind(this), this.Constant_.TINY_TIMEOUT);
+};
+// Public methods.
+/**
+   * Check the components disabled state.
+   *
+   * @public
+   */
+MaterialRadio.prototype.checkDisabled = function () {
+    if (this.btnElement_.disabled) {
+        this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    }
+};
+MaterialRadio.prototype['checkDisabled'] = MaterialRadio.prototype.checkDisabled;
+/**
+   * Check the components toggled state.
+   *
+   * @public
+   */
+MaterialRadio.prototype.checkToggleState = function () {
+    if (this.btnElement_.checked) {
+        this.element_.classList.add(this.CssClasses_.IS_CHECKED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
+    }
+};
+MaterialRadio.prototype['checkToggleState'] = MaterialRadio.prototype.checkToggleState;
+/**
+   * Disable radio.
+   *
+   * @public
+   */
+MaterialRadio.prototype.disable = function () {
+    this.btnElement_.disabled = true;
+    this.updateClasses_();
+};
+MaterialRadio.prototype['disable'] = MaterialRadio.prototype.disable;
+/**
+   * Enable radio.
+   *
+   * @public
+   */
+MaterialRadio.prototype.enable = function () {
+    this.btnElement_.disabled = false;
+    this.updateClasses_();
+};
+MaterialRadio.prototype['enable'] = MaterialRadio.prototype.enable;
+/**
+   * Check radio.
+   *
+   * @public
+   */
+MaterialRadio.prototype.check = function () {
+    this.btnElement_.checked = true;
+    this.updateClasses_();
+};
+MaterialRadio.prototype['check'] = MaterialRadio.prototype.check;
+/**
+   * Uncheck radio.
+   *
+   * @public
+   */
+MaterialRadio.prototype.uncheck = function () {
+    this.btnElement_.checked = false;
+    this.updateClasses_();
+};
+MaterialRadio.prototype['uncheck'] = MaterialRadio.prototype.uncheck;
+/**
+   * Initialize element.
+   */
+MaterialRadio.prototype.init = function () {
+    if (this.element_) {
+        this.btnElement_ = this.element_.querySelector('.' + this.CssClasses_.RADIO_BTN);
+        this.boundChangeHandler_ = this.onChange_.bind(this);
+        this.boundFocusHandler_ = this.onChange_.bind(this);
+        this.boundBlurHandler_ = this.onBlur_.bind(this);
+        this.boundMouseUpHandler_ = this.onMouseup_.bind(this);
+        var outerCircle = document.createElement('span');
+        outerCircle.classList.add(this.CssClasses_.RADIO_OUTER_CIRCLE);
+        var innerCircle = document.createElement('span');
+        innerCircle.classList.add(this.CssClasses_.RADIO_INNER_CIRCLE);
+        this.element_.appendChild(outerCircle);
+        this.element_.appendChild(innerCircle);
+        var rippleContainer;
+        if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+            this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            rippleContainer = document.createElement('span');
+            rippleContainer.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+            rippleContainer.classList.add(this.CssClasses_.RIPPLE_EFFECT);
+            rippleContainer.classList.add(this.CssClasses_.RIPPLE_CENTER);
+            rippleContainer.addEventListener('mouseup', this.boundMouseUpHandler_);
+            var ripple = document.createElement('span');
+            ripple.classList.add(this.CssClasses_.RIPPLE);
+            rippleContainer.appendChild(ripple);
+            this.element_.appendChild(rippleContainer);
+        }
+        this.btnElement_.addEventListener('change', this.boundChangeHandler_);
+        this.btnElement_.addEventListener('focus', this.boundFocusHandler_);
+        this.btnElement_.addEventListener('blur', this.boundBlurHandler_);
+        this.element_.addEventListener('mouseup', this.boundMouseUpHandler_);
+        this.updateClasses_();
+        this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+/**
+   * Downgrade the element.
+   *
+   * @private
+   */
+MaterialRadio.prototype.mdlDowngrade_ = function () {
+    var rippleContainer = this.element_.querySelector('.' + this.CssClasses_.RIPPLE_CONTAINER);
+    this.btnElement_.removeEventListener('change', this.boundChangeHandler_);
+    this.btnElement_.removeEventListener('focus', this.boundFocusHandler_);
+    this.btnElement_.removeEventListener('blur', this.boundBlurHandler_);
+    this.element_.removeEventListener('mouseup', this.boundMouseUpHandler_);
+    if (rippleContainer) {
+        rippleContainer.removeEventListener('mouseup', this.boundMouseUpHandler_);
+        this.element_.removeChild(rippleContainer);
+    }
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialRadio.prototype.mdlDowngrade = MaterialRadio.prototype.mdlDowngrade_;
+MaterialRadio.prototype['mdlDowngrade'] = MaterialRadio.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialRadio,
+    classAsString: 'MaterialRadio',
+    cssClass: 'mdl-js-radio',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Slider MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialSlider = function MaterialSlider(element) {
+    this.element_ = element;
+    // Browser feature detection.
+    this.isIE_ = window.navigator.msPointerEnabled;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialSlider'] = MaterialSlider;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialSlider.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialSlider.prototype.CssClasses_ = {
+    IE_CONTAINER: 'mdl-slider__ie-container',
+    SLIDER_CONTAINER: 'mdl-slider__container',
+    BACKGROUND_FLEX: 'mdl-slider__background-flex',
+    BACKGROUND_LOWER: 'mdl-slider__background-lower',
+    BACKGROUND_UPPER: 'mdl-slider__background-upper',
+    IS_LOWEST_VALUE: 'is-lowest-value',
+    IS_UPGRADED: 'is-upgraded'
+};
+/**
+   * Handle input on element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSlider.prototype.onInput_ = function (event) {
+    this.updateValueStyles_();
+};
+/**
+   * Handle change on element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSlider.prototype.onChange_ = function (event) {
+    this.updateValueStyles_();
+};
+/**
+   * Handle mouseup on element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSlider.prototype.onMouseUp_ = function (event) {
+    event.target.blur();
+};
+/**
+   * Handle mousedown on container element.
+   * This handler is purpose is to not require the use to click
+   * exactly on the 2px slider element, as FireFox seems to be very
+   * strict about this.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   * @suppress {missingProperties}
+   */
+MaterialSlider.prototype.onContainerMouseDown_ = function (event) {
+    // If this click is not on the parent element (but rather some child)
+    // ignore. It may still bubble up.
+    if (event.target !== this.element_.parentElement) {
+        return;
+    }
+    // Discard the original event and create a new event that
+    // is on the slider element.
+    event.preventDefault();
+    var newEvent = new MouseEvent('mousedown', {
+        target: event.target,
+        buttons: event.buttons,
+        clientX: event.clientX,
+        clientY: this.element_.getBoundingClientRect().y
+    });
+    this.element_.dispatchEvent(newEvent);
+};
+/**
+   * Handle updating of values.
+   *
+   * @private
+   */
+MaterialSlider.prototype.updateValueStyles_ = function () {
+    // Calculate and apply percentages to div structure behind slider.
+    var fraction = (this.element_.value - this.element_.min) / (this.element_.max - this.element_.min);
+    if (fraction === 0) {
+        this.element_.classList.add(this.CssClasses_.IS_LOWEST_VALUE);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_LOWEST_VALUE);
+    }
+    if (!this.isIE_) {
+        this.backgroundLower_.style.flex = fraction;
+        this.backgroundLower_.style.webkitFlex = fraction;
+        this.backgroundUpper_.style.flex = 1 - fraction;
+        this.backgroundUpper_.style.webkitFlex = 1 - fraction;
+    }
+};
+// Public methods.
+/**
+   * Disable slider.
+   *
+   * @public
+   */
+MaterialSlider.prototype.disable = function () {
+    this.element_.disabled = true;
+};
+MaterialSlider.prototype['disable'] = MaterialSlider.prototype.disable;
+/**
+   * Enable slider.
+   *
+   * @public
+   */
+MaterialSlider.prototype.enable = function () {
+    this.element_.disabled = false;
+};
+MaterialSlider.prototype['enable'] = MaterialSlider.prototype.enable;
+/**
+   * Update slider value.
+   *
+   * @param {number} value The value to which to set the control (optional).
+   * @public
+   */
+MaterialSlider.prototype.change = function (value) {
+    if (typeof value !== 'undefined') {
+        this.element_.value = value;
+    }
+    this.updateValueStyles_();
+};
+MaterialSlider.prototype['change'] = MaterialSlider.prototype.change;
+/**
+   * Initialize element.
+   */
+MaterialSlider.prototype.init = function () {
+    if (this.element_) {
+        if (this.isIE_) {
+            // Since we need to specify a very large height in IE due to
+            // implementation limitations, we add a parent here that trims it down to
+            // a reasonable size.
+            var containerIE = document.createElement('div');
+            containerIE.classList.add(this.CssClasses_.IE_CONTAINER);
+            this.element_.parentElement.insertBefore(containerIE, this.element_);
+            this.element_.parentElement.removeChild(this.element_);
+            containerIE.appendChild(this.element_);
+        } else {
+            // For non-IE browsers, we need a div structure that sits behind the
+            // slider and allows us to style the left and right sides of it with
+            // different colors.
+            var container = document.createElement('div');
+            container.classList.add(this.CssClasses_.SLIDER_CONTAINER);
+            this.element_.parentElement.insertBefore(container, this.element_);
+            this.element_.parentElement.removeChild(this.element_);
+            container.appendChild(this.element_);
+            var backgroundFlex = document.createElement('div');
+            backgroundFlex.classList.add(this.CssClasses_.BACKGROUND_FLEX);
+            container.appendChild(backgroundFlex);
+            this.backgroundLower_ = document.createElement('div');
+            this.backgroundLower_.classList.add(this.CssClasses_.BACKGROUND_LOWER);
+            backgroundFlex.appendChild(this.backgroundLower_);
+            this.backgroundUpper_ = document.createElement('div');
+            this.backgroundUpper_.classList.add(this.CssClasses_.BACKGROUND_UPPER);
+            backgroundFlex.appendChild(this.backgroundUpper_);
+        }
+        this.boundInputHandler = this.onInput_.bind(this);
+        this.boundChangeHandler = this.onChange_.bind(this);
+        this.boundMouseUpHandler = this.onMouseUp_.bind(this);
+        this.boundContainerMouseDownHandler = this.onContainerMouseDown_.bind(this);
+        this.element_.addEventListener('input', this.boundInputHandler);
+        this.element_.addEventListener('change', this.boundChangeHandler);
+        this.element_.addEventListener('mouseup', this.boundMouseUpHandler);
+        this.element_.parentElement.addEventListener('mousedown', this.boundContainerMouseDownHandler);
+        this.updateValueStyles_();
+        this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialSlider.prototype.mdlDowngrade_ = function () {
+    this.element_.removeEventListener('input', this.boundInputHandler);
+    this.element_.removeEventListener('change', this.boundChangeHandler);
+    this.element_.removeEventListener('mouseup', this.boundMouseUpHandler);
+    this.element_.parentElement.removeEventListener('mousedown', this.boundContainerMouseDownHandler);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialSlider.prototype.mdlDowngrade = MaterialSlider.prototype.mdlDowngrade_;
+MaterialSlider.prototype['mdlDowngrade'] = MaterialSlider.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialSlider,
+    classAsString: 'MaterialSlider',
+    cssClass: 'mdl-js-slider',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Spinner MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @param {HTMLElement} element The element that will be upgraded.
+   * @constructor
+   */
+var MaterialSpinner = function MaterialSpinner(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialSpinner'] = MaterialSpinner;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialSpinner.prototype.Constant_ = { MDL_SPINNER_LAYER_COUNT: 4 };
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialSpinner.prototype.CssClasses_ = {
+    MDL_SPINNER_LAYER: 'mdl-spinner__layer',
+    MDL_SPINNER_CIRCLE_CLIPPER: 'mdl-spinner__circle-clipper',
+    MDL_SPINNER_CIRCLE: 'mdl-spinner__circle',
+    MDL_SPINNER_GAP_PATCH: 'mdl-spinner__gap-patch',
+    MDL_SPINNER_LEFT: 'mdl-spinner__left',
+    MDL_SPINNER_RIGHT: 'mdl-spinner__right'
+};
+/**
+   * Auxiliary method to create a spinner layer.
+   *
+   * @param {number} index Index of the layer to be created.
+   * @public
+   */
+MaterialSpinner.prototype.createLayer = function (index) {
+    var layer = document.createElement('div');
+    layer.classList.add(this.CssClasses_.MDL_SPINNER_LAYER);
+    layer.classList.add(this.CssClasses_.MDL_SPINNER_LAYER + '-' + index);
+    var leftClipper = document.createElement('div');
+    leftClipper.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER);
+    leftClipper.classList.add(this.CssClasses_.MDL_SPINNER_LEFT);
+    var gapPatch = document.createElement('div');
+    gapPatch.classList.add(this.CssClasses_.MDL_SPINNER_GAP_PATCH);
+    var rightClipper = document.createElement('div');
+    rightClipper.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER);
+    rightClipper.classList.add(this.CssClasses_.MDL_SPINNER_RIGHT);
+    var circleOwners = [
+        leftClipper,
+        gapPatch,
+        rightClipper
+    ];
+    for (var i = 0; i < circleOwners.length; i++) {
+        var circle = document.createElement('div');
+        circle.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE);
+        circleOwners[i].appendChild(circle);
+    }
+    layer.appendChild(leftClipper);
+    layer.appendChild(gapPatch);
+    layer.appendChild(rightClipper);
+    this.element_.appendChild(layer);
+};
+MaterialSpinner.prototype['createLayer'] = MaterialSpinner.prototype.createLayer;
+/**
+   * Stops the spinner animation.
+   * Public method for users who need to stop the spinner for any reason.
+   *
+   * @public
+   */
+MaterialSpinner.prototype.stop = function () {
+    this.element_.classList.remove('is-active');
+};
+MaterialSpinner.prototype['stop'] = MaterialSpinner.prototype.stop;
+/**
+   * Starts the spinner animation.
+   * Public method for users who need to manually start the spinner for any reason
+   * (instead of just adding the 'is-active' class to their markup).
+   *
+   * @public
+   */
+MaterialSpinner.prototype.start = function () {
+    this.element_.classList.add('is-active');
+};
+MaterialSpinner.prototype['start'] = MaterialSpinner.prototype.start;
+/**
+   * Initialize element.
+   */
+MaterialSpinner.prototype.init = function () {
+    if (this.element_) {
+        for (var i = 1; i <= this.Constant_.MDL_SPINNER_LAYER_COUNT; i++) {
+            this.createLayer(i);
+        }
+        this.element_.classList.add('is-upgraded');
+    }
+};
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialSpinner,
+    classAsString: 'MaterialSpinner',
+    cssClass: 'mdl-js-spinner',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Checkbox MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialSwitch = function MaterialSwitch(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialSwitch'] = MaterialSwitch;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialSwitch.prototype.Constant_ = { TINY_TIMEOUT: 0.001 };
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialSwitch.prototype.CssClasses_ = {
+    INPUT: 'mdl-switch__input',
+    TRACK: 'mdl-switch__track',
+    THUMB: 'mdl-switch__thumb',
+    FOCUS_HELPER: 'mdl-switch__focus-helper',
+    RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE_CONTAINER: 'mdl-switch__ripple-container',
+    RIPPLE_CENTER: 'mdl-ripple--center',
+    RIPPLE: 'mdl-ripple',
+    IS_FOCUSED: 'is-focused',
+    IS_DISABLED: 'is-disabled',
+    IS_CHECKED: 'is-checked'
+};
+/**
+   * Handle change of state.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSwitch.prototype.onChange_ = function (event) {
+    this.updateClasses_();
+};
+/**
+   * Handle focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSwitch.prototype.onFocus_ = function (event) {
+    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle lost focus of element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSwitch.prototype.onBlur_ = function (event) {
+    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle mouseup.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialSwitch.prototype.onMouseUp_ = function (event) {
+    this.blur_();
+};
+/**
+   * Handle class updates.
+   *
+   * @private
+   */
+MaterialSwitch.prototype.updateClasses_ = function () {
+    this.checkDisabled();
+    this.checkToggleState();
+};
+/**
+   * Add blur.
+   *
+   * @private
+   */
+MaterialSwitch.prototype.blur_ = function () {
+    // TODO: figure out why there's a focus event being fired after our blur,
+    // so that we can avoid this hack.
+    window.setTimeout(function () {
+        this.inputElement_.blur();
+    }.bind(this), this.Constant_.TINY_TIMEOUT);
+};
+// Public methods.
+/**
+   * Check the components disabled state.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.checkDisabled = function () {
+    if (this.inputElement_.disabled) {
+        this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    }
+};
+MaterialSwitch.prototype['checkDisabled'] = MaterialSwitch.prototype.checkDisabled;
+/**
+   * Check the components toggled state.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.checkToggleState = function () {
+    if (this.inputElement_.checked) {
+        this.element_.classList.add(this.CssClasses_.IS_CHECKED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_CHECKED);
+    }
+};
+MaterialSwitch.prototype['checkToggleState'] = MaterialSwitch.prototype.checkToggleState;
+/**
+   * Disable switch.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.disable = function () {
+    this.inputElement_.disabled = true;
+    this.updateClasses_();
+};
+MaterialSwitch.prototype['disable'] = MaterialSwitch.prototype.disable;
+/**
+   * Enable switch.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.enable = function () {
+    this.inputElement_.disabled = false;
+    this.updateClasses_();
+};
+MaterialSwitch.prototype['enable'] = MaterialSwitch.prototype.enable;
+/**
+   * Activate switch.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.on = function () {
+    this.inputElement_.checked = true;
+    this.updateClasses_();
+};
+MaterialSwitch.prototype['on'] = MaterialSwitch.prototype.on;
+/**
+   * Deactivate switch.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.off = function () {
+    this.inputElement_.checked = false;
+    this.updateClasses_();
+};
+MaterialSwitch.prototype['off'] = MaterialSwitch.prototype.off;
+/**
+   * Initialize element.
+   */
+MaterialSwitch.prototype.init = function () {
+    if (this.element_) {
+        this.inputElement_ = this.element_.querySelector('.' + this.CssClasses_.INPUT);
+        var track = document.createElement('div');
+        track.classList.add(this.CssClasses_.TRACK);
+        var thumb = document.createElement('div');
+        thumb.classList.add(this.CssClasses_.THUMB);
+        var focusHelper = document.createElement('span');
+        focusHelper.classList.add(this.CssClasses_.FOCUS_HELPER);
+        thumb.appendChild(focusHelper);
+        this.element_.appendChild(track);
+        this.element_.appendChild(thumb);
+        this.boundMouseUpHandler = this.onMouseUp_.bind(this);
+        if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+            this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            this.rippleContainerElement_ = document.createElement('span');
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT);
+            this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER);
+            this.rippleContainerElement_.addEventListener('mouseup', this.boundMouseUpHandler);
+            var ripple = document.createElement('span');
+            ripple.classList.add(this.CssClasses_.RIPPLE);
+            this.rippleContainerElement_.appendChild(ripple);
+            this.element_.appendChild(this.rippleContainerElement_);
+        }
+        this.boundChangeHandler = this.onChange_.bind(this);
+        this.boundFocusHandler = this.onFocus_.bind(this);
+        this.boundBlurHandler = this.onBlur_.bind(this);
+        this.inputElement_.addEventListener('change', this.boundChangeHandler);
+        this.inputElement_.addEventListener('focus', this.boundFocusHandler);
+        this.inputElement_.addEventListener('blur', this.boundBlurHandler);
+        this.element_.addEventListener('mouseup', this.boundMouseUpHandler);
+        this.updateClasses_();
+        this.element_.classList.add('is-upgraded');
+    }
+};
+/**
+   * Downgrade the component.
+   *
+   * @private
+   */
+MaterialSwitch.prototype.mdlDowngrade_ = function () {
+    if (this.rippleContainerElement_) {
+        this.rippleContainerElement_.removeEventListener('mouseup', this.boundMouseUpHandler);
+    }
+    this.inputElement_.removeEventListener('change', this.boundChangeHandler);
+    this.inputElement_.removeEventListener('focus', this.boundFocusHandler);
+    this.inputElement_.removeEventListener('blur', this.boundBlurHandler);
+    this.element_.removeEventListener('mouseup', this.boundMouseUpHandler);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialSwitch.prototype.mdlDowngrade = MaterialSwitch.prototype.mdlDowngrade_;
+MaterialSwitch.prototype['mdlDowngrade'] = MaterialSwitch.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialSwitch,
+    classAsString: 'MaterialSwitch',
+    cssClass: 'mdl-js-switch',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Tabs MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialTabs = function MaterialTabs(element) {
+    // Stores the HTML element.
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialTabs'] = MaterialTabs;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialTabs.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialTabs.prototype.CssClasses_ = {
+    TAB_CLASS: 'mdl-tabs__tab',
+    PANEL_CLASS: 'mdl-tabs__panel',
+    ACTIVE_CLASS: 'is-active',
+    UPGRADED_CLASS: 'is-upgraded',
+    MDL_JS_RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    MDL_RIPPLE_CONTAINER: 'mdl-tabs__ripple-container',
+    MDL_RIPPLE: 'mdl-ripple',
+    MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events'
+};
+/**
+   * Handle clicks to a tabs component
+   *
+   * @private
+   */
+MaterialTabs.prototype.initTabs_ = function () {
+    if (this.element_.classList.contains(this.CssClasses_.MDL_JS_RIPPLE_EFFECT)) {
+        this.element_.classList.add(this.CssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS);
+    }
+    // Select element tabs, document panels
+    this.tabs_ = this.element_.querySelectorAll('.' + this.CssClasses_.TAB_CLASS);
+    this.panels_ = this.element_.querySelectorAll('.' + this.CssClasses_.PANEL_CLASS);
+    // Create new tabs for each tab element
+    for (var i = 0; i < this.tabs_.length; i++) {
+        new MaterialTab(this.tabs_[i], this);
+    }
+    this.element_.classList.add(this.CssClasses_.UPGRADED_CLASS);
+};
+/**
+   * Reset tab state, dropping active classes
+   *
+   * @private
+   */
+MaterialTabs.prototype.resetTabState_ = function () {
+    for (var k = 0; k < this.tabs_.length; k++) {
+        this.tabs_[k].classList.remove(this.CssClasses_.ACTIVE_CLASS);
+    }
+};
+/**
+   * Reset panel state, droping active classes
+   *
+   * @private
+   */
+MaterialTabs.prototype.resetPanelState_ = function () {
+    for (var j = 0; j < this.panels_.length; j++) {
+        this.panels_[j].classList.remove(this.CssClasses_.ACTIVE_CLASS);
+    }
+};
+/**
+   * Initialize element.
+   */
+MaterialTabs.prototype.init = function () {
+    if (this.element_) {
+        this.initTabs_();
+    }
+};
+/**
+   * Constructor for an individual tab.
+   *
+   * @constructor
+   * @param {HTMLElement} tab The HTML element for the tab.
+   * @param {MaterialTabs} ctx The MaterialTabs object that owns the tab.
+   */
+function MaterialTab(tab, ctx) {
+    if (tab) {
+        if (ctx.element_.classList.contains(ctx.CssClasses_.MDL_JS_RIPPLE_EFFECT)) {
+            var rippleContainer = document.createElement('span');
+            rippleContainer.classList.add(ctx.CssClasses_.MDL_RIPPLE_CONTAINER);
+            rippleContainer.classList.add(ctx.CssClasses_.MDL_JS_RIPPLE_EFFECT);
+            var ripple = document.createElement('span');
+            ripple.classList.add(ctx.CssClasses_.MDL_RIPPLE);
+            rippleContainer.appendChild(ripple);
+            tab.appendChild(rippleContainer);
+        }
+        tab.addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = tab.href.split('#')[1];
+            var panel = ctx.element_.querySelector('#' + href);
+            ctx.resetTabState_();
+            ctx.resetPanelState_();
+            tab.classList.add(ctx.CssClasses_.ACTIVE_CLASS);
+            panel.classList.add(ctx.CssClasses_.ACTIVE_CLASS);
+        });
+    }
+}
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialTabs,
+    classAsString: 'MaterialTabs',
+    cssClass: 'mdl-js-tabs'
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Textfield MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialTextfield = function MaterialTextfield(element) {
+    this.element_ = element;
+    this.maxRows = this.Constant_.NO_MAX_ROWS;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialTextfield'] = MaterialTextfield;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialTextfield.prototype.Constant_ = {
+    NO_MAX_ROWS: -1,
+    MAX_ROWS_ATTRIBUTE: 'maxrows'
+};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialTextfield.prototype.CssClasses_ = {
+    LABEL: 'mdl-textfield__label',
+    INPUT: 'mdl-textfield__input',
+    IS_DIRTY: 'is-dirty',
+    IS_FOCUSED: 'is-focused',
+    IS_DISABLED: 'is-disabled',
+    IS_INVALID: 'is-invalid',
+    IS_UPGRADED: 'is-upgraded'
+};
+/**
+   * Handle input being entered.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialTextfield.prototype.onKeyDown_ = function (event) {
+    var currentRowCount = event.target.value.split('\n').length;
+    if (event.keyCode === 13) {
+        if (currentRowCount >= this.maxRows) {
+            event.preventDefault();
+        }
+    }
+};
+/**
+   * Handle focus.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialTextfield.prototype.onFocus_ = function (event) {
+    this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle lost focus.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialTextfield.prototype.onBlur_ = function (event) {
+    this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+};
+/**
+   * Handle class updates.
+   *
+   * @private
+   */
+MaterialTextfield.prototype.updateClasses_ = function () {
+    this.checkDisabled();
+    this.checkValidity();
+    this.checkDirty();
+};
+// Public methods.
+/**
+   * Check the disabled state and update field accordingly.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.checkDisabled = function () {
+    if (this.input_.disabled) {
+        this.element_.classList.add(this.CssClasses_.IS_DISABLED);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DISABLED);
+    }
+};
+MaterialTextfield.prototype['checkDisabled'] = MaterialTextfield.prototype.checkDisabled;
+/**
+   * Check the validity state and update field accordingly.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.checkValidity = function () {
+    if (this.input_.validity) {
+        if (this.input_.validity.valid) {
+            this.element_.classList.remove(this.CssClasses_.IS_INVALID);
+        } else {
+            this.element_.classList.add(this.CssClasses_.IS_INVALID);
+        }
+    }
+};
+MaterialTextfield.prototype['checkValidity'] = MaterialTextfield.prototype.checkValidity;
+/**
+   * Check the dirty state and update field accordingly.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.checkDirty = function () {
+    if (this.input_.value && this.input_.value.length > 0) {
+        this.element_.classList.add(this.CssClasses_.IS_DIRTY);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_DIRTY);
+    }
+};
+MaterialTextfield.prototype['checkDirty'] = MaterialTextfield.prototype.checkDirty;
+/**
+   * Disable text field.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.disable = function () {
+    this.input_.disabled = true;
+    this.updateClasses_();
+};
+MaterialTextfield.prototype['disable'] = MaterialTextfield.prototype.disable;
+/**
+   * Enable text field.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.enable = function () {
+    this.input_.disabled = false;
+    this.updateClasses_();
+};
+MaterialTextfield.prototype['enable'] = MaterialTextfield.prototype.enable;
+/**
+   * Update text field value.
+   *
+   * @param {string} value The value to which to set the control (optional).
+   * @public
+   */
+MaterialTextfield.prototype.change = function (value) {
+    this.input_.value = value || '';
+    this.updateClasses_();
+};
+MaterialTextfield.prototype['change'] = MaterialTextfield.prototype.change;
+/**
+   * Initialize element.
+   */
+MaterialTextfield.prototype.init = function () {
+    if (this.element_) {
+        this.label_ = this.element_.querySelector('.' + this.CssClasses_.LABEL);
+        this.input_ = this.element_.querySelector('.' + this.CssClasses_.INPUT);
+        if (this.input_) {
+            if (this.input_.hasAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE)) {
+                this.maxRows = parseInt(this.input_.getAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE), 10);
+                if (isNaN(this.maxRows)) {
+                    this.maxRows = this.Constant_.NO_MAX_ROWS;
+                }
+            }
+            this.boundUpdateClassesHandler = this.updateClasses_.bind(this);
+            this.boundFocusHandler = this.onFocus_.bind(this);
+            this.boundBlurHandler = this.onBlur_.bind(this);
+            this.input_.addEventListener('input', this.boundUpdateClassesHandler);
+            this.input_.addEventListener('focus', this.boundFocusHandler);
+            this.input_.addEventListener('blur', this.boundBlurHandler);
+            if (this.maxRows !== this.Constant_.NO_MAX_ROWS) {
+                // TODO: This should handle pasting multi line text.
+                // Currently doesn't.
+                this.boundKeyDownHandler = this.onKeyDown_.bind(this);
+                this.input_.addEventListener('keydown', this.boundKeyDownHandler);
+            }
+            var invalid = this.element_.classList.contains(this.CssClasses_.IS_INVALID);
+            this.updateClasses_();
+            this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+            if (invalid) {
+                this.element_.classList.add(this.CssClasses_.IS_INVALID);
+            }
+        }
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialTextfield.prototype.mdlDowngrade_ = function () {
+    this.input_.removeEventListener('input', this.boundUpdateClassesHandler);
+    this.input_.removeEventListener('focus', this.boundFocusHandler);
+    this.input_.removeEventListener('blur', this.boundBlurHandler);
+    if (this.boundKeyDownHandler) {
+        this.input_.removeEventListener('keydown', this.boundKeyDownHandler);
+    }
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialTextfield.prototype.mdlDowngrade = MaterialTextfield.prototype.mdlDowngrade_;
+MaterialTextfield.prototype['mdlDowngrade'] = MaterialTextfield.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialTextfield,
+    classAsString: 'MaterialTextfield',
+    cssClass: 'mdl-js-textfield',
+    widget: true
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Tooltip MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialTooltip = function MaterialTooltip(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialTooltip'] = MaterialTooltip;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialTooltip.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialTooltip.prototype.CssClasses_ = { IS_ACTIVE: 'is-active' };
+/**
+   * Handle mouseenter for tooltip.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialTooltip.prototype.handleMouseEnter_ = function (event) {
+    event.stopPropagation();
+    var props = event.target.getBoundingClientRect();
+    var left = props.left + props.width / 2;
+    var marginLeft = -1 * (this.element_.offsetWidth / 2);
+    if (left + marginLeft < 0) {
+        this.element_.style.left = 0;
+        this.element_.style.marginLeft = 0;
+    } else {
+        this.element_.style.left = left + 'px';
+        this.element_.style.marginLeft = marginLeft + 'px';
+    }
+    this.element_.style.top = props.top + props.height + 10 + 'px';
+    this.element_.classList.add(this.CssClasses_.IS_ACTIVE);
+    window.addEventListener('scroll', this.boundMouseLeaveHandler, false);
+    window.addEventListener('touchmove', this.boundMouseLeaveHandler, false);
+};
+/**
+   * Handle mouseleave for tooltip.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialTooltip.prototype.handleMouseLeave_ = function (event) {
+    event.stopPropagation();
+    this.element_.classList.remove(this.CssClasses_.IS_ACTIVE);
+    window.removeEventListener('scroll', this.boundMouseLeaveHandler);
+    window.removeEventListener('touchmove', this.boundMouseLeaveHandler, false);
+};
+/**
+   * Initialize element.
+   */
+MaterialTooltip.prototype.init = function () {
+    if (this.element_) {
+        var forElId = this.element_.getAttribute('for');
+        if (forElId) {
+            this.forElement_ = document.getElementById(forElId);
+        }
+        if (this.forElement_) {
+            // Tabindex needs to be set for `blur` events to be emitted
+            if (!this.forElement_.hasAttribute('tabindex')) {
+                this.forElement_.setAttribute('tabindex', '0');
+            }
+            this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
+            this.boundMouseLeaveHandler = this.handleMouseLeave_.bind(this);
+            this.forElement_.addEventListener('mouseenter', this.boundMouseEnterHandler, false);
+            this.forElement_.addEventListener('click', this.boundMouseEnterHandler, false);
+            this.forElement_.addEventListener('blur', this.boundMouseLeaveHandler);
+            this.forElement_.addEventListener('touchstart', this.boundMouseEnterHandler, false);
+            this.forElement_.addEventListener('mouseleave', this.boundMouseLeaveHandler);
+        }
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialTooltip.prototype.mdlDowngrade_ = function () {
+    if (this.forElement_) {
+        this.forElement_.removeEventListener('mouseenter', this.boundMouseEnterHandler, false);
+        this.forElement_.removeEventListener('click', this.boundMouseEnterHandler, false);
+        this.forElement_.removeEventListener('touchstart', this.boundMouseEnterHandler, false);
+        this.forElement_.removeEventListener('mouseleave', this.boundMouseLeaveHandler);
+    }
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialTooltip.prototype.mdlDowngrade = MaterialTooltip.prototype.mdlDowngrade_;
+MaterialTooltip.prototype['mdlDowngrade'] = MaterialTooltip.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialTooltip,
+    classAsString: 'MaterialTooltip',
+    cssClass: 'mdl-tooltip'
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Layout MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialLayout = function MaterialLayout(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialLayout'] = MaterialLayout;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialLayout.prototype.Constant_ = {
+    MAX_WIDTH: '(max-width: 1024px)',
+    TAB_SCROLL_PIXELS: 100,
+    MENU_ICON: 'menu',
+    CHEVRON_LEFT: 'chevron_left',
+    CHEVRON_RIGHT: 'chevron_right'
+};
+/**
+   * Modes.
+   *
+   * @enum {number}
+   * @private
+   */
+MaterialLayout.prototype.Mode_ = {
+    STANDARD: 0,
+    SEAMED: 1,
+    WATERFALL: 2,
+    SCROLL: 3
+};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialLayout.prototype.CssClasses_ = {
+    CONTAINER: 'mdl-layout__container',
+    HEADER: 'mdl-layout__header',
+    DRAWER: 'mdl-layout__drawer',
+    CONTENT: 'mdl-layout__content',
+    DRAWER_BTN: 'mdl-layout__drawer-button',
+    ICON: 'material-icons',
+    JS_RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+    RIPPLE_CONTAINER: 'mdl-layout__tab-ripple-container',
+    RIPPLE: 'mdl-ripple',
+    RIPPLE_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    HEADER_SEAMED: 'mdl-layout__header--seamed',
+    HEADER_WATERFALL: 'mdl-layout__header--waterfall',
+    HEADER_SCROLL: 'mdl-layout__header--scroll',
+    FIXED_HEADER: 'mdl-layout--fixed-header',
+    OBFUSCATOR: 'mdl-layout__obfuscator',
+    TAB_BAR: 'mdl-layout__tab-bar',
+    TAB_CONTAINER: 'mdl-layout__tab-bar-container',
+    TAB: 'mdl-layout__tab',
+    TAB_BAR_BUTTON: 'mdl-layout__tab-bar-button',
+    TAB_BAR_LEFT_BUTTON: 'mdl-layout__tab-bar-left-button',
+    TAB_BAR_RIGHT_BUTTON: 'mdl-layout__tab-bar-right-button',
+    PANEL: 'mdl-layout__tab-panel',
+    HAS_DRAWER: 'has-drawer',
+    HAS_TABS: 'has-tabs',
+    HAS_SCROLLING_HEADER: 'has-scrolling-header',
+    CASTING_SHADOW: 'is-casting-shadow',
+    IS_COMPACT: 'is-compact',
+    IS_SMALL_SCREEN: 'is-small-screen',
+    IS_DRAWER_OPEN: 'is-visible',
+    IS_ACTIVE: 'is-active',
+    IS_UPGRADED: 'is-upgraded',
+    IS_ANIMATING: 'is-animating',
+    ON_LARGE_SCREEN: 'mdl-layout--large-screen-only',
+    ON_SMALL_SCREEN: 'mdl-layout--small-screen-only'
+};
+/**
+   * Handles scrolling on the content.
+   *
+   * @private
+   */
+MaterialLayout.prototype.contentScrollHandler_ = function () {
+    if (this.header_.classList.contains(this.CssClasses_.IS_ANIMATING)) {
+        return;
+    }
+    if (this.content_.scrollTop > 0 && !this.header_.classList.contains(this.CssClasses_.IS_COMPACT)) {
+        this.header_.classList.add(this.CssClasses_.CASTING_SHADOW);
+        this.header_.classList.add(this.CssClasses_.IS_COMPACT);
+        this.header_.classList.add(this.CssClasses_.IS_ANIMATING);
+    } else if (this.content_.scrollTop <= 0 && this.header_.classList.contains(this.CssClasses_.IS_COMPACT)) {
+        this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW);
+        this.header_.classList.remove(this.CssClasses_.IS_COMPACT);
+        this.header_.classList.add(this.CssClasses_.IS_ANIMATING);
+    }
+};
+/**
+   * Handles changes in screen size.
+   *
+   * @private
+   */
+MaterialLayout.prototype.screenSizeHandler_ = function () {
+    if (this.screenSizeMediaQuery_.matches) {
+        this.element_.classList.add(this.CssClasses_.IS_SMALL_SCREEN);
+    } else {
+        this.element_.classList.remove(this.CssClasses_.IS_SMALL_SCREEN);
+        // Collapse drawer (if any) when moving to a large screen size.
+        if (this.drawer_) {
+            this.drawer_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN);
+            this.obfuscator_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN);
+        }
+    }
+};
+/**
+   * Handles toggling of the drawer.
+   *
+   * @private
+   */
+MaterialLayout.prototype.drawerToggleHandler_ = function () {
+    this.drawer_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN);
+    this.obfuscator_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN);
+};
+/**
+   * Handles (un)setting the `is-animating` class
+   *
+   * @private
+   */
+MaterialLayout.prototype.headerTransitionEndHandler_ = function () {
+    this.header_.classList.remove(this.CssClasses_.IS_ANIMATING);
+};
+/**
+   * Handles expanding the header on click
+   *
+   * @private
+   */
+MaterialLayout.prototype.headerClickHandler_ = function () {
+    if (this.header_.classList.contains(this.CssClasses_.IS_COMPACT)) {
+        this.header_.classList.remove(this.CssClasses_.IS_COMPACT);
+        this.header_.classList.add(this.CssClasses_.IS_ANIMATING);
+    }
+};
+/**
+   * Reset tab state, dropping active classes
+   *
+   * @private
+   */
+MaterialLayout.prototype.resetTabState_ = function (tabBar) {
+    for (var k = 0; k < tabBar.length; k++) {
+        tabBar[k].classList.remove(this.CssClasses_.IS_ACTIVE);
+    }
+};
+/**
+   * Reset panel state, droping active classes
+   *
+   * @private
+   */
+MaterialLayout.prototype.resetPanelState_ = function (panels) {
+    for (var j = 0; j < panels.length; j++) {
+        panels[j].classList.remove(this.CssClasses_.IS_ACTIVE);
+    }
+};
+/**
+   * Initialize element.
+   */
+MaterialLayout.prototype.init = function () {
+    if (this.element_) {
+        var container = document.createElement('div');
+        container.classList.add(this.CssClasses_.CONTAINER);
+        this.element_.parentElement.insertBefore(container, this.element_);
+        this.element_.parentElement.removeChild(this.element_);
+        container.appendChild(this.element_);
+        var directChildren = this.element_.childNodes;
+        var numChildren = directChildren.length;
+        for (var c = 0; c < numChildren; c++) {
+            var child = directChildren[c];
+            if (child.classList && child.classList.contains(this.CssClasses_.HEADER)) {
+                this.header_ = child;
+            }
+            if (child.classList && child.classList.contains(this.CssClasses_.DRAWER)) {
+                this.drawer_ = child;
+            }
+            if (child.classList && child.classList.contains(this.CssClasses_.CONTENT)) {
+                this.content_ = child;
+            }
+        }
+        if (this.header_) {
+            this.tabBar_ = this.header_.querySelector('.' + this.CssClasses_.TAB_BAR);
+        }
+        var mode = this.Mode_.STANDARD;
+        if (this.header_) {
+            if (this.header_.classList.contains(this.CssClasses_.HEADER_SEAMED)) {
+                mode = this.Mode_.SEAMED;
+            } else if (this.header_.classList.contains(this.CssClasses_.HEADER_WATERFALL)) {
+                mode = this.Mode_.WATERFALL;
+                this.header_.addEventListener('transitionend', this.headerTransitionEndHandler_.bind(this));
+                this.header_.addEventListener('click', this.headerClickHandler_.bind(this));
+            } else if (this.header_.classList.contains(this.CssClasses_.HEADER_SCROLL)) {
+                mode = this.Mode_.SCROLL;
+                container.classList.add(this.CssClasses_.HAS_SCROLLING_HEADER);
+            }
+            if (mode === this.Mode_.STANDARD) {
+                this.header_.classList.add(this.CssClasses_.CASTING_SHADOW);
+                if (this.tabBar_) {
+                    this.tabBar_.classList.add(this.CssClasses_.CASTING_SHADOW);
+                }
+            } else if (mode === this.Mode_.SEAMED || mode === this.Mode_.SCROLL) {
+                this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW);
+                if (this.tabBar_) {
+                    this.tabBar_.classList.remove(this.CssClasses_.CASTING_SHADOW);
+                }
+            } else if (mode === this.Mode_.WATERFALL) {
+                // Add and remove shadows depending on scroll position.
+                // Also add/remove auxiliary class for styling of the compact version of
+                // the header.
+                this.content_.addEventListener('scroll', this.contentScrollHandler_.bind(this));
+                this.contentScrollHandler_();
+            }
+        }
+        // Add drawer toggling button to our layout, if we have an openable drawer.
+        if (this.drawer_) {
+            var drawerButton = this.element_.querySelector('.' + this.CssClasses_.DRAWER_BTN);
+            if (!drawerButton) {
+                drawerButton = document.createElement('div');
+                drawerButton.classList.add(this.CssClasses_.DRAWER_BTN);
+                var drawerButtonIcon = document.createElement('i');
+                drawerButtonIcon.classList.add(this.CssClasses_.ICON);
+                drawerButtonIcon.textContent = this.Constant_.MENU_ICON;
+                drawerButton.appendChild(drawerButtonIcon);
+            }
+            if (this.drawer_.classList.contains(this.CssClasses_.ON_LARGE_SCREEN)) {
+                //If drawer has ON_LARGE_SCREEN class then add it to the drawer toggle button as well.
+                drawerButton.classList.add(this.CssClasses_.ON_LARGE_SCREEN);
+            } else if (this.drawer_.classList.contains(this.CssClasses_.ON_SMALL_SCREEN)) {
+                //If drawer has ON_SMALL_SCREEN class then add it to the drawer toggle button as well.
+                drawerButton.classList.add(this.CssClasses_.ON_SMALL_SCREEN);
+            }
+            drawerButton.addEventListener('click', this.drawerToggleHandler_.bind(this));
+            // Add a class if the layout has a drawer, for altering the left padding.
+            // Adds the HAS_DRAWER to the elements since this.header_ may or may
+            // not be present.
+            this.element_.classList.add(this.CssClasses_.HAS_DRAWER);
+            // If we have a fixed header, add the button to the header rather than
+            // the layout.
+            if (this.element_.classList.contains(this.CssClasses_.FIXED_HEADER)) {
+                this.header_.insertBefore(drawerButton, this.header_.firstChild);
+            } else {
+                this.element_.insertBefore(drawerButton, this.content_);
+            }
+            var obfuscator = document.createElement('div');
+            obfuscator.classList.add(this.CssClasses_.OBFUSCATOR);
+            this.element_.appendChild(obfuscator);
+            obfuscator.addEventListener('click', this.drawerToggleHandler_.bind(this));
+            this.obfuscator_ = obfuscator;
+        }
+        // Keep an eye on screen size, and add/remove auxiliary class for styling
+        // of small screens.
+        this.screenSizeMediaQuery_ = window.matchMedia(this.Constant_.MAX_WIDTH);
+        this.screenSizeMediaQuery_.addListener(this.screenSizeHandler_.bind(this));
+        this.screenSizeHandler_();
+        // Initialize tabs, if any.
+        if (this.header_ && this.tabBar_) {
+            this.element_.classList.add(this.CssClasses_.HAS_TABS);
+            var tabContainer = document.createElement('div');
+            tabContainer.classList.add(this.CssClasses_.TAB_CONTAINER);
+            this.header_.insertBefore(tabContainer, this.tabBar_);
+            this.header_.removeChild(this.tabBar_);
+            var leftButton = document.createElement('div');
+            leftButton.classList.add(this.CssClasses_.TAB_BAR_BUTTON);
+            leftButton.classList.add(this.CssClasses_.TAB_BAR_LEFT_BUTTON);
+            var leftButtonIcon = document.createElement('i');
+            leftButtonIcon.classList.add(this.CssClasses_.ICON);
+            leftButtonIcon.textContent = this.Constant_.CHEVRON_LEFT;
+            leftButton.appendChild(leftButtonIcon);
+            leftButton.addEventListener('click', function () {
+                this.tabBar_.scrollLeft -= this.Constant_.TAB_SCROLL_PIXELS;
+            }.bind(this));
+            var rightButton = document.createElement('div');
+            rightButton.classList.add(this.CssClasses_.TAB_BAR_BUTTON);
+            rightButton.classList.add(this.CssClasses_.TAB_BAR_RIGHT_BUTTON);
+            var rightButtonIcon = document.createElement('i');
+            rightButtonIcon.classList.add(this.CssClasses_.ICON);
+            rightButtonIcon.textContent = this.Constant_.CHEVRON_RIGHT;
+            rightButton.appendChild(rightButtonIcon);
+            rightButton.addEventListener('click', function () {
+                this.tabBar_.scrollLeft += this.Constant_.TAB_SCROLL_PIXELS;
+            }.bind(this));
+            tabContainer.appendChild(leftButton);
+            tabContainer.appendChild(this.tabBar_);
+            tabContainer.appendChild(rightButton);
+            // Add and remove buttons depending on scroll position.
+            var tabScrollHandler = function () {
+                if (this.tabBar_.scrollLeft > 0) {
+                    leftButton.classList.add(this.CssClasses_.IS_ACTIVE);
+                } else {
+                    leftButton.classList.remove(this.CssClasses_.IS_ACTIVE);
+                }
+                if (this.tabBar_.scrollLeft < this.tabBar_.scrollWidth - this.tabBar_.offsetWidth) {
+                    rightButton.classList.add(this.CssClasses_.IS_ACTIVE);
+                } else {
+                    rightButton.classList.remove(this.CssClasses_.IS_ACTIVE);
+                }
+            }.bind(this);
+            this.tabBar_.addEventListener('scroll', tabScrollHandler);
+            tabScrollHandler();
+            if (this.tabBar_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)) {
+                this.tabBar_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);
+            }
+            // Select element tabs, document panels
+            var tabs = this.tabBar_.querySelectorAll('.' + this.CssClasses_.TAB);
+            var panels = this.content_.querySelectorAll('.' + this.CssClasses_.PANEL);
+            // Create new tabs for each tab element
+            for (var i = 0; i < tabs.length; i++) {
+                new MaterialLayoutTab(tabs[i], tabs, panels, this);
+            }
+        }
+        this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+/**
+   * Constructor for an individual tab.
+   *
+   * @constructor
+   * @param {HTMLElement} tab The HTML element for the tab.
+   * @param {!Array<HTMLElement>} tabs Array with HTML elements for all tabs.
+   * @param {!Array<HTMLElement>} panels Array with HTML elements for all panels.
+   * @param {MaterialLayout} layout The MaterialLayout object that owns the tab.
+   */
+function MaterialLayoutTab(tab, tabs, panels, layout) {
+    if (layout.tabBar_.classList.contains(layout.CssClasses_.JS_RIPPLE_EFFECT)) {
+        var rippleContainer = document.createElement('span');
+        rippleContainer.classList.add(layout.CssClasses_.RIPPLE_CONTAINER);
+        rippleContainer.classList.add(layout.CssClasses_.JS_RIPPLE_EFFECT);
+        var ripple = document.createElement('span');
+        ripple.classList.add(layout.CssClasses_.RIPPLE);
+        rippleContainer.appendChild(ripple);
+        tab.appendChild(rippleContainer);
+    }
+    tab.addEventListener('click', function (e) {
+        e.preventDefault();
+        var href = tab.href.split('#')[1];
+        var panel = layout.content_.querySelector('#' + href);
+        layout.resetTabState_(tabs);
+        layout.resetPanelState_(panels);
+        tab.classList.add(layout.CssClasses_.IS_ACTIVE);
+        panel.classList.add(layout.CssClasses_.IS_ACTIVE);
+    });
+}
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialLayout,
+    classAsString: 'MaterialLayout',
+    cssClass: 'mdl-js-layout'
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Data Table Card MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialDataTable = function MaterialDataTable(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialDataTable'] = MaterialDataTable;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialDataTable.prototype.Constant_ = {};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialDataTable.prototype.CssClasses_ = {
+    DATA_TABLE: 'mdl-data-table',
+    SELECTABLE: 'mdl-data-table--selectable',
+    SELECT_ELEMENT: 'mdl-data-table__select',
+    IS_SELECTED: 'is-selected',
+    IS_UPGRADED: 'is-upgraded'
+};
+/**
+   * Generates and returns a function that toggles the selection state of a
+   * single row (or multiple rows).
+   *
+   * @param {Element} checkbox Checkbox that toggles the selection state.
+   * @param {HTMLElement} row Row to toggle when checkbox changes.
+   * @param {(Array<Object>|NodeList)=} opt_rows Rows to toggle when checkbox changes.
+   * @private
+   */
+MaterialDataTable.prototype.selectRow_ = function (checkbox, row, opt_rows) {
+    if (row) {
+        return function () {
+            if (checkbox.checked) {
+                row.classList.add(this.CssClasses_.IS_SELECTED);
+            } else {
+                row.classList.remove(this.CssClasses_.IS_SELECTED);
+            }
+        }.bind(this);
+    }
+    if (opt_rows) {
+        return function () {
+            var i;
+            var el;
+            if (checkbox.checked) {
+                for (i = 0; i < opt_rows.length; i++) {
+                    el = opt_rows[i].querySelector('td').querySelector('.mdl-checkbox');
+                    el['MaterialCheckbox'].check();
+                    opt_rows[i].classList.add(this.CssClasses_.IS_SELECTED);
+                }
+            } else {
+                for (i = 0; i < opt_rows.length; i++) {
+                    el = opt_rows[i].querySelector('td').querySelector('.mdl-checkbox');
+                    el['MaterialCheckbox'].uncheck();
+                    opt_rows[i].classList.remove(this.CssClasses_.IS_SELECTED);
+                }
+            }
+        }.bind(this);
+    }
+};
+/**
+   * Creates a checkbox for a single or or multiple rows and hooks up the
+   * event handling.
+   *
+   * @param {HTMLElement} row Row to toggle when checkbox changes.
+   * @param {(Array<Object>|NodeList)=} opt_rows Rows to toggle when checkbox changes.
+   * @private
+   */
+MaterialDataTable.prototype.createCheckbox_ = function (row, opt_rows) {
+    var label = document.createElement('label');
+    var labelClasses = [
+        'mdl-checkbox',
+        'mdl-js-checkbox',
+        'mdl-js-ripple-effect',
+        this.CssClasses_.SELECT_ELEMENT
+    ];
+    label.className = labelClasses.join(' ');
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('mdl-checkbox__input');
+    checkbox.addEventListener('change', this.selectRow_(checkbox, row, opt_rows));
+    label.appendChild(checkbox);
+    componentHandler.upgradeElement(label, 'MaterialCheckbox');
+    return label;
+};
+/**
+   * Initialize element.
+   */
+MaterialDataTable.prototype.init = function () {
+    if (this.element_) {
+        var firstHeader = this.element_.querySelector('th');
+        var rows = this.element_.querySelector('tbody').querySelectorAll('tr');
+        if (this.element_.classList.contains(this.CssClasses_.SELECTABLE)) {
+            var th = document.createElement('th');
+            var headerCheckbox = this.createCheckbox_(null, rows);
+            th.appendChild(headerCheckbox);
+            firstHeader.parentElement.insertBefore(th, firstHeader);
+            for (var i = 0; i < rows.length; i++) {
+                var firstCell = rows[i].querySelector('td');
+                if (firstCell) {
+                    var td = document.createElement('td');
+                    var rowCheckbox = this.createCheckbox_(rows[i]);
+                    td.appendChild(rowCheckbox);
+                    rows[i].insertBefore(td, firstCell);
+                }
+            }
+        }
+        this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
+    }
+};
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialDataTable,
+    classAsString: 'MaterialDataTable',
+    cssClass: 'mdl-js-data-table'
+});
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
+   * Class constructor for Ripple MDL component.
+   * Implements MDL component design pattern defined at:
+   * https://github.com/jasonmayes/mdl-component-design-pattern
+   *
+   * @constructor
+   * @param {HTMLElement} element The element that will be upgraded.
+   */
+var MaterialRipple = function MaterialRipple(element) {
+    this.element_ = element;
+    // Initialize instance.
+    this.init();
+};
+window['MaterialRipple'] = MaterialRipple;
+/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+MaterialRipple.prototype.Constant_ = {
+    INITIAL_SCALE: 'scale(0.0001, 0.0001)',
+    INITIAL_SIZE: '1px',
+    INITIAL_OPACITY: '0.4',
+    FINAL_OPACITY: '0',
+    FINAL_SCALE: ''
+};
+/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+MaterialRipple.prototype.CssClasses_ = {
+    RIPPLE_CENTER: 'mdl-ripple--center',
+    RIPPLE_EFFECT_IGNORE_EVENTS: 'mdl-js-ripple-effect--ignore-events',
+    RIPPLE: 'mdl-ripple',
+    IS_ANIMATING: 'is-animating',
+    IS_VISIBLE: 'is-visible'
+};
+/**
+   * Handle mouse / finger down on element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRipple.prototype.downHandler_ = function (event) {
+    if (!this.rippleElement_.style.width && !this.rippleElement_.style.height) {
+        var rect = this.element_.getBoundingClientRect();
+        this.boundHeight = rect.height;
+        this.boundWidth = rect.width;
+        this.rippleSize_ = Math.sqrt(rect.width * rect.width + rect.height * rect.height) * 2 + 2;
+        this.rippleElement_.style.width = this.rippleSize_ + 'px';
+        this.rippleElement_.style.height = this.rippleSize_ + 'px';
+    }
+    this.rippleElement_.classList.add(this.CssClasses_.IS_VISIBLE);
+    if (event.type === 'mousedown' && this.ignoringMouseDown_) {
+        this.ignoringMouseDown_ = false;
+    } else {
+        if (event.type === 'touchstart') {
+            this.ignoringMouseDown_ = true;
+        }
+        var frameCount = this.getFrameCount();
+        if (frameCount > 0) {
+            return;
+        }
+        this.setFrameCount(1);
+        var bound = event.currentTarget.getBoundingClientRect();
+        var x;
+        var y;
+        // Check if we are handling a keyboard click.
+        if (event.clientX === 0 && event.clientY === 0) {
+            x = Math.round(bound.width / 2);
+            y = Math.round(bound.height / 2);
+        } else {
+            var clientX = event.clientX ? event.clientX : event.touches[0].clientX;
+            var clientY = event.clientY ? event.clientY : event.touches[0].clientY;
+            x = Math.round(clientX - bound.left);
+            y = Math.round(clientY - bound.top);
+        }
+        this.setRippleXY(x, y);
+        this.setRippleStyles(true);
+        window.requestAnimationFrame(this.animFrameHandler.bind(this));
+    }
+};
+/**
+   * Handle mouse / finger up on element.
+   *
+   * @param {Event} event The event that fired.
+   * @private
+   */
+MaterialRipple.prototype.upHandler_ = function (event) {
+    // Don't fire for the artificial "mouseup" generated by a double-click.
+    if (event && event.detail !== 2) {
+        this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE);
+    }
+    // Allow a repaint to occur before removing this class, so the animation
+    // shows for tap events, which seem to trigger a mouseup too soon after
+    // mousedown.
+    window.setTimeout(function () {
+        this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE);
+    }.bind(this), 0);
+};
+/**
+   * Initialize element.
+   */
+MaterialRipple.prototype.init = function () {
+    if (this.element_) {
+        var recentering = this.element_.classList.contains(this.CssClasses_.RIPPLE_CENTER);
+        if (!this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)) {
+            this.rippleElement_ = this.element_.querySelector('.' + this.CssClasses_.RIPPLE);
+            this.frameCount_ = 0;
+            this.rippleSize_ = 0;
+            this.x_ = 0;
+            this.y_ = 0;
+            // Touch start produces a compat mouse down event, which would cause a
+            // second ripples. To avoid that, we use this property to ignore the first
+            // mouse down after a touch start.
+            this.ignoringMouseDown_ = false;
+            this.boundDownHandler = this.downHandler_.bind(this);
+            this.element_.addEventListener('mousedown', this.boundDownHandler);
+            this.element_.addEventListener('touchstart', this.boundDownHandler);
+            this.boundUpHandler = this.upHandler_.bind(this);
+            this.element_.addEventListener('mouseup', this.boundUpHandler);
+            this.element_.addEventListener('mouseleave', this.boundUpHandler);
+            this.element_.addEventListener('touchend', this.boundUpHandler);
+            this.element_.addEventListener('blur', this.boundUpHandler);
+            /**
+         * Getter for frameCount_.
+         * @return {number} the frame count.
+         */
+            this.getFrameCount = function () {
+                return this.frameCount_;
+            };
+            /**
+         * Setter for frameCount_.
+         * @param {number} fC the frame count.
+         */
+            this.setFrameCount = function (fC) {
+                this.frameCount_ = fC;
+            };
+            /**
+         * Getter for rippleElement_.
+         * @return {Element} the ripple element.
+         */
+            this.getRippleElement = function () {
+                return this.rippleElement_;
+            };
+            /**
+         * Sets the ripple X and Y coordinates.
+         * @param  {number} newX the new X coordinate
+         * @param  {number} newY the new Y coordinate
+         */
+            this.setRippleXY = function (newX, newY) {
+                this.x_ = newX;
+                this.y_ = newY;
+            };
+            /**
+         * Sets the ripple styles.
+         * @param  {boolean} start whether or not this is the start frame.
+         */
+            this.setRippleStyles = function (start) {
+                if (this.rippleElement_ !== null) {
+                    var transformString;
+                    var scale;
+                    var size;
+                    var offset = 'translate(' + this.x_ + 'px, ' + this.y_ + 'px)';
+                    if (start) {
+                        scale = this.Constant_.INITIAL_SCALE;
+                        size = this.Constant_.INITIAL_SIZE;
+                    } else {
+                        scale = this.Constant_.FINAL_SCALE;
+                        size = this.rippleSize_ + 'px';
+                        if (recentering) {
+                            offset = 'translate(' + this.boundWidth / 2 + 'px, ' + this.boundHeight / 2 + 'px)';
+                        }
+                    }
+                    transformString = 'translate(-50%, -50%) ' + offset + scale;
+                    this.rippleElement_.style.webkitTransform = transformString;
+                    this.rippleElement_.style.msTransform = transformString;
+                    this.rippleElement_.style.transform = transformString;
+                    if (start) {
+                        this.rippleElement_.classList.remove(this.CssClasses_.IS_ANIMATING);
+                    } else {
+                        this.rippleElement_.classList.add(this.CssClasses_.IS_ANIMATING);
+                    }
+                }
+            };
+            /**
+         * Handles an animation frame.
+         */
+            this.animFrameHandler = function () {
+                if (this.frameCount_-- > 0) {
+                    window.requestAnimationFrame(this.animFrameHandler.bind(this));
+                } else {
+                    this.setRippleStyles(false);
+                }
+            };
+        }
+    }
+};
+/**
+   * Downgrade the component
+   *
+   * @private
+   */
+MaterialRipple.prototype.mdlDowngrade_ = function () {
+    this.element_.removeEventListener('mousedown', this.boundDownHandler);
+    this.element_.removeEventListener('touchstart', this.boundDownHandler);
+    this.element_.removeEventListener('mouseup', this.boundUpHandler);
+    this.element_.removeEventListener('mouseleave', this.boundUpHandler);
+    this.element_.removeEventListener('touchend', this.boundUpHandler);
+    this.element_.removeEventListener('blur', this.boundUpHandler);
+};
+/**
+   * Public alias for the downgrade method.
+   *
+   * @public
+   */
+MaterialRipple.prototype.mdlDowngrade = MaterialRipple.prototype.mdlDowngrade_;
+MaterialRipple.prototype['mdlDowngrade'] = MaterialRipple.prototype.mdlDowngrade;
+// The component registers itself. It can assume componentHandler is available
+// in the global scope.
+componentHandler.register({
+    constructor: MaterialRipple,
+    classAsString: 'MaterialRipple',
+    cssClass: 'mdl-js-ripple-effect',
+    widget: false
+});
+}());
+;(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.dragula = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+var cache = {};
+var start = '(?:^|\\s)';
+var end = '(?:\\s|$)';
+
+function lookupClass (className) {
+  var cached = cache[className];
+  if (cached) {
+    cached.lastIndex = 0;
+  } else {
+    cache[className] = cached = new RegExp(start + className + end, 'g');
+  }
+  return cached;
+}
+
+function addClass (el, className) {
+  var current = el.className;
+  if (!current.length) {
+    el.className = className;
+  } else if (!lookupClass(className).test(current)) {
+    el.className += ' ' + className;
+  }
+}
+
+function rmClass (el, className) {
+  el.className = el.className.replace(lookupClass(className), ' ').trim();
+}
+
+module.exports = {
+  add: addClass,
+  rm: rmClass
+};
+
+},{}],2:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var emitter = require('contra/emitter');
+var crossvent = require('crossvent');
+var classes = require('./classes');
+var doc = document;
+var documentElement = doc.documentElement;
+var body = doc.body;
+
+function dragula (initialContainers, options) {
+  var len = arguments.length;
+  if (len === 1 && Array.isArray(initialContainers) === false) {
+    options = initialContainers;
+    initialContainers = [];
+  }
+  var _mirror; // mirror image
+  var _source; // source container
+  var _item; // item being dragged
+  var _offsetX; // reference x
+  var _offsetY; // reference y
+  var _moveX; // reference move x
+  var _moveY; // reference move y
+  var _initialSibling; // reference sibling when grabbed
+  var _currentSibling; // reference sibling now
+  var _copy; // item used for copying
+  var _renderTimer; // timer for setTimeout renderMirrorImage
+  var _lastDropTarget = null; // last container item was over
+  var _grabbed; // holds mousedown context until first mousemove
+
+  var o = options || {};
+  if (o.moves === void 0) { o.moves = always; }
+  if (o.accepts === void 0) { o.accepts = always; }
+  if (o.invalid === void 0) { o.invalid = invalidTarget; }
+  if (o.containers === void 0) { o.containers = initialContainers || []; }
+  if (o.isContainer === void 0) { o.isContainer = never; }
+  if (o.copy === void 0) { o.copy = false; }
+  if (o.copySortSource === void 0) { o.copySortSource = false; }
+  if (o.revertOnSpill === void 0) { o.revertOnSpill = false; }
+  if (o.removeOnSpill === void 0) { o.removeOnSpill = false; }
+  if (o.direction === void 0) { o.direction = 'vertical'; }
+  if (o.ignoreInputTextSelection === void 0) { o.ignoreInputTextSelection = true; }
+  if (o.mirrorContainer === void 0) { o.mirrorContainer = body; }
+
+  var drake = emitter({
+    containers: o.containers,
+    start: manualStart,
+    end: end,
+    cancel: cancel,
+    remove: remove,
+    destroy: destroy,
+    dragging: false
+  });
+
+  if (o.removeOnSpill === true) {
+    drake.on('over', spillOver).on('out', spillOut);
+  }
+
+  events();
+
+  return drake;
+
+  function isContainer (el) {
+    return drake.containers.indexOf(el) !== -1 || o.isContainer(el);
+  }
+
+  function events (remove) {
+    var op = remove ? 'remove' : 'add';
+    touchy(documentElement, op, 'mousedown', grab);
+    touchy(documentElement, op, 'mouseup', release);
+  }
+
+  function eventualMovements (remove) {
+    var op = remove ? 'remove' : 'add';
+    touchy(documentElement, op, 'mousemove', startBecauseMouseMoved);
+  }
+
+  function movements (remove) {
+    var op = remove ? 'remove' : 'add';
+    crossvent[op](documentElement, 'selectstart', preventGrabbed); // IE8
+    crossvent[op](documentElement, 'click', preventGrabbed);
+  }
+
+  function destroy () {
+    events(true);
+    release({});
+  }
+
+  function preventGrabbed (e) {
+    if (_grabbed) {
+      e.preventDefault();
+    }
+  }
+
+  function grab (e) {
+    _moveX = e.clientX;
+    _moveY = e.clientY;
+
+    var ignore = whichMouseButton(e) !== 1 || e.metaKey || e.ctrlKey;
+    if (ignore) {
+      return; // we only care about honest-to-god left clicks and touch events
+    }
+    var item = e.target;
+    var context = canStart(item);
+    if (!context) {
+      return;
+    }
+    _grabbed = context;
+    eventualMovements();
+    if (e.type === 'mousedown') {
+      if (isInput(item)) { // see also: https://github.com/bevacqua/dragula/issues/208
+        item.focus(); // fixes https://github.com/bevacqua/dragula/issues/176
+      } else {
+        e.preventDefault(); // fixes https://github.com/bevacqua/dragula/issues/155
+      }
+    }
+  }
+
+  function startBecauseMouseMoved (e) {
+    if (!_grabbed) {
+      return;
+    }
+    if (whichMouseButton(e) === 0) {
+      release({});
+      return; // when text is selected on an input and then dragged, mouseup doesn't fire. this is our only hope
+    }
+    // truthy check fixes #239, equality fixes #207
+    if (e.clientX !== void 0 && e.clientX === _moveX && e.clientY !== void 0 && e.clientY === _moveY) {
+      return;
+    }
+    if (o.ignoreInputTextSelection) {
+      var clientX = getCoord('clientX', e);
+      var clientY = getCoord('clientY', e);
+      var elementBehindCursor = doc.elementFromPoint(clientX, clientY);
+      if (isInput(elementBehindCursor)) {
+        return;
+      }
+    }
+
+    var grabbed = _grabbed; // call to end() unsets _grabbed
+    eventualMovements(true);
+    movements();
+    end();
+    start(grabbed);
+
+    var offset = getOffset(_item);
+    _offsetX = getCoord('pageX', e) - offset.left;
+    _offsetY = getCoord('pageY', e) - offset.top;
+
+    classes.add(_copy || _item, 'gu-transit');
+    renderMirrorImage();
+    drag(e);
+  }
+
+  function canStart (item) {
+    if (drake.dragging && _mirror) {
+      return;
+    }
+    if (isContainer(item)) {
+      return; // don't drag container itself
+    }
+    var handle = item;
+    while (getParent(item) && isContainer(getParent(item)) === false) {
+      if (o.invalid(item, handle)) {
+        return;
+      }
+      item = getParent(item); // drag target should be a top element
+      if (!item) {
+        return;
+      }
+    }
+    var source = getParent(item);
+    if (!source) {
+      return;
+    }
+    if (o.invalid(item, handle)) {
+      return;
+    }
+
+    var movable = o.moves(item, source, handle, nextEl(item));
+    if (!movable) {
+      return;
+    }
+
+    return {
+      item: item,
+      source: source
+    };
+  }
+
+  function manualStart (item) {
+    var context = canStart(item);
+    if (context) {
+      start(context);
+    }
+  }
+
+  function start (context) {
+    if (isCopy(context.item, context.source)) {
+      _copy = context.item.cloneNode(true);
+      drake.emit('cloned', _copy, context.item, 'copy');
+    }
+
+    _source = context.source;
+    _item = context.item;
+    _initialSibling = _currentSibling = nextEl(context.item);
+
+    drake.dragging = true;
+    drake.emit('drag', _item, _source);
+  }
+
+  function invalidTarget () {
+    return false;
+  }
+
+  function end () {
+    if (!drake.dragging) {
+      return;
+    }
+    var item = _copy || _item;
+    drop(item, getParent(item));
+  }
+
+  function ungrab () {
+    _grabbed = false;
+    eventualMovements(true);
+    movements(true);
+  }
+
+  function release (e) {
+    ungrab();
+
+    if (!drake.dragging) {
+      return;
+    }
+    var item = _copy || _item;
+    var clientX = getCoord('clientX', e);
+    var clientY = getCoord('clientY', e);
+    var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
+    var dropTarget = findDropTarget(elementBehindCursor, clientX, clientY);
+    if (dropTarget && ((_copy && o.copySortSource) || (!_copy || dropTarget !== _source))) {
+      drop(item, dropTarget);
+    } else if (o.removeOnSpill) {
+      remove();
+    } else {
+      cancel();
+    }
+  }
+
+  function drop (item, target) {
+    var parent = getParent(item);
+    if (_copy && o.copySortSource && target === _source) {
+      parent.removeChild(_item);
+    }
+    if (isInitialPlacement(target)) {
+      drake.emit('cancel', item, _source, _source);
+    } else {
+      drake.emit('drop', item, target, _source, _currentSibling);
+    }
+    cleanup();
+  }
+
+  function remove () {
+    if (!drake.dragging) {
+      return;
+    }
+    var item = _copy || _item;
+    var parent = getParent(item);
+    if (parent) {
+      parent.removeChild(item);
+    }
+    drake.emit(_copy ? 'cancel' : 'remove', item, parent, _source);
+    cleanup();
+  }
+
+  function cancel (revert) {
+    if (!drake.dragging) {
+      return;
+    }
+    var reverts = arguments.length > 0 ? revert : o.revertOnSpill;
+    var item = _copy || _item;
+    var parent = getParent(item);
+    if (parent === _source && _copy) {
+      parent.removeChild(_copy);
+    }
+    var initial = isInitialPlacement(parent);
+    if (initial === false && !_copy && reverts) {
+      _source.insertBefore(item, _initialSibling);
+    }
+    if (initial || reverts) {
+      drake.emit('cancel', item, _source, _source);
+    } else {
+      drake.emit('drop', item, parent, _source, _currentSibling);
+    }
+    cleanup();
+  }
+
+  function cleanup () {
+    var item = _copy || _item;
+    ungrab();
+    removeMirrorImage();
+    if (item) {
+      classes.rm(item, 'gu-transit');
+    }
+    if (_renderTimer) {
+      clearTimeout(_renderTimer);
+    }
+    drake.dragging = false;
+    if (_lastDropTarget) {
+      drake.emit('out', item, _lastDropTarget, _source);
+    }
+    drake.emit('dragend', item);
+    _source = _item = _copy = _initialSibling = _currentSibling = _renderTimer = _lastDropTarget = null;
+  }
+
+  function isInitialPlacement (target, s) {
+    var sibling;
+    if (s !== void 0) {
+      sibling = s;
+    } else if (_mirror) {
+      sibling = _currentSibling;
+    } else {
+      sibling = nextEl(_copy || _item);
+    }
+    return target === _source && sibling === _initialSibling;
+  }
+
+  function findDropTarget (elementBehindCursor, clientX, clientY) {
+    var target = elementBehindCursor;
+    while (target && !accepted()) {
+      target = getParent(target);
+    }
+    return target;
+
+    function accepted () {
+      var droppable = isContainer(target);
+      if (droppable === false) {
+        return false;
+      }
+
+      var immediate = getImmediateChild(target, elementBehindCursor);
+      var reference = getReference(target, immediate, clientX, clientY);
+      var initial = isInitialPlacement(target, reference);
+      if (initial) {
+        return true; // should always be able to drop it right back where it was
+      }
+      return o.accepts(_item, target, _source, reference);
+    }
+  }
+
+  function drag (e) {
+    if (!_mirror) {
+      return;
+    }
+    e.preventDefault();
+
+    var clientX = getCoord('clientX', e);
+    var clientY = getCoord('clientY', e);
+    var x = clientX - _offsetX;
+    var y = clientY - _offsetY;
+
+    _mirror.style.left = x + 'px';
+    _mirror.style.top = y + 'px';
+
+    var item = _copy || _item;
+    var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
+    var dropTarget = findDropTarget(elementBehindCursor, clientX, clientY);
+    var changed = dropTarget !== null && dropTarget !== _lastDropTarget;
+    if (changed || dropTarget === null) {
+      out();
+      _lastDropTarget = dropTarget;
+      over();
+    }
+    var parent = getParent(item);
+    if (dropTarget === _source && _copy && !o.copySortSource) {
+      if (parent) {
+        parent.removeChild(item);
+      }
+      return;
+    }
+    var reference;
+    var immediate = getImmediateChild(dropTarget, elementBehindCursor);
+    if (immediate !== null) {
+      reference = getReference(dropTarget, immediate, clientX, clientY);
+    } else if (o.revertOnSpill === true && !_copy) {
+      reference = _initialSibling;
+      dropTarget = _source;
+    } else {
+      if (_copy && parent) {
+        parent.removeChild(item);
+      }
+      return;
+    }
+    if (
+      reference === null ||
+      reference !== item &&
+      reference !== nextEl(item) &&
+      reference !== _currentSibling
+    ) {
+      _currentSibling = reference;
+      dropTarget.insertBefore(item, reference);
+      drake.emit('shadow', item, dropTarget, _source);
+    }
+    function moved (type) { drake.emit(type, item, _lastDropTarget, _source); }
+    function over () { if (changed) { moved('over'); } }
+    function out () { if (_lastDropTarget) { moved('out'); } }
+  }
+
+  function spillOver (el) {
+    classes.rm(el, 'gu-hide');
+  }
+
+  function spillOut (el) {
+    if (drake.dragging) { classes.add(el, 'gu-hide'); }
+  }
+
+  function renderMirrorImage () {
+    if (_mirror) {
+      return;
+    }
+    var rect = _item.getBoundingClientRect();
+    _mirror = _item.cloneNode(true);
+    _mirror.style.width = getRectWidth(rect) + 'px';
+    _mirror.style.height = getRectHeight(rect) + 'px';
+    classes.rm(_mirror, 'gu-transit');
+    classes.add(_mirror, 'gu-mirror');
+    o.mirrorContainer.appendChild(_mirror);
+    touchy(documentElement, 'add', 'mousemove', drag);
+    classes.add(o.mirrorContainer, 'gu-unselectable');
+    drake.emit('cloned', _mirror, _item, 'mirror');
+  }
+
+  function removeMirrorImage () {
+    if (_mirror) {
+      classes.rm(o.mirrorContainer, 'gu-unselectable');
+      touchy(documentElement, 'remove', 'mousemove', drag);
+      getParent(_mirror).removeChild(_mirror);
+      _mirror = null;
+    }
+  }
+
+  function getImmediateChild (dropTarget, target) {
+    var immediate = target;
+    while (immediate !== dropTarget && getParent(immediate) !== dropTarget) {
+      immediate = getParent(immediate);
+    }
+    if (immediate === documentElement) {
+      return null;
+    }
+    return immediate;
+  }
+
+  function getReference (dropTarget, target, x, y) {
+    var horizontal = o.direction === 'horizontal';
+    var reference = target !== dropTarget ? inside() : outside();
+    return reference;
+
+    function outside () { // slower, but able to figure out any position
+      var len = dropTarget.children.length;
+      var i;
+      var el;
+      var rect;
+      for (i = 0; i < len; i++) {
+        el = dropTarget.children[i];
+        rect = el.getBoundingClientRect();
+        if (horizontal && rect.left > x) { return el; }
+        if (!horizontal && rect.top > y) { return el; }
+      }
+      return null;
+    }
+
+    function inside () { // faster, but only available if dropped inside a child element
+      var rect = target.getBoundingClientRect();
+      if (horizontal) {
+        return resolve(x > rect.left + getRectWidth(rect) / 2);
+      }
+      return resolve(y > rect.top + getRectHeight(rect) / 2);
+    }
+
+    function resolve (after) {
+      return after ? nextEl(target) : target;
+    }
+  }
+
+  function isCopy (item, container) {
+    return typeof o.copy === 'boolean' ? o.copy : o.copy(item, container);
+  }
+}
+
+function touchy (el, op, type, fn) {
+  var touch = {
+    mouseup: 'touchend',
+    mousedown: 'touchstart',
+    mousemove: 'touchmove'
+  };
+  var pointers = {
+    mouseup: 'pointerup',
+    mousedown: 'pointerdown',
+    mousemove: 'pointermove'
+  };
+  var microsoft = {
+    mouseup: 'MSPointerUp',
+    mousedown: 'MSPointerDown',
+    mousemove: 'MSPointerMove'
+  };
+  if (global.navigator.pointerEnabled) {
+    crossvent[op](el, pointers[type], fn);
+  } else if (global.navigator.msPointerEnabled) {
+    crossvent[op](el, microsoft[type], fn);
+  } else {
+    crossvent[op](el, touch[type], fn);
+    crossvent[op](el, type, fn);
+  }
+}
+
+function whichMouseButton (e) {
+  if (e.touches !== void 0) { return e.touches.length; }
+  if (e.buttons !== void 0) { return e.buttons; }
+  if (e.which !== void 0) { return e.which; }
+  var button = e.button;
+  if (button !== void 0) { // see https://github.com/jquery/jquery/blob/99e8ff1baa7ae341e94bb89c3e84570c7c3ad9ea/src/event.js#L573-L575
+    return button & 1 ? 1 : button & 2 ? 3 : (button & 4 ? 2 : 0);
+  }
+}
+
+function getOffset (el) {
+  var rect = el.getBoundingClientRect();
+  return {
+    left: rect.left + getScroll('scrollLeft', 'pageXOffset'),
+    top: rect.top + getScroll('scrollTop', 'pageYOffset')
+  };
+}
+
+function getScroll (scrollProp, offsetProp) {
+  if (typeof global[offsetProp] !== 'undefined') {
+    return global[offsetProp];
+  }
+  if (documentElement.clientHeight) {
+    return documentElement[scrollProp];
+  }
+  return body[scrollProp];
+}
+
+function getElementBehindPoint (point, x, y) {
+  var p = point || {};
+  var state = p.className;
+  var el;
+  p.className += ' gu-hide';
+  el = doc.elementFromPoint(x, y);
+  p.className = state;
+  return el;
+}
+
+function never () { return false; }
+function always () { return true; }
+function getRectWidth (rect) { return rect.width || (rect.right - rect.left); }
+function getRectHeight (rect) { return rect.height || (rect.bottom - rect.top); }
+function getParent (el) { return el.parentNode === doc ? null : el.parentNode; }
+function isInput (el) { return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || isEditable(el); }
+function isEditable (el) {
+  if (!el) { return false; } // no parents were editable
+  if (el.contentEditable === 'false') { return false; } // stop the lookup
+  if (el.contentEditable === 'true') { return true; } // found a contentEditable element in the chain
+  return isEditable(getParent(el)); // contentEditable is set to 'inherit'
+}
+
+function nextEl (el) {
+  return el.nextElementSibling || manually();
+  function manually () {
+    var sibling = el;
+    do {
+      sibling = sibling.nextSibling;
+    } while (sibling && sibling.nodeType !== 1);
+    return sibling;
+  }
+}
+
+function getEventHost (e) {
+  // on touchend event, we have to use `e.changedTouches`
+  // see http://stackoverflow.com/questions/7192563/touchend-event-properties
+  // see https://github.com/bevacqua/dragula/issues/34
+  if (e.targetTouches && e.targetTouches.length) {
+    return e.targetTouches[0];
+  }
+  if (e.changedTouches && e.changedTouches.length) {
+    return e.changedTouches[0];
+  }
+  return e;
+}
+
+function getCoord (coord, e) {
+  var host = getEventHost(e);
+  var missMap = {
+    pageX: 'clientX', // IE8
+    pageY: 'clientY' // IE8
+  };
+  if (coord in missMap && !(coord in host) && missMap[coord] in host) {
+    coord = missMap[coord];
+  }
+  return host[coord];
+}
+
+module.exports = dragula;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"./classes":1,"contra/emitter":4,"crossvent":8}],3:[function(require,module,exports){
+'use strict';
+
+var ticky = require('ticky');
+
+module.exports = function debounce (fn, args, ctx) {
+  if (!fn) { return; }
+  ticky(function run () {
+    fn.apply(ctx || null, args || []);
+  });
+};
+
+},{"ticky":6}],4:[function(require,module,exports){
+'use strict';
+
+var atoa = require('atoa');
+var debounce = require('./debounce');
+
+module.exports = function emitter (thing, options) {
+  var opts = options || {};
+  var evt = {};
+  if (thing === undefined) { thing = {}; }
+  thing.on = function (type, fn) {
+    if (!evt[type]) {
+      evt[type] = [fn];
+    } else {
+      evt[type].push(fn);
+    }
+    return thing;
+  };
+  thing.once = function (type, fn) {
+    fn._once = true; // thing.off(fn) still works!
+    thing.on(type, fn);
+    return thing;
+  };
+  thing.off = function (type, fn) {
+    var c = arguments.length;
+    if (c === 1) {
+      delete evt[type];
+    } else if (c === 0) {
+      evt = {};
+    } else {
+      var et = evt[type];
+      if (!et) { return thing; }
+      et.splice(et.indexOf(fn), 1);
+    }
+    return thing;
+  };
+  thing.emit = function () {
+    var args = atoa(arguments);
+    return thing.emitterSnapshot(args.shift()).apply(this, args);
+  };
+  thing.emitterSnapshot = function (type) {
+    var et = (evt[type] || []).slice(0);
+    return function () {
+      var args = atoa(arguments);
+      var ctx = this || thing;
+      if (type === 'error' && opts.throws !== false && !et.length) { throw args.length === 1 ? args[0] : args; }
+      et.forEach(function emitter (listen) {
+        if (opts.async) { debounce(listen, args, ctx); } else { listen.apply(ctx, args); }
+        if (listen._once) { thing.off(type, listen); }
+      });
+      return thing;
+    };
+  };
+  return thing;
+};
+
+},{"./debounce":3,"atoa":5}],5:[function(require,module,exports){
+module.exports = function atoa (a, n) { return Array.prototype.slice.call(a, n); }
+
+},{}],6:[function(require,module,exports){
+var si = typeof setImmediate === 'function', tick;
+if (si) {
+  tick = function (fn) { setImmediate(fn); };
+} else {
+  tick = function (fn) { setTimeout(fn, 0); };
+}
+
+module.exports = tick;
+},{}],7:[function(require,module,exports){
+(function (global){
+
+var NativeCustomEvent = global.CustomEvent;
+
+function useNative () {
+  try {
+    var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
+    return  'cat' === p.type && 'bar' === p.detail.foo;
+  } catch (e) {
+  }
+  return false;
+}
+
+/**
+ * Cross-browser `CustomEvent` constructor.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
+ *
+ * @public
+ */
+
+module.exports = useNative() ? NativeCustomEvent :
+
+// IE >= 9
+'function' === typeof document.createEvent ? function CustomEvent (type, params) {
+  var e = document.createEvent('CustomEvent');
+  if (params) {
+    e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+  } else {
+    e.initCustomEvent(type, false, false, void 0);
+  }
+  return e;
+} :
+
+// IE <= 8
+function CustomEvent (type, params) {
+  var e = document.createEventObject();
+  e.type = type;
+  if (params) {
+    e.bubbles = Boolean(params.bubbles);
+    e.cancelable = Boolean(params.cancelable);
+    e.detail = params.detail;
+  } else {
+    e.bubbles = false;
+    e.cancelable = false;
+    e.detail = void 0;
+  }
+  return e;
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}],8:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var customEvent = require('custom-event');
+var eventmap = require('./eventmap');
+var doc = global.document;
+var addEvent = addEventEasy;
+var removeEvent = removeEventEasy;
+var hardCache = [];
+
+if (!global.addEventListener) {
+  addEvent = addEventHard;
+  removeEvent = removeEventHard;
+}
+
+module.exports = {
+  add: addEvent,
+  remove: removeEvent,
+  fabricate: fabricateEvent
+};
+
+function addEventEasy (el, type, fn, capturing) {
+  return el.addEventListener(type, fn, capturing);
+}
+
+function addEventHard (el, type, fn) {
+  return el.attachEvent('on' + type, wrap(el, type, fn));
+}
+
+function removeEventEasy (el, type, fn, capturing) {
+  return el.removeEventListener(type, fn, capturing);
+}
+
+function removeEventHard (el, type, fn) {
+  var listener = unwrap(el, type, fn);
+  if (listener) {
+    return el.detachEvent('on' + type, listener);
+  }
+}
+
+function fabricateEvent (el, type, model) {
+  var e = eventmap.indexOf(type) === -1 ? makeCustomEvent() : makeClassicEvent();
+  if (el.dispatchEvent) {
+    el.dispatchEvent(e);
+  } else {
+    el.fireEvent('on' + type, e);
+  }
+  function makeClassicEvent () {
+    var e;
+    if (doc.createEvent) {
+      e = doc.createEvent('Event');
+      e.initEvent(type, true, true);
+    } else if (doc.createEventObject) {
+      e = doc.createEventObject();
+    }
+    return e;
+  }
+  function makeCustomEvent () {
+    return new customEvent(type, { detail: model });
+  }
+}
+
+function wrapperFactory (el, type, fn) {
+  return function wrapper (originalEvent) {
+    var e = originalEvent || global.event;
+    e.target = e.target || e.srcElement;
+    e.preventDefault = e.preventDefault || function preventDefault () { e.returnValue = false; };
+    e.stopPropagation = e.stopPropagation || function stopPropagation () { e.cancelBubble = true; };
+    e.which = e.which || e.keyCode;
+    fn.call(el, e);
+  };
+}
+
+function wrap (el, type, fn) {
+  var wrapper = unwrap(el, type, fn) || wrapperFactory(el, type, fn);
+  hardCache.push({
+    wrapper: wrapper,
+    element: el,
+    type: type,
+    fn: fn
+  });
+  return wrapper;
+}
+
+function unwrap (el, type, fn) {
+  var i = find(el, type, fn);
+  if (i) {
+    var wrapper = hardCache[i].wrapper;
+    hardCache.splice(i, 1); // free up a tad of memory
+    return wrapper;
+  }
+}
+
+function find (el, type, fn) {
+  var i, item;
+  for (i = 0; i < hardCache.length; i++) {
+    item = hardCache[i];
+    if (item.element === el && item.type === type && item.fn === fn) {
+      return i;
+    }
+  }
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{"./eventmap":9,"custom-event":7}],9:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var eventmap = [];
+var eventname = '';
+var ron = /^on/;
+
+for (eventname in global) {
+  if (ron.test(eventname)) {
+    eventmap.push(eventname.slice(2));
+  }
+}
+
+module.exports = eventmap;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}]},{},[2])(2)
+});
+//# sourceMappingURL=data:application/json;charset:utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vZGVfbW9kdWxlcy9icm93c2VyaWZ5L25vZGVfbW9kdWxlcy9icm93c2VyLXBhY2svX3ByZWx1ZGUuanMiLCJjbGFzc2VzLmpzIiwiZHJhZ3VsYS5qcyIsIm5vZGVfbW9kdWxlcy9jb250cmEvZGVib3VuY2UuanMiLCJub2RlX21vZHVsZXMvY29udHJhL2VtaXR0ZXIuanMiLCJub2RlX21vZHVsZXMvY29udHJhL25vZGVfbW9kdWxlcy9hdG9hL2F0b2EuanMiLCJub2RlX21vZHVsZXMvY29udHJhL25vZGVfbW9kdWxlcy90aWNreS90aWNreS1icm93c2VyLmpzIiwibm9kZV9tb2R1bGVzL2Nyb3NzdmVudC9ub2RlX21vZHVsZXMvY3VzdG9tLWV2ZW50L2luZGV4LmpzIiwibm9kZV9tb2R1bGVzL2Nyb3NzdmVudC9zcmMvY3Jvc3N2ZW50LmpzIiwibm9kZV9tb2R1bGVzL2Nyb3NzdmVudC9zcmMvZXZlbnRtYXAuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUNBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7O0FDakNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7OztBQzFsQkE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUNWQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUN0REE7QUFDQTs7QUNEQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7QUNQQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7Ozs7QUNoREE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOzs7OztBQ3JHQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6ImdlbmVyYXRlZC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzQ29udGVudCI6WyIoZnVuY3Rpb24gZSh0LG4scil7ZnVuY3Rpb24gcyhvLHUpe2lmKCFuW29dKXtpZighdFtvXSl7dmFyIGE9dHlwZW9mIHJlcXVpcmU9PVwiZnVuY3Rpb25cIiYmcmVxdWlyZTtpZighdSYmYSlyZXR1cm4gYShvLCEwKTtpZihpKXJldHVybiBpKG8sITApO3ZhciBmPW5ldyBFcnJvcihcIkNhbm5vdCBmaW5kIG1vZHVsZSAnXCIrbytcIidcIik7dGhyb3cgZi5jb2RlPVwiTU9EVUxFX05PVF9GT1VORFwiLGZ9dmFyIGw9bltvXT17ZXhwb3J0czp7fX07dFtvXVswXS5jYWxsKGwuZXhwb3J0cyxmdW5jdGlvbihlKXt2YXIgbj10W29dWzFdW2VdO3JldHVybiBzKG4/bjplKX0sbCxsLmV4cG9ydHMsZSx0LG4scil9cmV0dXJuIG5bb10uZXhwb3J0c312YXIgaT10eXBlb2YgcmVxdWlyZT09XCJmdW5jdGlvblwiJiZyZXF1aXJlO2Zvcih2YXIgbz0wO288ci5sZW5ndGg7bysrKXMocltvXSk7cmV0dXJuIHN9KSIsIid1c2Ugc3RyaWN0JztcblxudmFyIGNhY2hlID0ge307XG52YXIgc3RhcnQgPSAnKD86XnxcXFxccyknO1xudmFyIGVuZCA9ICcoPzpcXFxcc3wkKSc7XG5cbmZ1bmN0aW9uIGxvb2t1cENsYXNzIChjbGFzc05hbWUpIHtcbiAgdmFyIGNhY2hlZCA9IGNhY2hlW2NsYXNzTmFtZV07XG4gIGlmIChjYWNoZWQpIHtcbiAgICBjYWNoZWQubGFzdEluZGV4ID0gMDtcbiAgfSBlbHNlIHtcbiAgICBjYWNoZVtjbGFzc05hbWVdID0gY2FjaGVkID0gbmV3IFJlZ0V4cChzdGFydCArIGNsYXNzTmFtZSArIGVuZCwgJ2cnKTtcbiAgfVxuICByZXR1cm4gY2FjaGVkO1xufVxuXG5mdW5jdGlvbiBhZGRDbGFzcyAoZWwsIGNsYXNzTmFtZSkge1xuICB2YXIgY3VycmVudCA9IGVsLmNsYXNzTmFtZTtcbiAgaWYgKCFjdXJyZW50Lmxlbmd0aCkge1xuICAgIGVsLmNsYXNzTmFtZSA9IGNsYXNzTmFtZTtcbiAgfSBlbHNlIGlmICghbG9va3VwQ2xhc3MoY2xhc3NOYW1lKS50ZXN0KGN1cnJlbnQpKSB7XG4gICAgZWwuY2xhc3NOYW1lICs9ICcgJyArIGNsYXNzTmFtZTtcbiAgfVxufVxuXG5mdW5jdGlvbiBybUNsYXNzIChlbCwgY2xhc3NOYW1lKSB7XG4gIGVsLmNsYXNzTmFtZSA9IGVsLmNsYXNzTmFtZS5yZXBsYWNlKGxvb2t1cENsYXNzKGNsYXNzTmFtZSksICcgJykudHJpbSgpO1xufVxuXG5tb2R1bGUuZXhwb3J0cyA9IHtcbiAgYWRkOiBhZGRDbGFzcyxcbiAgcm06IHJtQ2xhc3Ncbn07XG4iLCIndXNlIHN0cmljdCc7XG5cbnZhciBlbWl0dGVyID0gcmVxdWlyZSgnY29udHJhL2VtaXR0ZXInKTtcbnZhciBjcm9zc3ZlbnQgPSByZXF1aXJlKCdjcm9zc3ZlbnQnKTtcbnZhciBjbGFzc2VzID0gcmVxdWlyZSgnLi9jbGFzc2VzJyk7XG52YXIgZG9jID0gZG9jdW1lbnQ7XG52YXIgZG9jdW1lbnRFbGVtZW50ID0gZG9jLmRvY3VtZW50RWxlbWVudDtcbnZhciBib2R5ID0gZG9jLmJvZHk7XG5cbmZ1bmN0aW9uIGRyYWd1bGEgKGluaXRpYWxDb250YWluZXJzLCBvcHRpb25zKSB7XG4gIHZhciBsZW4gPSBhcmd1bWVudHMubGVuZ3RoO1xuICBpZiAobGVuID09PSAxICYmIEFycmF5LmlzQXJyYXkoaW5pdGlhbENvbnRhaW5lcnMpID09PSBmYWxzZSkge1xuICAgIG9wdGlvbnMgPSBpbml0aWFsQ29udGFpbmVycztcbiAgICBpbml0aWFsQ29udGFpbmVycyA9IFtdO1xuICB9XG4gIHZhciBfbWlycm9yOyAvLyBtaXJyb3IgaW1hZ2VcbiAgdmFyIF9zb3VyY2U7IC8vIHNvdXJjZSBjb250YWluZXJcbiAgdmFyIF9pdGVtOyAvLyBpdGVtIGJlaW5nIGRyYWdnZWRcbiAgdmFyIF9vZmZzZXRYOyAvLyByZWZlcmVuY2UgeFxuICB2YXIgX29mZnNldFk7IC8vIHJlZmVyZW5jZSB5XG4gIHZhciBfbW92ZVg7IC8vIHJlZmVyZW5jZSBtb3ZlIHhcbiAgdmFyIF9tb3ZlWTsgLy8gcmVmZXJlbmNlIG1vdmUgeVxuICB2YXIgX2luaXRpYWxTaWJsaW5nOyAvLyByZWZlcmVuY2Ugc2libGluZyB3aGVuIGdyYWJiZWRcbiAgdmFyIF9jdXJyZW50U2libGluZzsgLy8gcmVmZXJlbmNlIHNpYmxpbmcgbm93XG4gIHZhciBfY29weTsgLy8gaXRlbSB1c2VkIGZvciBjb3B5aW5nXG4gIHZhciBfcmVuZGVyVGltZXI7IC8vIHRpbWVyIGZvciBzZXRUaW1lb3V0IHJlbmRlck1pcnJvckltYWdlXG4gIHZhciBfbGFzdERyb3BUYXJnZXQgPSBudWxsOyAvLyBsYXN0IGNvbnRhaW5lciBpdGVtIHdhcyBvdmVyXG4gIHZhciBfZ3JhYmJlZDsgLy8gaG9sZHMgbW91c2Vkb3duIGNvbnRleHQgdW50aWwgZmlyc3QgbW91c2Vtb3ZlXG5cbiAgdmFyIG8gPSBvcHRpb25zIHx8IHt9O1xuICBpZiAoby5tb3ZlcyA9PT0gdm9pZCAwKSB7IG8ubW92ZXMgPSBhbHdheXM7IH1cbiAgaWYgKG8uYWNjZXB0cyA9PT0gdm9pZCAwKSB7IG8uYWNjZXB0cyA9IGFsd2F5czsgfVxuICBpZiAoby5pbnZhbGlkID09PSB2b2lkIDApIHsgby5pbnZhbGlkID0gaW52YWxpZFRhcmdldDsgfVxuICBpZiAoby5jb250YWluZXJzID09PSB2b2lkIDApIHsgby5jb250YWluZXJzID0gaW5pdGlhbENvbnRhaW5lcnMgfHwgW107IH1cbiAgaWYgKG8uaXNDb250YWluZXIgPT09IHZvaWQgMCkgeyBvLmlzQ29udGFpbmVyID0gbmV2ZXI7IH1cbiAgaWYgKG8uY29weSA9PT0gdm9pZCAwKSB7IG8uY29weSA9IGZhbHNlOyB9XG4gIGlmIChvLmNvcHlTb3J0U291cmNlID09PSB2b2lkIDApIHsgby5jb3B5U29ydFNvdXJjZSA9IGZhbHNlOyB9XG4gIGlmIChvLnJldmVydE9uU3BpbGwgPT09IHZvaWQgMCkgeyBvLnJldmVydE9uU3BpbGwgPSBmYWxzZTsgfVxuICBpZiAoby5yZW1vdmVPblNwaWxsID09PSB2b2lkIDApIHsgby5yZW1vdmVPblNwaWxsID0gZmFsc2U7IH1cbiAgaWYgKG8uZGlyZWN0aW9uID09PSB2b2lkIDApIHsgby5kaXJlY3Rpb24gPSAndmVydGljYWwnOyB9XG4gIGlmIChvLmlnbm9yZUlucHV0VGV4dFNlbGVjdGlvbiA9PT0gdm9pZCAwKSB7IG8uaWdub3JlSW5wdXRUZXh0U2VsZWN0aW9uID0gdHJ1ZTsgfVxuICBpZiAoby5taXJyb3JDb250YWluZXIgPT09IHZvaWQgMCkgeyBvLm1pcnJvckNvbnRhaW5lciA9IGJvZHk7IH1cblxuICB2YXIgZHJha2UgPSBlbWl0dGVyKHtcbiAgICBjb250YWluZXJzOiBvLmNvbnRhaW5lcnMsXG4gICAgc3RhcnQ6IG1hbnVhbFN0YXJ0LFxuICAgIGVuZDogZW5kLFxuICAgIGNhbmNlbDogY2FuY2VsLFxuICAgIHJlbW92ZTogcmVtb3ZlLFxuICAgIGRlc3Ryb3k6IGRlc3Ryb3ksXG4gICAgZHJhZ2dpbmc6IGZhbHNlXG4gIH0pO1xuXG4gIGlmIChvLnJlbW92ZU9uU3BpbGwgPT09IHRydWUpIHtcbiAgICBkcmFrZS5vbignb3ZlcicsIHNwaWxsT3Zlcikub24oJ291dCcsIHNwaWxsT3V0KTtcbiAgfVxuXG4gIGV2ZW50cygpO1xuXG4gIHJldHVybiBkcmFrZTtcblxuICBmdW5jdGlvbiBpc0NvbnRhaW5lciAoZWwpIHtcbiAgICByZXR1cm4gZHJha2UuY29udGFpbmVycy5pbmRleE9mKGVsKSAhPT0gLTEgfHwgby5pc0NvbnRhaW5lcihlbCk7XG4gIH1cblxuICBmdW5jdGlvbiBldmVudHMgKHJlbW92ZSkge1xuICAgIHZhciBvcCA9IHJlbW92ZSA/ICdyZW1vdmUnIDogJ2FkZCc7XG4gICAgdG91Y2h5KGRvY3VtZW50RWxlbWVudCwgb3AsICdtb3VzZWRvd24nLCBncmFiKTtcbiAgICB0b3VjaHkoZG9jdW1lbnRFbGVtZW50LCBvcCwgJ21vdXNldXAnLCByZWxlYXNlKTtcbiAgfVxuXG4gIGZ1bmN0aW9uIGV2ZW50dWFsTW92ZW1lbnRzIChyZW1vdmUpIHtcbiAgICB2YXIgb3AgPSByZW1vdmUgPyAncmVtb3ZlJyA6ICdhZGQnO1xuICAgIHRvdWNoeShkb2N1bWVudEVsZW1lbnQsIG9wLCAnbW91c2Vtb3ZlJywgc3RhcnRCZWNhdXNlTW91c2VNb3ZlZCk7XG4gIH1cblxuICBmdW5jdGlvbiBtb3ZlbWVudHMgKHJlbW92ZSkge1xuICAgIHZhciBvcCA9IHJlbW92ZSA/ICdyZW1vdmUnIDogJ2FkZCc7XG4gICAgY3Jvc3N2ZW50W29wXShkb2N1bWVudEVsZW1lbnQsICdzZWxlY3RzdGFydCcsIHByZXZlbnRHcmFiYmVkKTsgLy8gSUU4XG4gICAgY3Jvc3N2ZW50W29wXShkb2N1bWVudEVsZW1lbnQsICdjbGljaycsIHByZXZlbnRHcmFiYmVkKTtcbiAgfVxuXG4gIGZ1bmN0aW9uIGRlc3Ryb3kgKCkge1xuICAgIGV2ZW50cyh0cnVlKTtcbiAgICByZWxlYXNlKHt9KTtcbiAgfVxuXG4gIGZ1bmN0aW9uIHByZXZlbnRHcmFiYmVkIChlKSB7XG4gICAgaWYgKF9ncmFiYmVkKSB7XG4gICAgICBlLnByZXZlbnREZWZhdWx0KCk7XG4gICAgfVxuICB9XG5cbiAgZnVuY3Rpb24gZ3JhYiAoZSkge1xuICAgIF9tb3ZlWCA9IGUuY2xpZW50WDtcbiAgICBfbW92ZVkgPSBlLmNsaWVudFk7XG5cbiAgICB2YXIgaWdub3JlID0gd2hpY2hNb3VzZUJ1dHRvbihlKSAhPT0gMSB8fCBlLm1ldGFLZXkgfHwgZS5jdHJsS2V5O1xuICAgIGlmIChpZ25vcmUpIHtcbiAgICAgIHJldHVybjsgLy8gd2Ugb25seSBjYXJlIGFib3V0IGhvbmVzdC10by1nb2QgbGVmdCBjbGlja3MgYW5kIHRvdWNoIGV2ZW50c1xuICAgIH1cbiAgICB2YXIgaXRlbSA9IGUudGFyZ2V0O1xuICAgIHZhciBjb250ZXh0ID0gY2FuU3RhcnQoaXRlbSk7XG4gICAgaWYgKCFjb250ZXh0KSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIF9ncmFiYmVkID0gY29udGV4dDtcbiAgICBldmVudHVhbE1vdmVtZW50cygpO1xuICAgIGlmIChlLnR5cGUgPT09ICdtb3VzZWRvd24nKSB7XG4gICAgICBpZiAoaXNJbnB1dChpdGVtKSkgeyAvLyBzZWUgYWxzbzogaHR0cHM6Ly9naXRodWIuY29tL2JldmFjcXVhL2RyYWd1bGEvaXNzdWVzLzIwOFxuICAgICAgICBpdGVtLmZvY3VzKCk7IC8vIGZpeGVzIGh0dHBzOi8vZ2l0aHViLmNvbS9iZXZhY3F1YS9kcmFndWxhL2lzc3Vlcy8xNzZcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGUucHJldmVudERlZmF1bHQoKTsgLy8gZml4ZXMgaHR0cHM6Ly9naXRodWIuY29tL2JldmFjcXVhL2RyYWd1bGEvaXNzdWVzLzE1NVxuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIGZ1bmN0aW9uIHN0YXJ0QmVjYXVzZU1vdXNlTW92ZWQgKGUpIHtcbiAgICBpZiAoIV9ncmFiYmVkKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIGlmICh3aGljaE1vdXNlQnV0dG9uKGUpID09PSAwKSB7XG4gICAgICByZWxlYXNlKHt9KTtcbiAgICAgIHJldHVybjsgLy8gd2hlbiB0ZXh0IGlzIHNlbGVjdGVkIG9uIGFuIGlucHV0IGFuZCB0aGVuIGRyYWdnZWQsIG1vdXNldXAgZG9lc24ndCBmaXJlLiB0aGlzIGlzIG91ciBvbmx5IGhvcGVcbiAgICB9XG4gICAgLy8gdHJ1dGh5IGNoZWNrIGZpeGVzICMyMzksIGVxdWFsaXR5IGZpeGVzICMyMDdcbiAgICBpZiAoZS5jbGllbnRYICE9PSB2b2lkIDAgJiYgZS5jbGllbnRYID09PSBfbW92ZVggJiYgZS5jbGllbnRZICE9PSB2b2lkIDAgJiYgZS5jbGllbnRZID09PSBfbW92ZVkpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG4gICAgaWYgKG8uaWdub3JlSW5wdXRUZXh0U2VsZWN0aW9uKSB7XG4gICAgICB2YXIgY2xpZW50WCA9IGdldENvb3JkKCdjbGllbnRYJywgZSk7XG4gICAgICB2YXIgY2xpZW50WSA9IGdldENvb3JkKCdjbGllbnRZJywgZSk7XG4gICAgICB2YXIgZWxlbWVudEJlaGluZEN1cnNvciA9IGRvYy5lbGVtZW50RnJvbVBvaW50KGNsaWVudFgsIGNsaWVudFkpO1xuICAgICAgaWYgKGlzSW5wdXQoZWxlbWVudEJlaGluZEN1cnNvcikpIHtcbiAgICAgICAgcmV0dXJuO1xuICAgICAgfVxuICAgIH1cblxuICAgIHZhciBncmFiYmVkID0gX2dyYWJiZWQ7IC8vIGNhbGwgdG8gZW5kKCkgdW5zZXRzIF9ncmFiYmVkXG4gICAgZXZlbnR1YWxNb3ZlbWVudHModHJ1ZSk7XG4gICAgbW92ZW1lbnRzKCk7XG4gICAgZW5kKCk7XG4gICAgc3RhcnQoZ3JhYmJlZCk7XG5cbiAgICB2YXIgb2Zmc2V0ID0gZ2V0T2Zmc2V0KF9pdGVtKTtcbiAgICBfb2Zmc2V0WCA9IGdldENvb3JkKCdwYWdlWCcsIGUpIC0gb2Zmc2V0LmxlZnQ7XG4gICAgX29mZnNldFkgPSBnZXRDb29yZCgncGFnZVknLCBlKSAtIG9mZnNldC50b3A7XG5cbiAgICBjbGFzc2VzLmFkZChfY29weSB8fCBfaXRlbSwgJ2d1LXRyYW5zaXQnKTtcbiAgICByZW5kZXJNaXJyb3JJbWFnZSgpO1xuICAgIGRyYWcoZSk7XG4gIH1cblxuICBmdW5jdGlvbiBjYW5TdGFydCAoaXRlbSkge1xuICAgIGlmIChkcmFrZS5kcmFnZ2luZyAmJiBfbWlycm9yKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIGlmIChpc0NvbnRhaW5lcihpdGVtKSkge1xuICAgICAgcmV0dXJuOyAvLyBkb24ndCBkcmFnIGNvbnRhaW5lciBpdHNlbGZcbiAgICB9XG4gICAgdmFyIGhhbmRsZSA9IGl0ZW07XG4gICAgd2hpbGUgKGdldFBhcmVudChpdGVtKSAmJiBpc0NvbnRhaW5lcihnZXRQYXJlbnQoaXRlbSkpID09PSBmYWxzZSkge1xuICAgICAgaWYgKG8uaW52YWxpZChpdGVtLCBoYW5kbGUpKSB7XG4gICAgICAgIHJldHVybjtcbiAgICAgIH1cbiAgICAgIGl0ZW0gPSBnZXRQYXJlbnQoaXRlbSk7IC8vIGRyYWcgdGFyZ2V0IHNob3VsZCBiZSBhIHRvcCBlbGVtZW50XG4gICAgICBpZiAoIWl0ZW0pIHtcbiAgICAgICAgcmV0dXJuO1xuICAgICAgfVxuICAgIH1cbiAgICB2YXIgc291cmNlID0gZ2V0UGFyZW50KGl0ZW0pO1xuICAgIGlmICghc291cmNlKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIGlmIChvLmludmFsaWQoaXRlbSwgaGFuZGxlKSkge1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIHZhciBtb3ZhYmxlID0gby5tb3ZlcyhpdGVtLCBzb3VyY2UsIGhhbmRsZSwgbmV4dEVsKGl0ZW0pKTtcbiAgICBpZiAoIW1vdmFibGUpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG5cbiAgICByZXR1cm4ge1xuICAgICAgaXRlbTogaXRlbSxcbiAgICAgIHNvdXJjZTogc291cmNlXG4gICAgfTtcbiAgfVxuXG4gIGZ1bmN0aW9uIG1hbnVhbFN0YXJ0IChpdGVtKSB7XG4gICAgdmFyIGNvbnRleHQgPSBjYW5TdGFydChpdGVtKTtcbiAgICBpZiAoY29udGV4dCkge1xuICAgICAgc3RhcnQoY29udGV4dCk7XG4gICAgfVxuICB9XG5cbiAgZnVuY3Rpb24gc3RhcnQgKGNvbnRleHQpIHtcbiAgICBpZiAoaXNDb3B5KGNvbnRleHQuaXRlbSwgY29udGV4dC5zb3VyY2UpKSB7XG4gICAgICBfY29weSA9IGNvbnRleHQuaXRlbS5jbG9uZU5vZGUodHJ1ZSk7XG4gICAgICBkcmFrZS5lbWl0KCdjbG9uZWQnLCBfY29weSwgY29udGV4dC5pdGVtLCAnY29weScpO1xuICAgIH1cblxuICAgIF9zb3VyY2UgPSBjb250ZXh0LnNvdXJjZTtcbiAgICBfaXRlbSA9IGNvbnRleHQuaXRlbTtcbiAgICBfaW5pdGlhbFNpYmxpbmcgPSBfY3VycmVudFNpYmxpbmcgPSBuZXh0RWwoY29udGV4dC5pdGVtKTtcblxuICAgIGRyYWtlLmRyYWdnaW5nID0gdHJ1ZTtcbiAgICBkcmFrZS5lbWl0KCdkcmFnJywgX2l0ZW0sIF9zb3VyY2UpO1xuICB9XG5cbiAgZnVuY3Rpb24gaW52YWxpZFRhcmdldCAoKSB7XG4gICAgcmV0dXJuIGZhbHNlO1xuICB9XG5cbiAgZnVuY3Rpb24gZW5kICgpIHtcbiAgICBpZiAoIWRyYWtlLmRyYWdnaW5nKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIHZhciBpdGVtID0gX2NvcHkgfHwgX2l0ZW07XG4gICAgZHJvcChpdGVtLCBnZXRQYXJlbnQoaXRlbSkpO1xuICB9XG5cbiAgZnVuY3Rpb24gdW5ncmFiICgpIHtcbiAgICBfZ3JhYmJlZCA9IGZhbHNlO1xuICAgIGV2ZW50dWFsTW92ZW1lbnRzKHRydWUpO1xuICAgIG1vdmVtZW50cyh0cnVlKTtcbiAgfVxuXG4gIGZ1bmN0aW9uIHJlbGVhc2UgKGUpIHtcbiAgICB1bmdyYWIoKTtcblxuICAgIGlmICghZHJha2UuZHJhZ2dpbmcpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG4gICAgdmFyIGl0ZW0gPSBfY29weSB8fCBfaXRlbTtcbiAgICB2YXIgY2xpZW50WCA9IGdldENvb3JkKCdjbGllbnRYJywgZSk7XG4gICAgdmFyIGNsaWVudFkgPSBnZXRDb29yZCgnY2xpZW50WScsIGUpO1xuICAgIHZhciBlbGVtZW50QmVoaW5kQ3Vyc29yID0gZ2V0RWxlbWVudEJlaGluZFBvaW50KF9taXJyb3IsIGNsaWVudFgsIGNsaWVudFkpO1xuICAgIHZhciBkcm9wVGFyZ2V0ID0gZmluZERyb3BUYXJnZXQoZWxlbWVudEJlaGluZEN1cnNvciwgY2xpZW50WCwgY2xpZW50WSk7XG4gICAgaWYgKGRyb3BUYXJnZXQgJiYgKChfY29weSAmJiBvLmNvcHlTb3J0U291cmNlKSB8fCAoIV9jb3B5IHx8IGRyb3BUYXJnZXQgIT09IF9zb3VyY2UpKSkge1xuICAgICAgZHJvcChpdGVtLCBkcm9wVGFyZ2V0KTtcbiAgICB9IGVsc2UgaWYgKG8ucmVtb3ZlT25TcGlsbCkge1xuICAgICAgcmVtb3ZlKCk7XG4gICAgfSBlbHNlIHtcbiAgICAgIGNhbmNlbCgpO1xuICAgIH1cbiAgfVxuXG4gIGZ1bmN0aW9uIGRyb3AgKGl0ZW0sIHRhcmdldCkge1xuICAgIHZhciBwYXJlbnQgPSBnZXRQYXJlbnQoaXRlbSk7XG4gICAgaWYgKF9jb3B5ICYmIG8uY29weVNvcnRTb3VyY2UgJiYgdGFyZ2V0ID09PSBfc291cmNlKSB7XG4gICAgICBwYXJlbnQucmVtb3ZlQ2hpbGQoX2l0ZW0pO1xuICAgIH1cbiAgICBpZiAoaXNJbml0aWFsUGxhY2VtZW50KHRhcmdldCkpIHtcbiAgICAgIGRyYWtlLmVtaXQoJ2NhbmNlbCcsIGl0ZW0sIF9zb3VyY2UsIF9zb3VyY2UpO1xuICAgIH0gZWxzZSB7XG4gICAgICBkcmFrZS5lbWl0KCdkcm9wJywgaXRlbSwgdGFyZ2V0LCBfc291cmNlLCBfY3VycmVudFNpYmxpbmcpO1xuICAgIH1cbiAgICBjbGVhbnVwKCk7XG4gIH1cblxuICBmdW5jdGlvbiByZW1vdmUgKCkge1xuICAgIGlmICghZHJha2UuZHJhZ2dpbmcpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG4gICAgdmFyIGl0ZW0gPSBfY29weSB8fCBfaXRlbTtcbiAgICB2YXIgcGFyZW50ID0gZ2V0UGFyZW50KGl0ZW0pO1xuICAgIGlmIChwYXJlbnQpIHtcbiAgICAgIHBhcmVudC5yZW1vdmVDaGlsZChpdGVtKTtcbiAgICB9XG4gICAgZHJha2UuZW1pdChfY29weSA/ICdjYW5jZWwnIDogJ3JlbW92ZScsIGl0ZW0sIHBhcmVudCwgX3NvdXJjZSk7XG4gICAgY2xlYW51cCgpO1xuICB9XG5cbiAgZnVuY3Rpb24gY2FuY2VsIChyZXZlcnQpIHtcbiAgICBpZiAoIWRyYWtlLmRyYWdnaW5nKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIHZhciByZXZlcnRzID0gYXJndW1lbnRzLmxlbmd0aCA+IDAgPyByZXZlcnQgOiBvLnJldmVydE9uU3BpbGw7XG4gICAgdmFyIGl0ZW0gPSBfY29weSB8fCBfaXRlbTtcbiAgICB2YXIgcGFyZW50ID0gZ2V0UGFyZW50KGl0ZW0pO1xuICAgIGlmIChwYXJlbnQgPT09IF9zb3VyY2UgJiYgX2NvcHkpIHtcbiAgICAgIHBhcmVudC5yZW1vdmVDaGlsZChfY29weSk7XG4gICAgfVxuICAgIHZhciBpbml0aWFsID0gaXNJbml0aWFsUGxhY2VtZW50KHBhcmVudCk7XG4gICAgaWYgKGluaXRpYWwgPT09IGZhbHNlICYmICFfY29weSAmJiByZXZlcnRzKSB7XG4gICAgICBfc291cmNlLmluc2VydEJlZm9yZShpdGVtLCBfaW5pdGlhbFNpYmxpbmcpO1xuICAgIH1cbiAgICBpZiAoaW5pdGlhbCB8fCByZXZlcnRzKSB7XG4gICAgICBkcmFrZS5lbWl0KCdjYW5jZWwnLCBpdGVtLCBfc291cmNlLCBfc291cmNlKTtcbiAgICB9IGVsc2Uge1xuICAgICAgZHJha2UuZW1pdCgnZHJvcCcsIGl0ZW0sIHBhcmVudCwgX3NvdXJjZSwgX2N1cnJlbnRTaWJsaW5nKTtcbiAgICB9XG4gICAgY2xlYW51cCgpO1xuICB9XG5cbiAgZnVuY3Rpb24gY2xlYW51cCAoKSB7XG4gICAgdmFyIGl0ZW0gPSBfY29weSB8fCBfaXRlbTtcbiAgICB1bmdyYWIoKTtcbiAgICByZW1vdmVNaXJyb3JJbWFnZSgpO1xuICAgIGlmIChpdGVtKSB7XG4gICAgICBjbGFzc2VzLnJtKGl0ZW0sICdndS10cmFuc2l0Jyk7XG4gICAgfVxuICAgIGlmIChfcmVuZGVyVGltZXIpIHtcbiAgICAgIGNsZWFyVGltZW91dChfcmVuZGVyVGltZXIpO1xuICAgIH1cbiAgICBkcmFrZS5kcmFnZ2luZyA9IGZhbHNlO1xuICAgIGlmIChfbGFzdERyb3BUYXJnZXQpIHtcbiAgICAgIGRyYWtlLmVtaXQoJ291dCcsIGl0ZW0sIF9sYXN0RHJvcFRhcmdldCwgX3NvdXJjZSk7XG4gICAgfVxuICAgIGRyYWtlLmVtaXQoJ2RyYWdlbmQnLCBpdGVtKTtcbiAgICBfc291cmNlID0gX2l0ZW0gPSBfY29weSA9IF9pbml0aWFsU2libGluZyA9IF9jdXJyZW50U2libGluZyA9IF9yZW5kZXJUaW1lciA9IF9sYXN0RHJvcFRhcmdldCA9IG51bGw7XG4gIH1cblxuICBmdW5jdGlvbiBpc0luaXRpYWxQbGFjZW1lbnQgKHRhcmdldCwgcykge1xuICAgIHZhciBzaWJsaW5nO1xuICAgIGlmIChzICE9PSB2b2lkIDApIHtcbiAgICAgIHNpYmxpbmcgPSBzO1xuICAgIH0gZWxzZSBpZiAoX21pcnJvcikge1xuICAgICAgc2libGluZyA9IF9jdXJyZW50U2libGluZztcbiAgICB9IGVsc2Uge1xuICAgICAgc2libGluZyA9IG5leHRFbChfY29weSB8fCBfaXRlbSk7XG4gICAgfVxuICAgIHJldHVybiB0YXJnZXQgPT09IF9zb3VyY2UgJiYgc2libGluZyA9PT0gX2luaXRpYWxTaWJsaW5nO1xuICB9XG5cbiAgZnVuY3Rpb24gZmluZERyb3BUYXJnZXQgKGVsZW1lbnRCZWhpbmRDdXJzb3IsIGNsaWVudFgsIGNsaWVudFkpIHtcbiAgICB2YXIgdGFyZ2V0ID0gZWxlbWVudEJlaGluZEN1cnNvcjtcbiAgICB3aGlsZSAodGFyZ2V0ICYmICFhY2NlcHRlZCgpKSB7XG4gICAgICB0YXJnZXQgPSBnZXRQYXJlbnQodGFyZ2V0KTtcbiAgICB9XG4gICAgcmV0dXJuIHRhcmdldDtcblxuICAgIGZ1bmN0aW9uIGFjY2VwdGVkICgpIHtcbiAgICAgIHZhciBkcm9wcGFibGUgPSBpc0NvbnRhaW5lcih0YXJnZXQpO1xuICAgICAgaWYgKGRyb3BwYWJsZSA9PT0gZmFsc2UpIHtcbiAgICAgICAgcmV0dXJuIGZhbHNlO1xuICAgICAgfVxuXG4gICAgICB2YXIgaW1tZWRpYXRlID0gZ2V0SW1tZWRpYXRlQ2hpbGQodGFyZ2V0LCBlbGVtZW50QmVoaW5kQ3Vyc29yKTtcbiAgICAgIHZhciByZWZlcmVuY2UgPSBnZXRSZWZlcmVuY2UodGFyZ2V0LCBpbW1lZGlhdGUsIGNsaWVudFgsIGNsaWVudFkpO1xuICAgICAgdmFyIGluaXRpYWwgPSBpc0luaXRpYWxQbGFjZW1lbnQodGFyZ2V0LCByZWZlcmVuY2UpO1xuICAgICAgaWYgKGluaXRpYWwpIHtcbiAgICAgICAgcmV0dXJuIHRydWU7IC8vIHNob3VsZCBhbHdheXMgYmUgYWJsZSB0byBkcm9wIGl0IHJpZ2h0IGJhY2sgd2hlcmUgaXQgd2FzXG4gICAgICB9XG4gICAgICByZXR1cm4gby5hY2NlcHRzKF9pdGVtLCB0YXJnZXQsIF9zb3VyY2UsIHJlZmVyZW5jZSk7XG4gICAgfVxuICB9XG5cbiAgZnVuY3Rpb24gZHJhZyAoZSkge1xuICAgIGlmICghX21pcnJvcikge1xuICAgICAgcmV0dXJuO1xuICAgIH1cbiAgICBlLnByZXZlbnREZWZhdWx0KCk7XG5cbiAgICB2YXIgY2xpZW50WCA9IGdldENvb3JkKCdjbGllbnRYJywgZSk7XG4gICAgdmFyIGNsaWVudFkgPSBnZXRDb29yZCgnY2xpZW50WScsIGUpO1xuICAgIHZhciB4ID0gY2xpZW50WCAtIF9vZmZzZXRYO1xuICAgIHZhciB5ID0gY2xpZW50WSAtIF9vZmZzZXRZO1xuXG4gICAgX21pcnJvci5zdHlsZS5sZWZ0ID0geCArICdweCc7XG4gICAgX21pcnJvci5zdHlsZS50b3AgPSB5ICsgJ3B4JztcblxuICAgIHZhciBpdGVtID0gX2NvcHkgfHwgX2l0ZW07XG4gICAgdmFyIGVsZW1lbnRCZWhpbmRDdXJzb3IgPSBnZXRFbGVtZW50QmVoaW5kUG9pbnQoX21pcnJvciwgY2xpZW50WCwgY2xpZW50WSk7XG4gICAgdmFyIGRyb3BUYXJnZXQgPSBmaW5kRHJvcFRhcmdldChlbGVtZW50QmVoaW5kQ3Vyc29yLCBjbGllbnRYLCBjbGllbnRZKTtcbiAgICB2YXIgY2hhbmdlZCA9IGRyb3BUYXJnZXQgIT09IG51bGwgJiYgZHJvcFRhcmdldCAhPT0gX2xhc3REcm9wVGFyZ2V0O1xuICAgIGlmIChjaGFuZ2VkIHx8IGRyb3BUYXJnZXQgPT09IG51bGwpIHtcbiAgICAgIG91dCgpO1xuICAgICAgX2xhc3REcm9wVGFyZ2V0ID0gZHJvcFRhcmdldDtcbiAgICAgIG92ZXIoKTtcbiAgICB9XG4gICAgdmFyIHBhcmVudCA9IGdldFBhcmVudChpdGVtKTtcbiAgICBpZiAoZHJvcFRhcmdldCA9PT0gX3NvdXJjZSAmJiBfY29weSAmJiAhby5jb3B5U29ydFNvdXJjZSkge1xuICAgICAgaWYgKHBhcmVudCkge1xuICAgICAgICBwYXJlbnQucmVtb3ZlQ2hpbGQoaXRlbSk7XG4gICAgICB9XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIHZhciByZWZlcmVuY2U7XG4gICAgdmFyIGltbWVkaWF0ZSA9IGdldEltbWVkaWF0ZUNoaWxkKGRyb3BUYXJnZXQsIGVsZW1lbnRCZWhpbmRDdXJzb3IpO1xuICAgIGlmIChpbW1lZGlhdGUgIT09IG51bGwpIHtcbiAgICAgIHJlZmVyZW5jZSA9IGdldFJlZmVyZW5jZShkcm9wVGFyZ2V0LCBpbW1lZGlhdGUsIGNsaWVudFgsIGNsaWVudFkpO1xuICAgIH0gZWxzZSBpZiAoby5yZXZlcnRPblNwaWxsID09PSB0cnVlICYmICFfY29weSkge1xuICAgICAgcmVmZXJlbmNlID0gX2luaXRpYWxTaWJsaW5nO1xuICAgICAgZHJvcFRhcmdldCA9IF9zb3VyY2U7XG4gICAgfSBlbHNlIHtcbiAgICAgIGlmIChfY29weSAmJiBwYXJlbnQpIHtcbiAgICAgICAgcGFyZW50LnJlbW92ZUNoaWxkKGl0ZW0pO1xuICAgICAgfVxuICAgICAgcmV0dXJuO1xuICAgIH1cbiAgICBpZiAoXG4gICAgICByZWZlcmVuY2UgPT09IG51bGwgfHxcbiAgICAgIHJlZmVyZW5jZSAhPT0gaXRlbSAmJlxuICAgICAgcmVmZXJlbmNlICE9PSBuZXh0RWwoaXRlbSkgJiZcbiAgICAgIHJlZmVyZW5jZSAhPT0gX2N1cnJlbnRTaWJsaW5nXG4gICAgKSB7XG4gICAgICBfY3VycmVudFNpYmxpbmcgPSByZWZlcmVuY2U7XG4gICAgICBkcm9wVGFyZ2V0Lmluc2VydEJlZm9yZShpdGVtLCByZWZlcmVuY2UpO1xuICAgICAgZHJha2UuZW1pdCgnc2hhZG93JywgaXRlbSwgZHJvcFRhcmdldCwgX3NvdXJjZSk7XG4gICAgfVxuICAgIGZ1bmN0aW9uIG1vdmVkICh0eXBlKSB7IGRyYWtlLmVtaXQodHlwZSwgaXRlbSwgX2xhc3REcm9wVGFyZ2V0LCBfc291cmNlKTsgfVxuICAgIGZ1bmN0aW9uIG92ZXIgKCkgeyBpZiAoY2hhbmdlZCkgeyBtb3ZlZCgnb3ZlcicpOyB9IH1cbiAgICBmdW5jdGlvbiBvdXQgKCkgeyBpZiAoX2xhc3REcm9wVGFyZ2V0KSB7IG1vdmVkKCdvdXQnKTsgfSB9XG4gIH1cblxuICBmdW5jdGlvbiBzcGlsbE92ZXIgKGVsKSB7XG4gICAgY2xhc3Nlcy5ybShlbCwgJ2d1LWhpZGUnKTtcbiAgfVxuXG4gIGZ1bmN0aW9uIHNwaWxsT3V0IChlbCkge1xuICAgIGlmIChkcmFrZS5kcmFnZ2luZykgeyBjbGFzc2VzLmFkZChlbCwgJ2d1LWhpZGUnKTsgfVxuICB9XG5cbiAgZnVuY3Rpb24gcmVuZGVyTWlycm9ySW1hZ2UgKCkge1xuICAgIGlmIChfbWlycm9yKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIHZhciByZWN0ID0gX2l0ZW0uZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7XG4gICAgX21pcnJvciA9IF9pdGVtLmNsb25lTm9kZSh0cnVlKTtcbiAgICBfbWlycm9yLnN0eWxlLndpZHRoID0gZ2V0UmVjdFdpZHRoKHJlY3QpICsgJ3B4JztcbiAgICBfbWlycm9yLnN0eWxlLmhlaWdodCA9IGdldFJlY3RIZWlnaHQocmVjdCkgKyAncHgnO1xuICAgIGNsYXNzZXMucm0oX21pcnJvciwgJ2d1LXRyYW5zaXQnKTtcbiAgICBjbGFzc2VzLmFkZChfbWlycm9yLCAnZ3UtbWlycm9yJyk7XG4gICAgby5taXJyb3JDb250YWluZXIuYXBwZW5kQ2hpbGQoX21pcnJvcik7XG4gICAgdG91Y2h5KGRvY3VtZW50RWxlbWVudCwgJ2FkZCcsICdtb3VzZW1vdmUnLCBkcmFnKTtcbiAgICBjbGFzc2VzLmFkZChvLm1pcnJvckNvbnRhaW5lciwgJ2d1LXVuc2VsZWN0YWJsZScpO1xuICAgIGRyYWtlLmVtaXQoJ2Nsb25lZCcsIF9taXJyb3IsIF9pdGVtLCAnbWlycm9yJyk7XG4gIH1cblxuICBmdW5jdGlvbiByZW1vdmVNaXJyb3JJbWFnZSAoKSB7XG4gICAgaWYgKF9taXJyb3IpIHtcbiAgICAgIGNsYXNzZXMucm0oby5taXJyb3JDb250YWluZXIsICdndS11bnNlbGVjdGFibGUnKTtcbiAgICAgIHRvdWNoeShkb2N1bWVudEVsZW1lbnQsICdyZW1vdmUnLCAnbW91c2Vtb3ZlJywgZHJhZyk7XG4gICAgICBnZXRQYXJlbnQoX21pcnJvcikucmVtb3ZlQ2hpbGQoX21pcnJvcik7XG4gICAgICBfbWlycm9yID0gbnVsbDtcbiAgICB9XG4gIH1cblxuICBmdW5jdGlvbiBnZXRJbW1lZGlhdGVDaGlsZCAoZHJvcFRhcmdldCwgdGFyZ2V0KSB7XG4gICAgdmFyIGltbWVkaWF0ZSA9IHRhcmdldDtcbiAgICB3aGlsZSAoaW1tZWRpYXRlICE9PSBkcm9wVGFyZ2V0ICYmIGdldFBhcmVudChpbW1lZGlhdGUpICE9PSBkcm9wVGFyZ2V0KSB7XG4gICAgICBpbW1lZGlhdGUgPSBnZXRQYXJlbnQoaW1tZWRpYXRlKTtcbiAgICB9XG4gICAgaWYgKGltbWVkaWF0ZSA9PT0gZG9jdW1lbnRFbGVtZW50KSB7XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG4gICAgcmV0dXJuIGltbWVkaWF0ZTtcbiAgfVxuXG4gIGZ1bmN0aW9uIGdldFJlZmVyZW5jZSAoZHJvcFRhcmdldCwgdGFyZ2V0LCB4LCB5KSB7XG4gICAgdmFyIGhvcml6b250YWwgPSBvLmRpcmVjdGlvbiA9PT0gJ2hvcml6b250YWwnO1xuICAgIHZhciByZWZlcmVuY2UgPSB0YXJnZXQgIT09IGRyb3BUYXJnZXQgPyBpbnNpZGUoKSA6IG91dHNpZGUoKTtcbiAgICByZXR1cm4gcmVmZXJlbmNlO1xuXG4gICAgZnVuY3Rpb24gb3V0c2lkZSAoKSB7IC8vIHNsb3dlciwgYnV0IGFibGUgdG8gZmlndXJlIG91dCBhbnkgcG9zaXRpb25cbiAgICAgIHZhciBsZW4gPSBkcm9wVGFyZ2V0LmNoaWxkcmVuLmxlbmd0aDtcbiAgICAgIHZhciBpO1xuICAgICAgdmFyIGVsO1xuICAgICAgdmFyIHJlY3Q7XG4gICAgICBmb3IgKGkgPSAwOyBpIDwgbGVuOyBpKyspIHtcbiAgICAgICAgZWwgPSBkcm9wVGFyZ2V0LmNoaWxkcmVuW2ldO1xuICAgICAgICByZWN0ID0gZWwuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7XG4gICAgICAgIGlmIChob3Jpem9udGFsICYmIHJlY3QubGVmdCA+IHgpIHsgcmV0dXJuIGVsOyB9XG4gICAgICAgIGlmICghaG9yaXpvbnRhbCAmJiByZWN0LnRvcCA+IHkpIHsgcmV0dXJuIGVsOyB9XG4gICAgICB9XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBpbnNpZGUgKCkgeyAvLyBmYXN0ZXIsIGJ1dCBvbmx5IGF2YWlsYWJsZSBpZiBkcm9wcGVkIGluc2lkZSBhIGNoaWxkIGVsZW1lbnRcbiAgICAgIHZhciByZWN0ID0gdGFyZ2V0LmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpO1xuICAgICAgaWYgKGhvcml6b250YWwpIHtcbiAgICAgICAgcmV0dXJuIHJlc29sdmUoeCA+IHJlY3QubGVmdCArIGdldFJlY3RXaWR0aChyZWN0KSAvIDIpO1xuICAgICAgfVxuICAgICAgcmV0dXJuIHJlc29sdmUoeSA+IHJlY3QudG9wICsgZ2V0UmVjdEhlaWdodChyZWN0KSAvIDIpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHJlc29sdmUgKGFmdGVyKSB7XG4gICAgICByZXR1cm4gYWZ0ZXIgPyBuZXh0RWwodGFyZ2V0KSA6IHRhcmdldDtcbiAgICB9XG4gIH1cblxuICBmdW5jdGlvbiBpc0NvcHkgKGl0ZW0sIGNvbnRhaW5lcikge1xuICAgIHJldHVybiB0eXBlb2Ygby5jb3B5ID09PSAnYm9vbGVhbicgPyBvLmNvcHkgOiBvLmNvcHkoaXRlbSwgY29udGFpbmVyKTtcbiAgfVxufVxuXG5mdW5jdGlvbiB0b3VjaHkgKGVsLCBvcCwgdHlwZSwgZm4pIHtcbiAgdmFyIHRvdWNoID0ge1xuICAgIG1vdXNldXA6ICd0b3VjaGVuZCcsXG4gICAgbW91c2Vkb3duOiAndG91Y2hzdGFydCcsXG4gICAgbW91c2Vtb3ZlOiAndG91Y2htb3ZlJ1xuICB9O1xuICB2YXIgcG9pbnRlcnMgPSB7XG4gICAgbW91c2V1cDogJ3BvaW50ZXJ1cCcsXG4gICAgbW91c2Vkb3duOiAncG9pbnRlcmRvd24nLFxuICAgIG1vdXNlbW92ZTogJ3BvaW50ZXJtb3ZlJ1xuICB9O1xuICB2YXIgbWljcm9zb2Z0ID0ge1xuICAgIG1vdXNldXA6ICdNU1BvaW50ZXJVcCcsXG4gICAgbW91c2Vkb3duOiAnTVNQb2ludGVyRG93bicsXG4gICAgbW91c2Vtb3ZlOiAnTVNQb2ludGVyTW92ZSdcbiAgfTtcbiAgaWYgKGdsb2JhbC5uYXZpZ2F0b3IucG9pbnRlckVuYWJsZWQpIHtcbiAgICBjcm9zc3ZlbnRbb3BdKGVsLCBwb2ludGVyc1t0eXBlXSwgZm4pO1xuICB9IGVsc2UgaWYgKGdsb2JhbC5uYXZpZ2F0b3IubXNQb2ludGVyRW5hYmxlZCkge1xuICAgIGNyb3NzdmVudFtvcF0oZWwsIG1pY3Jvc29mdFt0eXBlXSwgZm4pO1xuICB9IGVsc2Uge1xuICAgIGNyb3NzdmVudFtvcF0oZWwsIHRvdWNoW3R5cGVdLCBmbik7XG4gICAgY3Jvc3N2ZW50W29wXShlbCwgdHlwZSwgZm4pO1xuICB9XG59XG5cbmZ1bmN0aW9uIHdoaWNoTW91c2VCdXR0b24gKGUpIHtcbiAgaWYgKGUudG91Y2hlcyAhPT0gdm9pZCAwKSB7IHJldHVybiBlLnRvdWNoZXMubGVuZ3RoOyB9XG4gIGlmIChlLmJ1dHRvbnMgIT09IHZvaWQgMCkgeyByZXR1cm4gZS5idXR0b25zOyB9XG4gIGlmIChlLndoaWNoICE9PSB2b2lkIDApIHsgcmV0dXJuIGUud2hpY2g7IH1cbiAgdmFyIGJ1dHRvbiA9IGUuYnV0dG9uO1xuICBpZiAoYnV0dG9uICE9PSB2b2lkIDApIHsgLy8gc2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9qcXVlcnkvanF1ZXJ5L2Jsb2IvOTllOGZmMWJhYTdhZTM0MWU5NGJiODljM2U4NDU3MGM3YzNhZDllYS9zcmMvZXZlbnQuanMjTDU3My1MNTc1XG4gICAgcmV0dXJuIGJ1dHRvbiAmIDEgPyAxIDogYnV0dG9uICYgMiA/IDMgOiAoYnV0dG9uICYgNCA/IDIgOiAwKTtcbiAgfVxufVxuXG5mdW5jdGlvbiBnZXRPZmZzZXQgKGVsKSB7XG4gIHZhciByZWN0ID0gZWwuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7XG4gIHJldHVybiB7XG4gICAgbGVmdDogcmVjdC5sZWZ0ICsgZ2V0U2Nyb2xsKCdzY3JvbGxMZWZ0JywgJ3BhZ2VYT2Zmc2V0JyksXG4gICAgdG9wOiByZWN0LnRvcCArIGdldFNjcm9sbCgnc2Nyb2xsVG9wJywgJ3BhZ2VZT2Zmc2V0JylcbiAgfTtcbn1cblxuZnVuY3Rpb24gZ2V0U2Nyb2xsIChzY3JvbGxQcm9wLCBvZmZzZXRQcm9wKSB7XG4gIGlmICh0eXBlb2YgZ2xvYmFsW29mZnNldFByb3BdICE9PSAndW5kZWZpbmVkJykge1xuICAgIHJldHVybiBnbG9iYWxbb2Zmc2V0UHJvcF07XG4gIH1cbiAgaWYgKGRvY3VtZW50RWxlbWVudC5jbGllbnRIZWlnaHQpIHtcbiAgICByZXR1cm4gZG9jdW1lbnRFbGVtZW50W3Njcm9sbFByb3BdO1xuICB9XG4gIHJldHVybiBib2R5W3Njcm9sbFByb3BdO1xufVxuXG5mdW5jdGlvbiBnZXRFbGVtZW50QmVoaW5kUG9pbnQgKHBvaW50LCB4LCB5KSB7XG4gIHZhciBwID0gcG9pbnQgfHwge307XG4gIHZhciBzdGF0ZSA9IHAuY2xhc3NOYW1lO1xuICB2YXIgZWw7XG4gIHAuY2xhc3NOYW1lICs9ICcgZ3UtaGlkZSc7XG4gIGVsID0gZG9jLmVsZW1lbnRGcm9tUG9pbnQoeCwgeSk7XG4gIHAuY2xhc3NOYW1lID0gc3RhdGU7XG4gIHJldHVybiBlbDtcbn1cblxuZnVuY3Rpb24gbmV2ZXIgKCkgeyByZXR1cm4gZmFsc2U7IH1cbmZ1bmN0aW9uIGFsd2F5cyAoKSB7IHJldHVybiB0cnVlOyB9XG5mdW5jdGlvbiBnZXRSZWN0V2lkdGggKHJlY3QpIHsgcmV0dXJuIHJlY3Qud2lkdGggfHwgKHJlY3QucmlnaHQgLSByZWN0LmxlZnQpOyB9XG5mdW5jdGlvbiBnZXRSZWN0SGVpZ2h0IChyZWN0KSB7IHJldHVybiByZWN0LmhlaWdodCB8fCAocmVjdC5ib3R0b20gLSByZWN0LnRvcCk7IH1cbmZ1bmN0aW9uIGdldFBhcmVudCAoZWwpIHsgcmV0dXJuIGVsLnBhcmVudE5vZGUgPT09IGRvYyA/IG51bGwgOiBlbC5wYXJlbnROb2RlOyB9XG5mdW5jdGlvbiBpc0lucHV0IChlbCkgeyByZXR1cm4gZWwudGFnTmFtZSA9PT0gJ0lOUFVUJyB8fCBlbC50YWdOYW1lID09PSAnVEVYVEFSRUEnIHx8IGVsLnRhZ05hbWUgPT09ICdTRUxFQ1QnIHx8IGlzRWRpdGFibGUoZWwpOyB9XG5mdW5jdGlvbiBpc0VkaXRhYmxlIChlbCkge1xuICBpZiAoIWVsKSB7IHJldHVybiBmYWxzZTsgfSAvLyBubyBwYXJlbnRzIHdlcmUgZWRpdGFibGVcbiAgaWYgKGVsLmNvbnRlbnRFZGl0YWJsZSA9PT0gJ2ZhbHNlJykgeyByZXR1cm4gZmFsc2U7IH0gLy8gc3RvcCB0aGUgbG9va3VwXG4gIGlmIChlbC5jb250ZW50RWRpdGFibGUgPT09ICd0cnVlJykgeyByZXR1cm4gdHJ1ZTsgfSAvLyBmb3VuZCBhIGNvbnRlbnRFZGl0YWJsZSBlbGVtZW50IGluIHRoZSBjaGFpblxuICByZXR1cm4gaXNFZGl0YWJsZShnZXRQYXJlbnQoZWwpKTsgLy8gY29udGVudEVkaXRhYmxlIGlzIHNldCB0byAnaW5oZXJpdCdcbn1cblxuZnVuY3Rpb24gbmV4dEVsIChlbCkge1xuICByZXR1cm4gZWwubmV4dEVsZW1lbnRTaWJsaW5nIHx8IG1hbnVhbGx5KCk7XG4gIGZ1bmN0aW9uIG1hbnVhbGx5ICgpIHtcbiAgICB2YXIgc2libGluZyA9IGVsO1xuICAgIGRvIHtcbiAgICAgIHNpYmxpbmcgPSBzaWJsaW5nLm5leHRTaWJsaW5nO1xuICAgIH0gd2hpbGUgKHNpYmxpbmcgJiYgc2libGluZy5ub2RlVHlwZSAhPT0gMSk7XG4gICAgcmV0dXJuIHNpYmxpbmc7XG4gIH1cbn1cblxuZnVuY3Rpb24gZ2V0RXZlbnRIb3N0IChlKSB7XG4gIC8vIG9uIHRvdWNoZW5kIGV2ZW50LCB3ZSBoYXZlIHRvIHVzZSBgZS5jaGFuZ2VkVG91Y2hlc2BcbiAgLy8gc2VlIGh0dHA6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvNzE5MjU2My90b3VjaGVuZC1ldmVudC1wcm9wZXJ0aWVzXG4gIC8vIHNlZSBodHRwczovL2dpdGh1Yi5jb20vYmV2YWNxdWEvZHJhZ3VsYS9pc3N1ZXMvMzRcbiAgaWYgKGUudGFyZ2V0VG91Y2hlcyAmJiBlLnRhcmdldFRvdWNoZXMubGVuZ3RoKSB7XG4gICAgcmV0dXJuIGUudGFyZ2V0VG91Y2hlc1swXTtcbiAgfVxuICBpZiAoZS5jaGFuZ2VkVG91Y2hlcyAmJiBlLmNoYW5nZWRUb3VjaGVzLmxlbmd0aCkge1xuICAgIHJldHVybiBlLmNoYW5nZWRUb3VjaGVzWzBdO1xuICB9XG4gIHJldHVybiBlO1xufVxuXG5mdW5jdGlvbiBnZXRDb29yZCAoY29vcmQsIGUpIHtcbiAgdmFyIGhvc3QgPSBnZXRFdmVudEhvc3QoZSk7XG4gIHZhciBtaXNzTWFwID0ge1xuICAgIHBhZ2VYOiAnY2xpZW50WCcsIC8vIElFOFxuICAgIHBhZ2VZOiAnY2xpZW50WScgLy8gSUU4XG4gIH07XG4gIGlmIChjb29yZCBpbiBtaXNzTWFwICYmICEoY29vcmQgaW4gaG9zdCkgJiYgbWlzc01hcFtjb29yZF0gaW4gaG9zdCkge1xuICAgIGNvb3JkID0gbWlzc01hcFtjb29yZF07XG4gIH1cbiAgcmV0dXJuIGhvc3RbY29vcmRdO1xufVxuXG5tb2R1bGUuZXhwb3J0cyA9IGRyYWd1bGE7XG4iLCIndXNlIHN0cmljdCc7XG5cbnZhciB0aWNreSA9IHJlcXVpcmUoJ3RpY2t5Jyk7XG5cbm1vZHVsZS5leHBvcnRzID0gZnVuY3Rpb24gZGVib3VuY2UgKGZuLCBhcmdzLCBjdHgpIHtcbiAgaWYgKCFmbikgeyByZXR1cm47IH1cbiAgdGlja3koZnVuY3Rpb24gcnVuICgpIHtcbiAgICBmbi5hcHBseShjdHggfHwgbnVsbCwgYXJncyB8fCBbXSk7XG4gIH0pO1xufTtcbiIsIid1c2Ugc3RyaWN0JztcblxudmFyIGF0b2EgPSByZXF1aXJlKCdhdG9hJyk7XG52YXIgZGVib3VuY2UgPSByZXF1aXJlKCcuL2RlYm91bmNlJyk7XG5cbm1vZHVsZS5leHBvcnRzID0gZnVuY3Rpb24gZW1pdHRlciAodGhpbmcsIG9wdGlvbnMpIHtcbiAgdmFyIG9wdHMgPSBvcHRpb25zIHx8IHt9O1xuICB2YXIgZXZ0ID0ge307XG4gIGlmICh0aGluZyA9PT0gdW5kZWZpbmVkKSB7IHRoaW5nID0ge307IH1cbiAgdGhpbmcub24gPSBmdW5jdGlvbiAodHlwZSwgZm4pIHtcbiAgICBpZiAoIWV2dFt0eXBlXSkge1xuICAgICAgZXZ0W3R5cGVdID0gW2ZuXTtcbiAgICB9IGVsc2Uge1xuICAgICAgZXZ0W3R5cGVdLnB1c2goZm4pO1xuICAgIH1cbiAgICByZXR1cm4gdGhpbmc7XG4gIH07XG4gIHRoaW5nLm9uY2UgPSBmdW5jdGlvbiAodHlwZSwgZm4pIHtcbiAgICBmbi5fb25jZSA9IHRydWU7IC8vIHRoaW5nLm9mZihmbikgc3RpbGwgd29ya3MhXG4gICAgdGhpbmcub24odHlwZSwgZm4pO1xuICAgIHJldHVybiB0aGluZztcbiAgfTtcbiAgdGhpbmcub2ZmID0gZnVuY3Rpb24gKHR5cGUsIGZuKSB7XG4gICAgdmFyIGMgPSBhcmd1bWVudHMubGVuZ3RoO1xuICAgIGlmIChjID09PSAxKSB7XG4gICAgICBkZWxldGUgZXZ0W3R5cGVdO1xuICAgIH0gZWxzZSBpZiAoYyA9PT0gMCkge1xuICAgICAgZXZ0ID0ge307XG4gICAgfSBlbHNlIHtcbiAgICAgIHZhciBldCA9IGV2dFt0eXBlXTtcbiAgICAgIGlmICghZXQpIHsgcmV0dXJuIHRoaW5nOyB9XG4gICAgICBldC5zcGxpY2UoZXQuaW5kZXhPZihmbiksIDEpO1xuICAgIH1cbiAgICByZXR1cm4gdGhpbmc7XG4gIH07XG4gIHRoaW5nLmVtaXQgPSBmdW5jdGlvbiAoKSB7XG4gICAgdmFyIGFyZ3MgPSBhdG9hKGFyZ3VtZW50cyk7XG4gICAgcmV0dXJuIHRoaW5nLmVtaXR0ZXJTbmFwc2hvdChhcmdzLnNoaWZ0KCkpLmFwcGx5KHRoaXMsIGFyZ3MpO1xuICB9O1xuICB0aGluZy5lbWl0dGVyU25hcHNob3QgPSBmdW5jdGlvbiAodHlwZSkge1xuICAgIHZhciBldCA9IChldnRbdHlwZV0gfHwgW10pLnNsaWNlKDApO1xuICAgIHJldHVybiBmdW5jdGlvbiAoKSB7XG4gICAgICB2YXIgYXJncyA9IGF0b2EoYXJndW1lbnRzKTtcbiAgICAgIHZhciBjdHggPSB0aGlzIHx8IHRoaW5nO1xuICAgICAgaWYgKHR5cGUgPT09ICdlcnJvcicgJiYgb3B0cy50aHJvd3MgIT09IGZhbHNlICYmICFldC5sZW5ndGgpIHsgdGhyb3cgYXJncy5sZW5ndGggPT09IDEgPyBhcmdzWzBdIDogYXJnczsgfVxuICAgICAgZXQuZm9yRWFjaChmdW5jdGlvbiBlbWl0dGVyIChsaXN0ZW4pIHtcbiAgICAgICAgaWYgKG9wdHMuYXN5bmMpIHsgZGVib3VuY2UobGlzdGVuLCBhcmdzLCBjdHgpOyB9IGVsc2UgeyBsaXN0ZW4uYXBwbHkoY3R4LCBhcmdzKTsgfVxuICAgICAgICBpZiAobGlzdGVuLl9vbmNlKSB7IHRoaW5nLm9mZih0eXBlLCBsaXN0ZW4pOyB9XG4gICAgICB9KTtcbiAgICAgIHJldHVybiB0aGluZztcbiAgICB9O1xuICB9O1xuICByZXR1cm4gdGhpbmc7XG59O1xuIiwibW9kdWxlLmV4cG9ydHMgPSBmdW5jdGlvbiBhdG9hIChhLCBuKSB7IHJldHVybiBBcnJheS5wcm90b3R5cGUuc2xpY2UuY2FsbChhLCBuKTsgfVxuIiwidmFyIHNpID0gdHlwZW9mIHNldEltbWVkaWF0ZSA9PT0gJ2Z1bmN0aW9uJywgdGljaztcbmlmIChzaSkge1xuICB0aWNrID0gZnVuY3Rpb24gKGZuKSB7IHNldEltbWVkaWF0ZShmbik7IH07XG59IGVsc2Uge1xuICB0aWNrID0gZnVuY3Rpb24gKGZuKSB7IHNldFRpbWVvdXQoZm4sIDApOyB9O1xufVxuXG5tb2R1bGUuZXhwb3J0cyA9IHRpY2s7IiwiXG52YXIgTmF0aXZlQ3VzdG9tRXZlbnQgPSBnbG9iYWwuQ3VzdG9tRXZlbnQ7XG5cbmZ1bmN0aW9uIHVzZU5hdGl2ZSAoKSB7XG4gIHRyeSB7XG4gICAgdmFyIHAgPSBuZXcgTmF0aXZlQ3VzdG9tRXZlbnQoJ2NhdCcsIHsgZGV0YWlsOiB7IGZvbzogJ2JhcicgfSB9KTtcbiAgICByZXR1cm4gICdjYXQnID09PSBwLnR5cGUgJiYgJ2JhcicgPT09IHAuZGV0YWlsLmZvbztcbiAgfSBjYXRjaCAoZSkge1xuICB9XG4gIHJldHVybiBmYWxzZTtcbn1cblxuLyoqXG4gKiBDcm9zcy1icm93c2VyIGBDdXN0b21FdmVudGAgY29uc3RydWN0b3IuXG4gKlxuICogaHR0cHM6Ly9kZXZlbG9wZXIubW96aWxsYS5vcmcvZW4tVVMvZG9jcy9XZWIvQVBJL0N1c3RvbUV2ZW50LkN1c3RvbUV2ZW50XG4gKlxuICogQHB1YmxpY1xuICovXG5cbm1vZHVsZS5leHBvcnRzID0gdXNlTmF0aXZlKCkgPyBOYXRpdmVDdXN0b21FdmVudCA6XG5cbi8vIElFID49IDlcbidmdW5jdGlvbicgPT09IHR5cGVvZiBkb2N1bWVudC5jcmVhdGVFdmVudCA/IGZ1bmN0aW9uIEN1c3RvbUV2ZW50ICh0eXBlLCBwYXJhbXMpIHtcbiAgdmFyIGUgPSBkb2N1bWVudC5jcmVhdGVFdmVudCgnQ3VzdG9tRXZlbnQnKTtcbiAgaWYgKHBhcmFtcykge1xuICAgIGUuaW5pdEN1c3RvbUV2ZW50KHR5cGUsIHBhcmFtcy5idWJibGVzLCBwYXJhbXMuY2FuY2VsYWJsZSwgcGFyYW1zLmRldGFpbCk7XG4gIH0gZWxzZSB7XG4gICAgZS5pbml0Q3VzdG9tRXZlbnQodHlwZSwgZmFsc2UsIGZhbHNlLCB2b2lkIDApO1xuICB9XG4gIHJldHVybiBlO1xufSA6XG5cbi8vIElFIDw9IDhcbmZ1bmN0aW9uIEN1c3RvbUV2ZW50ICh0eXBlLCBwYXJhbXMpIHtcbiAgdmFyIGUgPSBkb2N1bWVudC5jcmVhdGVFdmVudE9iamVjdCgpO1xuICBlLnR5cGUgPSB0eXBlO1xuICBpZiAocGFyYW1zKSB7XG4gICAgZS5idWJibGVzID0gQm9vbGVhbihwYXJhbXMuYnViYmxlcyk7XG4gICAgZS5jYW5jZWxhYmxlID0gQm9vbGVhbihwYXJhbXMuY2FuY2VsYWJsZSk7XG4gICAgZS5kZXRhaWwgPSBwYXJhbXMuZGV0YWlsO1xuICB9IGVsc2Uge1xuICAgIGUuYnViYmxlcyA9IGZhbHNlO1xuICAgIGUuY2FuY2VsYWJsZSA9IGZhbHNlO1xuICAgIGUuZGV0YWlsID0gdm9pZCAwO1xuICB9XG4gIHJldHVybiBlO1xufVxuIiwiJ3VzZSBzdHJpY3QnO1xuXG52YXIgY3VzdG9tRXZlbnQgPSByZXF1aXJlKCdjdXN0b20tZXZlbnQnKTtcbnZhciBldmVudG1hcCA9IHJlcXVpcmUoJy4vZXZlbnRtYXAnKTtcbnZhciBkb2MgPSBnbG9iYWwuZG9jdW1lbnQ7XG52YXIgYWRkRXZlbnQgPSBhZGRFdmVudEVhc3k7XG52YXIgcmVtb3ZlRXZlbnQgPSByZW1vdmVFdmVudEVhc3k7XG52YXIgaGFyZENhY2hlID0gW107XG5cbmlmICghZ2xvYmFsLmFkZEV2ZW50TGlzdGVuZXIpIHtcbiAgYWRkRXZlbnQgPSBhZGRFdmVudEhhcmQ7XG4gIHJlbW92ZUV2ZW50ID0gcmVtb3ZlRXZlbnRIYXJkO1xufVxuXG5tb2R1bGUuZXhwb3J0cyA9IHtcbiAgYWRkOiBhZGRFdmVudCxcbiAgcmVtb3ZlOiByZW1vdmVFdmVudCxcbiAgZmFicmljYXRlOiBmYWJyaWNhdGVFdmVudFxufTtcblxuZnVuY3Rpb24gYWRkRXZlbnRFYXN5IChlbCwgdHlwZSwgZm4sIGNhcHR1cmluZykge1xuICByZXR1cm4gZWwuYWRkRXZlbnRMaXN0ZW5lcih0eXBlLCBmbiwgY2FwdHVyaW5nKTtcbn1cblxuZnVuY3Rpb24gYWRkRXZlbnRIYXJkIChlbCwgdHlwZSwgZm4pIHtcbiAgcmV0dXJuIGVsLmF0dGFjaEV2ZW50KCdvbicgKyB0eXBlLCB3cmFwKGVsLCB0eXBlLCBmbikpO1xufVxuXG5mdW5jdGlvbiByZW1vdmVFdmVudEVhc3kgKGVsLCB0eXBlLCBmbiwgY2FwdHVyaW5nKSB7XG4gIHJldHVybiBlbC5yZW1vdmVFdmVudExpc3RlbmVyKHR5cGUsIGZuLCBjYXB0dXJpbmcpO1xufVxuXG5mdW5jdGlvbiByZW1vdmVFdmVudEhhcmQgKGVsLCB0eXBlLCBmbikge1xuICB2YXIgbGlzdGVuZXIgPSB1bndyYXAoZWwsIHR5cGUsIGZuKTtcbiAgaWYgKGxpc3RlbmVyKSB7XG4gICAgcmV0dXJuIGVsLmRldGFjaEV2ZW50KCdvbicgKyB0eXBlLCBsaXN0ZW5lcik7XG4gIH1cbn1cblxuZnVuY3Rpb24gZmFicmljYXRlRXZlbnQgKGVsLCB0eXBlLCBtb2RlbCkge1xuICB2YXIgZSA9IGV2ZW50bWFwLmluZGV4T2YodHlwZSkgPT09IC0xID8gbWFrZUN1c3RvbUV2ZW50KCkgOiBtYWtlQ2xhc3NpY0V2ZW50KCk7XG4gIGlmIChlbC5kaXNwYXRjaEV2ZW50KSB7XG4gICAgZWwuZGlzcGF0Y2hFdmVudChlKTtcbiAgfSBlbHNlIHtcbiAgICBlbC5maXJlRXZlbnQoJ29uJyArIHR5cGUsIGUpO1xuICB9XG4gIGZ1bmN0aW9uIG1ha2VDbGFzc2ljRXZlbnQgKCkge1xuICAgIHZhciBlO1xuICAgIGlmIChkb2MuY3JlYXRlRXZlbnQpIHtcbiAgICAgIGUgPSBkb2MuY3JlYXRlRXZlbnQoJ0V2ZW50Jyk7XG4gICAgICBlLmluaXRFdmVudCh0eXBlLCB0cnVlLCB0cnVlKTtcbiAgICB9IGVsc2UgaWYgKGRvYy5jcmVhdGVFdmVudE9iamVjdCkge1xuICAgICAgZSA9IGRvYy5jcmVhdGVFdmVudE9iamVjdCgpO1xuICAgIH1cbiAgICByZXR1cm4gZTtcbiAgfVxuICBmdW5jdGlvbiBtYWtlQ3VzdG9tRXZlbnQgKCkge1xuICAgIHJldHVybiBuZXcgY3VzdG9tRXZlbnQodHlwZSwgeyBkZXRhaWw6IG1vZGVsIH0pO1xuICB9XG59XG5cbmZ1bmN0aW9uIHdyYXBwZXJGYWN0b3J5IChlbCwgdHlwZSwgZm4pIHtcbiAgcmV0dXJuIGZ1bmN0aW9uIHdyYXBwZXIgKG9yaWdpbmFsRXZlbnQpIHtcbiAgICB2YXIgZSA9IG9yaWdpbmFsRXZlbnQgfHwgZ2xvYmFsLmV2ZW50O1xuICAgIGUudGFyZ2V0ID0gZS50YXJnZXQgfHwgZS5zcmNFbGVtZW50O1xuICAgIGUucHJldmVudERlZmF1bHQgPSBlLnByZXZlbnREZWZhdWx0IHx8IGZ1bmN0aW9uIHByZXZlbnREZWZhdWx0ICgpIHsgZS5yZXR1cm5WYWx1ZSA9IGZhbHNlOyB9O1xuICAgIGUuc3RvcFByb3BhZ2F0aW9uID0gZS5zdG9wUHJvcGFnYXRpb24gfHwgZnVuY3Rpb24gc3RvcFByb3BhZ2F0aW9uICgpIHsgZS5jYW5jZWxCdWJibGUgPSB0cnVlOyB9O1xuICAgIGUud2hpY2ggPSBlLndoaWNoIHx8IGUua2V5Q29kZTtcbiAgICBmbi5jYWxsKGVsLCBlKTtcbiAgfTtcbn1cblxuZnVuY3Rpb24gd3JhcCAoZWwsIHR5cGUsIGZuKSB7XG4gIHZhciB3cmFwcGVyID0gdW53cmFwKGVsLCB0eXBlLCBmbikgfHwgd3JhcHBlckZhY3RvcnkoZWwsIHR5cGUsIGZuKTtcbiAgaGFyZENhY2hlLnB1c2goe1xuICAgIHdyYXBwZXI6IHdyYXBwZXIsXG4gICAgZWxlbWVudDogZWwsXG4gICAgdHlwZTogdHlwZSxcbiAgICBmbjogZm5cbiAgfSk7XG4gIHJldHVybiB3cmFwcGVyO1xufVxuXG5mdW5jdGlvbiB1bndyYXAgKGVsLCB0eXBlLCBmbikge1xuICB2YXIgaSA9IGZpbmQoZWwsIHR5cGUsIGZuKTtcbiAgaWYgKGkpIHtcbiAgICB2YXIgd3JhcHBlciA9IGhhcmRDYWNoZVtpXS53cmFwcGVyO1xuICAgIGhhcmRDYWNoZS5zcGxpY2UoaSwgMSk7IC8vIGZyZWUgdXAgYSB0YWQgb2YgbWVtb3J5XG4gICAgcmV0dXJuIHdyYXBwZXI7XG4gIH1cbn1cblxuZnVuY3Rpb24gZmluZCAoZWwsIHR5cGUsIGZuKSB7XG4gIHZhciBpLCBpdGVtO1xuICBmb3IgKGkgPSAwOyBpIDwgaGFyZENhY2hlLmxlbmd0aDsgaSsrKSB7XG4gICAgaXRlbSA9IGhhcmRDYWNoZVtpXTtcbiAgICBpZiAoaXRlbS5lbGVtZW50ID09PSBlbCAmJiBpdGVtLnR5cGUgPT09IHR5cGUgJiYgaXRlbS5mbiA9PT0gZm4pIHtcbiAgICAgIHJldHVybiBpO1xuICAgIH1cbiAgfVxufVxuIiwiJ3VzZSBzdHJpY3QnO1xuXG52YXIgZXZlbnRtYXAgPSBbXTtcbnZhciBldmVudG5hbWUgPSAnJztcbnZhciByb24gPSAvXm9uLztcblxuZm9yIChldmVudG5hbWUgaW4gZ2xvYmFsKSB7XG4gIGlmIChyb24udGVzdChldmVudG5hbWUpKSB7XG4gICAgZXZlbnRtYXAucHVzaChldmVudG5hbWUuc2xpY2UoMikpO1xuICB9XG59XG5cbm1vZHVsZS5leHBvcnRzID0gZXZlbnRtYXA7XG4iXX0=
+;/* *******************************************
               sticky notes
 ******************************************* */
 var globalStickyNoteCounter = 0;
-
-function newStickyNote(parentId) {
-    var elm = '<div id="note'+globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp mdl-color--amber-50">'+
-                '<div class="sticky-header-drawer mdl-card__title mdl-color--amber-200">'+
-                    '<h2 class="mdl-color-text--cyan sticky-editable" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="1">New Note</h2>'+
+/* ------------------------------------------
+            spawn sticky note
+------------------------------------------- */
+function spawnNewStickyNote(parentId) {
+    var elm = '<div id="note'+globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp">'+
+                '<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
+                    '<h2 id="title'+globalStickyNoteCounter+'" class="mdl-color-text--cyan can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="1">New Note</h2>'+
                 '</div>'+
-                '<div class="sticky-content-wrapper">'+
-                    '<div id="n'+globalStickyNoteCounter+'i2" class="sticky-note-content" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="2"></div>'+
+                '<div id="wrapper'+globalStickyNoteCounter+'" class="sticky-content-wrapper">'+
+                    '<div id="n'+globalStickyNoteCounter+'i2" class="sticky-note-content can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="2"></div>'+
                 '</div>'+
-                '<div class="sticky-footer-drawer mdl-color--amber-300">'+
-                    '<button class="mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
+                '<div class="spacer"></div>'+
+                '<div class="sticky-footer-drawer mdl-color--amber">'+
+                    '<button class="sticky-delete mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
                         '<i class="material-icons">delete</i>'+
                     '</button>'+
                 '</div>'+
@@ -35,16 +4795,23 @@ function newStickyNote(parentId) {
     document.getElementById(parentId).appendChild(newElm);
     globalStickyNoteCounter++;
 }
-
-function invokeEditableField(parentId, value, stickyNoteId, stickyItemId) {
-    var valueText = "";
+/* ------------------------------------------
+            spawn editable field
+------------------------------------------- */
+function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
+    console.log("EDIT");
+    var valueText = "", elm = null;
     if (value.length > 0) {
         valueText = ' value="'+value+'"';
     }
-    var elm = '<div class="mdl-textfield mdl-js-textfield">'+
-                    '<input class="mdl-textfield__input" type="text" id="note'+stickyNoteId+'-item'+stickyItemId+'"'+valueText+'>'+
-                    '<label class="mdl-textfield__label" for="note'+stickyNoteId+'-item'+stickyItemId+'">New item</label>'+
-                '</div>';
+    if (type == "input") { 
+        elm = returnTextField(valueText, stickyNoteId, stickyItemId);
+    } else if (type == "checkbox") {
+        elm = returnCheckbox(value, stickyNoteId, stickyItemId);
+        $("#"+parentId).removeClass("can-edit");
+    } else {
+        throw "Invalid type";
+    }
 
     var form = document.createElement('form');
     form.innerHTML = elm;
@@ -54,37 +4821,124 @@ function invokeEditableField(parentId, value, stickyNoteId, stickyItemId) {
     $("#"+parentId).addClass("sticky-editing");
     $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
     $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
-        $("#n"+stickyNoteId+"i"+stickyItemId).html($(this).val());
-        $("#n"+stickyNoteId+"i"+stickyItemId).removeClass("sticky-editing");
+        if (type == "input") {
+            $("#"+parentId).html($(this).val());
+        } else if (type == "checkbox") {
+            //$("#"+parentId).html($(this).val());
+        } else {
+            throw "Invalid type";
+        }
+        
+        $("#"+parentId).removeClass("sticky-editing");
     });
 }
-
+function returnTextField(value, stickyNoteId, stickyItemId) {
+    var elm = '<div class="mdl-textfield mdl-js-textfield">'+
+                    '<input class="mdl-textfield__input" type="text" id="note'+stickyNoteId+'-item'+stickyItemId+'"'+value+'>'+
+                    '<label class="mdl-textfield__label" for="note'+stickyNoteId+'-item'+stickyItemId+'">New item</label>'+
+                '</div>';
+    return elm;
+}
+function returnCheckbox(value, stickyNoteId, stickyItemId) {
+    var elm = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
+                    '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
+                    '<span id="cb900'+stickyItemId+'" class="mdl-checkbox__label can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="900'+stickyItemId+'">'+value+'</span>'+
+                '</label>';
+    return elm;
+}
 /* *******************************************
-              DOCUMENT READY
+             INITIATE LISTENERS
 ******************************************* */
 $(function() {
     /* *******************************************
              dragula.js DRAG & DROP
     ******************************************* */
-    // sticky-note interaction
+    // sticky-note drag & drop
     var containers = $('.dropzone').toArray();
-    dragula(containers);
+    dragula(containers, {
+        isContainer: function (el) {
+            return false; // only elements in drake.containers will be taken into account
+        },
+        moves: function (el, source, handle, sibling) {
+            return true; // elements are always draggable by default
+        },
+        accepts: function (el, target, source, sibling) {
+            return true; // elements can be dropped in any of the `containers` by default
+        },
+        invalid: function (el, target) {
+            return false; // don't prevent any drags from initiating by default
+        },
+        direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
+        copy: false,                       // elements are moved by default, not copied
+        copySortSource: false,             // elements in copy-source containers can be reordered
+        revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
+        removeOnSpill: false,              // spilling will `.remove` the element, if this is true
+        mirrorContainer: document.body,    // set the element that gets mirror elements appended
+        ignoreInputTextSelection: true     // allows users to select input text, see details below
+    }).on('over', function (el, container) {
+        container.className += ' drop-target';
+    }).on('out', function (el, container) {
+        container.className = container.className.replace(' drop-target', '');
+    });
     /* *******************************************
-                  sticky INTERACTIONS
+              sticky-note INTERACTIONS
     ******************************************* */
+    
+    /* ------------------------------------------
+               MANIPULATE STICKY NOTES
+    ------------------------------------------- */
+    // spawn new sticky note
+    $("#add-note").click(function(event) {
+        spawnNewStickyNote("dz1");
+    });
+    // delete sticky note
+    $('body').on('click', '.sticky-delete', function() {
+        $(this).closest(".sticky-note").remove();
+    });
+    // archive sticky note
+    $('body').on('click', '.sticky-archive', function() {
+        // TO DO
+        $(this).closest(".sticky-note").detach();
+    });
+    /* ------------------------------------------
+             interactions with content
+    ------------------------------------------- */
     // INVOKE EDITABLE LINE
-    $('body').on('click', '.sticky-note-content', function() {
+    $('body').on('click', '.can-edit', function(event) {
         if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
-            invokeEditableField($(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
-            if (!$(this).attr("data-dirty")) { // fire only on last line (add new one)   
+            var type = "input";
+            if (event.ctrlKey) { // if ctrl is pressed, toggle checkbox input
+                type = "checkbox";
+            }
+            try {
+                spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
+            } catch(error) {console.log(error);}
+            
+            if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)   
                 var itemId = parseInt($(this).attr("data-item-id")) + 1;
                 // INSERT NEW EMPTY LINE
-                $(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
+                $(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
                 $(this).attr("data-dirty", "true"); // mark as dirty
             }
         }
     });
-    $("#add-note").click(function(event) {
-        newStickyNote("dz1");
+    // key events on editable content
+    $('body').on('keydown', '.mdl-textfield__input', function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // prevent ENTER to trigger page reload
+        }
+    });
+    // key events on editable content
+    $('body').on('keyup', '.mdl-textfield__input', function (event) {
+        if (event.keyCode === 27) { // remove focus on ESC (finish editing)
+            $(this).blur();
+        }
+        if (event.keyCode === 13) { // remove focus and start new line on ENTER
+            $(this).closest(".can-edit").next().click();
+            $(this).blur();
+        }
+        if (event.keyCode === 46) { // delete line
+            $(this).closest(".can-edit").remove();
+        }
     });
 });

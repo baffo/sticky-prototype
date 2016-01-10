@@ -2,8 +2,28 @@
     width: 95%;
     margin: 10px auto 20px auto;
 
-    .sticky-header-drawer, .sticky-footer-drawer {
+    .sticky-header-drawer {
         width: 100%;
+        margin-bottom: 5px;
+        .mdl-textfield__input {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        h2 {
+            margin: 0;
+            font-size: 20px;
+            line-height: 22px;
+            font-weight: bold;
+            
+            .mdl-textfield__input {
+                font-size: 22px;
+            }
+        }
+    }
+    .sticky-footer-drawer {
+        width: 100%;
+        bottom: 0;
+        position: absolute;
         max-height: 5px;
         overflow: hidden;
         -webkit-transition: max-height 0.8s;
@@ -12,26 +32,12 @@
         &:hover {
             max-height: 70px;
         }
-        h2 {
-            margin: 0;
-            font-size:25px;
-            line-height: 30px;
-        }
-        .mdl-textfield__input {
-            font-size: 18px;
-            font-weight: bold;
-        }
-    }
-    .sticky-footer-drawer {
-        bottom: 0;
-        position: absolute;
     }
     .spacer {
-        height: 70px;
+        height: 10px;
     }
     .sticky-note-content, .sticky-header-drawer { 
         width: 100%;
-        border: none;
         box-sizing: border-box;
         
         form {
@@ -51,16 +57,23 @@
                     }
                 }
             }
+            .mdl-checkbox__label {
+                width: 100%;
+                min-height: 20px;
+                display: inline-block;
+            }
         }
     }
     .sticky-note-content {
-        min-height: 30px;
+        border: none;
+        min-height: 20px;
         padding: 0 16px;
+        margin-bottom: 5px;
     }
 }
 .dropzone {
     min-height: 200px;
-    &.mdl-cell {
+    &.drop-target {
         background: rgba(22,22,22,0.05);
         border: 1px #cccccc dashed;
         .border-radius(4px);

@@ -3,41 +3,42 @@
   width: 95%;
   margin: 10px auto 20px auto;
 }
-.sticky-note .sticky-header-drawer,
+.sticky-note .sticky-header-drawer {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.sticky-note .sticky-header-drawer .mdl-textfield__input {
+  font-size: 18px;
+  font-weight: bold;
+}
+.sticky-note .sticky-header-drawer h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: bold;
+}
+.sticky-note .sticky-header-drawer h2 .mdl-textfield__input {
+  font-size: 22px;
+}
 .sticky-note .sticky-footer-drawer {
   width: 100%;
+  bottom: 0;
+  position: absolute;
   max-height: 5px;
   overflow: hidden;
   -webkit-transition: max-height 0.8s;
   -moz-transition: max-height 0.8s;
   transition: max-height 0.8s;
 }
-.sticky-note .sticky-header-drawer:hover,
 .sticky-note .sticky-footer-drawer:hover {
   max-height: 70px;
 }
-.sticky-note .sticky-header-drawer h2,
-.sticky-note .sticky-footer-drawer h2 {
-  margin: 0;
-  font-size: 25px;
-  line-height: 30px;
-}
-.sticky-note .sticky-header-drawer .mdl-textfield__input,
-.sticky-note .sticky-footer-drawer .mdl-textfield__input {
-  font-size: 18px;
-  font-weight: bold;
-}
-.sticky-note .sticky-footer-drawer {
-  bottom: 0;
-  position: absolute;
-}
 .sticky-note .spacer {
-  height: 70px;
+  height: 10px;
 }
 .sticky-note .sticky-note-content,
 .sticky-note .sticky-header-drawer {
   width: 100%;
-  border: none;
   box-sizing: border-box;
 }
 .sticky-note .sticky-note-content form,
@@ -63,14 +64,22 @@
 .sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__label:after {
   bottom: 0;
 }
+.sticky-note .sticky-note-content form .mdl-checkbox__label,
+.sticky-note .sticky-header-drawer form .mdl-checkbox__label {
+  width: 100%;
+  min-height: 20px;
+  display: inline-block;
+}
 .sticky-note .sticky-note-content {
-  min-height: 30px;
+  border: none;
+  min-height: 20px;
   padding: 0 16px;
+  margin-bottom: 5px;
 }
 .dropzone {
   min-height: 200px;
 }
-.dropzone.mdl-cell {
+.dropzone.drop-target {
   background: rgba(22, 22, 22, 0.05);
   border: 1px #cccccc dashed;
   -webkit-border-radius: 4px;
