@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 			separator: ';',
 		},
 		dist: {
-			src: ['assets/js/material.js', 'assets/js/dragula.js', 'assets/js/main.js'],
+			src: ['assets/js/material.js', 'assets/js/dragula.js', 'assets/js/URI.js', 'assets/js/sanitizer.js', 'assets/js/main.js'],
 			dest: 'assets/js/sticky.js',
 		},
 	},
