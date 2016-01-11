@@ -1505,7 +1505,9 @@ if (typeof exports !== 'undefined') {
 ******************************************* */
 function Sticky() {}
 Sticky.globalStickyNoteCounter = 0;
+Sticky.homeCount = 0;
 Sticky.archivedCount = 0;
+Sticky.page = ['home', 'archive'];
 Sticky.fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
 Sticky.noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
 
@@ -1559,6 +1561,23 @@ Sticky.withinString = function(string, callback, options) {
     return string;
 };
 /* ------------------------------------------
+        check for url parameter
+------------------------------------------- */
+Sticky.getPage = function() {
+	var regex = new RegExp("[\\?&][a-z]+");
+	var results = regex.exec(window.location.href);
+	if (results) {
+        if (Sticky.page.indexOf(results[0].substring(1, results[0].length))) {
+            $('body').addClass(results[0].substring(1, results[0].length)); 
+            return results[0].substring(1, results[0].length);
+        }
+        $('body').addClass(Sticky.page[0]); 
+		return Sticky.page[0];
+	}
+    $('body').addClass(Sticky.page[0]); 
+    return Sticky.page[0];
+};
+/* ------------------------------------------
             sanitize String
 ------------------------------------------- */
 Sticky.sanitizeString = function(text) {
@@ -1573,17 +1592,26 @@ Sticky.sanitizeString = function(text) {
 /* ------------------------------------------
         load saved state from DB
 ------------------------------------------- */
-Sticky.loadSavedState = function() {
+Sticky.loadSavedState = function(page) {
     var notes = new Firebase(Sticky.fireBaseUrl+'/notes');
 
     notes.once("value", function(snapshot) {
         snapshot.forEach(function(data) {
-            if (!data.val().isArchived) {
+            if (!data.val().isArchived && page == "home") {
                 spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
-            } else {
+                Sticky.homeCount++;
+            } else if (data.val().isArchived && page == "archive") {
+                spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
                 Sticky.archivedCount++;
+            } else {
+                if(!data.val().isArchived) { // TO-DO implement pageDisplay (String type) property to notes
+                    Sticky.homeCount++;
+                } else if(data.val().isArchived) {
+                    Sticky.archivedCount++; 
+                }    
             }
         });
+        $("#home .mdl-badge").attr("data-badge", Sticky.homeCount);
         $("#archive .mdl-badge").attr("data-badge", Sticky.archivedCount);
     });
 }
@@ -1771,15 +1799,23 @@ $(function() {
               sticky-note INTERACTIONS
     ******************************************* */
     /* ------------------------------------------
-               Load saved state from DB
+            Load saved state for current page
     ------------------------------------------- */
-    Sticky.loadSavedState();
+    Sticky.loadSavedState(Sticky.getPage());
     /* ------------------------------------------
                MANIPULATE STICKY NOTES
     ------------------------------------------- */
     // spawn new sticky note
     $("#add-note").click(function(event) {
         spawnNewStickyNote("dz"+Sticky.noteDefaults.column, true, Sticky.noteDefaults, "new");
+    });
+    // GO-TO home
+    $("#home").click(function(event) {
+        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname; 
+    });
+    // GO-TO archive
+    $("#archive").click(function(event) {
+        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive"; 
     });
     // delete sticky note
     $('body').on('click', '.sticky-delete', function() {

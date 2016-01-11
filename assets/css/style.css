@@ -1,4 +1,10 @@
 /* produces a square in IE8 and below!! */
+.archive #archive {
+  display: none;
+}
+.home #home {
+  display: none;
+}
 .sticky-grid {
   margin-top: 50px;
 }
@@ -94,7 +100,8 @@
   -ms-moz-border-radius: 4px;
   border-radius: 4px;
 }
-#archive {
+#archive,
+#home {
   position: absolute;
   right: 76px;
   top: 10px;
