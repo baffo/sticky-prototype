@@ -3,6 +3,7 @@
 ******************************************* */
 function Sticky() {}
 Sticky.globalStickyNoteCounter = 0;
+Sticky.archivedCount = 0;
 Sticky.fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
 Sticky.noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
 
@@ -77,8 +78,11 @@ Sticky.loadSavedState = function() {
         snapshot.forEach(function(data) {
             if (!data.val().isArchived) {
                 spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
+            } else {
+                Sticky.archivedCount++;
             }
         });
+        $("#archive .mdl-badge").attr("data-badge", Sticky.archivedCount);
     });
 }
 /* ------------------------------------------
@@ -91,6 +95,7 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
                 '</div>'+
                 '<div id="wrapper'+Sticky.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
     var c = 2;
+    if (!data.items) {data.items = Sticky.noteDefaults.items;}
     for(item in data.items) {
         var key = "";
         if (item != 0) {key = 'data-item-key="'+item+'"';}
@@ -283,7 +288,7 @@ $(function() {
             }
         });
         $(this).closest(".sticky-note").toggleClass('delete');
-        $(this).closest(".sticky-note").remove();
+        setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
     });
     // archive sticky note
     $('body').on('click', '.sticky-archive', function() {
@@ -295,8 +300,11 @@ $(function() {
                 console.log("Data could not be saved." + error);
             }
         });
+        // update UI
         $(this).closest(".sticky-note").toggleClass('archive');
-        $(this).closest(".sticky-note").remove();
+        setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
+        Sticky.archivedCount++;
+        $("#archive .mdl-badge").attr("data-badge", Sticky.archivedCount);
     });
     /* ------------------------------------------
              interactions with content

@@ -1,3 +1,6 @@
+.sticky-grid {
+    margin-top: 50px;
+}
 .sticky-note {
     width: 95%;
     margin: 10px auto 20px auto;
@@ -31,6 +34,9 @@
         transition: max-height 0.8s;
         &:hover {
             max-height: 70px;
+        }
+        button {
+            margin: 5px;
         }
     }
     .spacer {
@@ -79,6 +85,13 @@
         .border-radius(4px);
     }
 }
+#archive {
+    position: absolute;
+    right: 76px;
+    top: 10px;
+    z-index: 100;
+    overflow: visible;
+}
 #add-note {
     position: absolute;
     right: 10px;
@@ -86,35 +99,6 @@
     z-index: 100;
 }
 /* ANIMATIONS */
-.counter {
-	position: absolute;
-	left: 50%;
-	top: 30px;
-	width: 40px;
-	margin-left: -20px;
-}
-
-.counter svg {
-	display: block;
-	margin: 14px auto 0;
-	fill: #58785A;
-}
-
-.counter__number {
-	text-align: center;
-	position: absolute;
-	background: #e66868;
-	font-size: 10px;
-	font-weight: bold;
-	color: #fff;
-	width: 20px;
-	height: 20px;
-	line-height: 20px;
-	border-radius: 50%;
-	bottom: -5px;
-	right: -5px;
-}
-
 .sticky-note.delete {
 	-webkit-animation: stickyDelete 0.5s forwards;
 	animation: stickyDelete 0.5s forwards;
