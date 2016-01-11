@@ -49,27 +49,17 @@
         width: 100%;
         box-sizing: border-box;
         
-        form {
-            margin-bottom: 0;
-            padding: 0;
+        .mdl-textfield {
             width: 100%;
-            .mdl-textfield {
-                width: 100%;
-                padding: 0;
-                .mdl-textfield__input {
-                    border-bottom: none;    
-                }
-                .mdl-textfield__label {
-                    top: 2px;
-                    &:after {
-                        bottom:0;
-                    }
-                }
+            padding: 0;
+            .mdl-textfield__input {
+                border-bottom: none;    
             }
-            .mdl-checkbox__label {
-                width: 100%;
-                min-height: 20px;
-                display: inline-block;
+            .mdl-textfield__label {
+                top: 2px;
+                &:after {
+                    bottom:0;
+                }
             }
         }
     }
@@ -78,6 +68,21 @@
         min-height: 20px;
         padding: 0 16px;
         margin-bottom: 5px;
+    }
+    .checkbox-item {
+        position: relative;
+        width: 100%;
+        min-height: 24px;
+        display: inline-block;
+        label {
+            width: 24px;
+            position: absolute;
+            left: 0;
+        }
+        .checkbox-content {
+            padding-left: 24px;
+            width: 100%;
+        }
     }
 }
 .dropzone {

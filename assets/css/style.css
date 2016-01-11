@@ -53,40 +53,43 @@
   width: 100%;
   box-sizing: border-box;
 }
-.sticky-note .sticky-note-content form,
-.sticky-note .sticky-header-drawer form {
-  margin-bottom: 0;
-  padding: 0;
-  width: 100%;
-}
-.sticky-note .sticky-note-content form .mdl-textfield,
-.sticky-note .sticky-header-drawer form .mdl-textfield {
+.sticky-note .sticky-note-content .mdl-textfield,
+.sticky-note .sticky-header-drawer .mdl-textfield {
   width: 100%;
   padding: 0;
 }
-.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__input,
-.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__input {
+.sticky-note .sticky-note-content .mdl-textfield .mdl-textfield__input,
+.sticky-note .sticky-header-drawer .mdl-textfield .mdl-textfield__input {
   border-bottom: none;
 }
-.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__label,
-.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__label {
+.sticky-note .sticky-note-content .mdl-textfield .mdl-textfield__label,
+.sticky-note .sticky-header-drawer .mdl-textfield .mdl-textfield__label {
   top: 2px;
 }
-.sticky-note .sticky-note-content form .mdl-textfield .mdl-textfield__label:after,
-.sticky-note .sticky-header-drawer form .mdl-textfield .mdl-textfield__label:after {
+.sticky-note .sticky-note-content .mdl-textfield .mdl-textfield__label:after,
+.sticky-note .sticky-header-drawer .mdl-textfield .mdl-textfield__label:after {
   bottom: 0;
-}
-.sticky-note .sticky-note-content form .mdl-checkbox__label,
-.sticky-note .sticky-header-drawer form .mdl-checkbox__label {
-  width: 100%;
-  min-height: 20px;
-  display: inline-block;
 }
 .sticky-note .sticky-note-content {
   border: none;
   min-height: 20px;
   padding: 0 16px;
   margin-bottom: 5px;
+}
+.sticky-note .checkbox-item {
+  position: relative;
+  width: 100%;
+  min-height: 24px;
+  display: inline-block;
+}
+.sticky-note .checkbox-item label {
+  width: 24px;
+  position: absolute;
+  left: 0;
+}
+.sticky-note .checkbox-item .checkbox-content {
+  padding-left: 24px;
+  width: 100%;
 }
 .dropzone {
   min-height: 200px;

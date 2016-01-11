@@ -1561,6 +1561,25 @@ Sticky.withinString = function(string, callback, options) {
     return string;
 };
 /* ------------------------------------------
+        prepare HTML element
+        construct DOM tree from string
+        and register element with componentHandler
+------------------------------------------- */
+Sticky.prepareHtmlElement = function(elm, upgrade, child, withWrapper) {
+    upgrade = typeof upgrade !== 'undefined' ? upgrade : false;
+    child = typeof child !== 'undefined' ? child : false;
+    withWrapper = typeof withWrapper !== 'undefined' ? withWrapper : false;
+    var div = document.createElement('div');
+    div.innerHTML = elm;
+    var newElm = div.firstChild;
+    if (upgrade) {
+        if (child) {componentHandler.upgradeElement(newElm.firstChild);} 
+            else {componentHandler.upgradeElement(newElm);}
+    }
+    if (withWrapper) {return div;}
+    return newElm;
+}
+/* ------------------------------------------
         check for url parameter
 ------------------------------------------- */
 Sticky.getPage = function() {
@@ -1581,10 +1600,7 @@ Sticky.getPage = function() {
             sanitize String
 ------------------------------------------- */
 Sticky.sanitizeString = function(text) {
-    // create temporary containing element
-    var elm = document.createElement('div');
-    elm.innerHTML = text;
-    var inputText = $(elm).text(); // retrieve only text and get rid of (most) HTML tags
+    var inputText = $(Sticky.prepareHtmlElement(text)).text(); // retrieve only text and get rid of (most) HTML tags
     inputText = Sanitizer.escape(inputText, function(url) {return url;}); // run through sanitizer to tak ecare of possible XSS injections
     inputText = Sticky.withinString(inputText, function(url) {return "<a>" + url + "</a>";}); // make url-s clickable
     return inputText;
@@ -1629,7 +1645,14 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
     for(item in data.items) {
         var key = "";
         if (item != 0) {key = 'data-item-key="'+item+'"';}
-        elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+data.items[item].text+'</div>';
+        if (data.items[item].type == "checkbox") {           
+            var newElm = Sticky.prepareHtmlElement(returnCheckbox(data.items[item].text, Sticky.globalStickyNoteCounter, c), true, true, true);
+            
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+newElm.innerHTML+'</div>';
+        
+        } else {
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+data.items[item].text+'</div>';
+        }
         c++;
     }
     elm += '</div>'+
@@ -1644,11 +1667,7 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
             '</div>'+
         '</div>';
 
-    var parent = document.createElement('div');
-    parent.innerHTML = elm;
-    var newElm = parent.firstChild;
-    componentHandler.upgradeElement(newElm);
-    document.getElementById(parentId).appendChild(newElm);
+    document.getElementById(parentId).appendChild(Sticky.prepareHtmlElement(elm, true));
     
     // needs to be saved if triggered by user
     if (isNew) {
@@ -1672,29 +1691,30 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
             spawn editable field
 ------------------------------------------- */
 function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
-    var valueText = "", elm = null;
+    var valueText = "", elm = null, newElm;
     if (value.length > 0) {
         valueText = ' value="'+value+'"';
     }
     if (type == "input") { 
         elm = returnTextField(valueText, stickyNoteId, stickyItemId);
+        newElm = Sticky.prepareHtmlElement(elm, true);
     } else if (type == "checkbox") {
         elm = returnCheckbox(value, stickyNoteId, stickyItemId);
+        newElm = Sticky.prepareHtmlElement(elm, true, true);
         $("#"+parentId).removeClass("can-edit");
     } else {
         throw "Invalid type";
     }
 
-    var form = document.createElement('form');
-    form.innerHTML = elm;
-    var newElm = form.firstChild;
-    componentHandler.upgradeElement(newElm);
-    $("#"+parentId).html(form);
+    $("#"+parentId).html(newElm);
     $("#"+parentId).addClass("sticky-editing");
-    $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
-    $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
-        if (type == "input") {
+    if (type == "input") { 
+        $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
+        $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
             var inputText = Sticky.sanitizeString($(this).val());
+            var fieldType = "input";
+            if ($("#"+parentId).hasClass("checkbox-content")) {var fieldType = "checkbox";}
+            
             $("#"+parentId).html(inputText); // write to DOM
             if ($("#"+parentId).hasClass("sticky-title")) {
                 var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key"));
@@ -1708,6 +1728,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
             } else if ($("#"+parentId).attr("data-item-key")) {
                 var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key"));
                 items.set({
+                    type: fieldType,
                     text: inputText,
                     timestamp: Firebase.ServerValue.TIMESTAMP,
                 }, function(error) {
@@ -1718,6 +1739,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
             } else {
                 var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+'/items');
                 var push = items.push({
+                    type: fieldType,
                     text: inputText,
                     timestamp: Firebase.ServerValue.TIMESTAMP,
                 }, function(error) {
@@ -1727,16 +1749,13 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
                 });
                 $("#"+parentId).attr("data-item-key", push.key());
             }
-            
-            
-        } else if (type == "checkbox") {
-            //$("#"+parentId).html($(this).val());
-        } else {
-            throw "Invalid type";
-        }
-        
-        $("#"+parentId).removeClass("sticky-editing");
-    });
+            $("#"+parentId).removeClass("sticky-editing");
+        });
+    } else if (type == "checkbox") {
+        $("#cbn"+stickyNoteId+"i"+stickyItemId).click(); // toggle checkbox label edit field
+    } else {
+        throw "Invalid type";
+    }
 }
 function returnTextField(value, stickyNoteId, stickyItemId) {
     var elm = '<div class="mdl-textfield mdl-js-textfield">'+
@@ -1746,10 +1765,12 @@ function returnTextField(value, stickyNoteId, stickyItemId) {
     return elm;
 }
 function returnCheckbox(value, stickyNoteId, stickyItemId) {
-    var elm = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
+    var elm = '<div class="checkbox-item">'+
+                '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
                     '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
-                    '<span id="cb900'+stickyItemId+'" class="mdl-checkbox__label can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="900'+stickyItemId+'">'+value+'</span>'+
-                '</label>';
+                '</label>'+
+                '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" data-dirty="true">'+value+'</div>'+
+            '</div>';
     return elm;
 }
 /* *******************************************
