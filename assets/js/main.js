@@ -1,30 +1,83 @@
 /* *******************************************
               sticky notes
 ******************************************* */
-var globalStickyNoteCounter = 0;
-var fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
-var noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
+function Sticky() {}
+Sticky.globalStickyNoteCounter = 0;
+Sticky.fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
+Sticky.noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
+
+/* ------------------------------------------
+        detect URL within string
+------------------------------------------- */
+Sticky.findUrl = {
+    // valid "scheme://" or "www."
+    start: /\b(?:([a-z][a-z0-9.+-]*:\/\/)|www\.)/gi,
+    // everything up to the next whitespace
+    end: /[\s\r\n]|$/,
+    // trim trailing punctuation captured by end RegExp
+    trim: /[`!()\[\]{};:'".,<>?«»“”„‘’]+$/
+};
+Sticky.withinString = function(string, callback, options) {
+    options || (options = {});
+    var _start = options.start || Sticky.findUrl.start;
+    var _end = options.end || Sticky.findUrl.end;
+    var _trim = options.trim || Sticky.findUrl.trim;
+    var _attributeOpen = /[a-z0-9-]=["']?$/i;
+
+    _start.lastIndex = 0;
+    while (true) {
+      var match = _start.exec(string);
+      if (!match) {
+        break;
+      }
+
+      var start = match.index;
+      if (options.ignoreHtml) {
+        // attribut(e=["']?$)
+        var attributeOpen = string.slice(Math.max(start - 3, 0), start);
+        if (attributeOpen && _attributeOpen.test(attributeOpen)) {
+          continue;
+        }
+      }
+
+      var end = start + string.slice(start).search(_end);
+      var slice = string.slice(start, end).replace(_trim, '');
+      if (options.ignore && options.ignore.test(slice)) {
+        continue;
+      }
+
+      end = start + slice.length;
+      var result = callback(slice, start, end, string);
+      string = string.slice(0, start) + result + string.slice(end);
+      _start.lastIndex = start + result.length;
+    }
+
+    _start.lastIndex = 0;
+    return string;
+};
 /* ------------------------------------------
             sanitize String
 ------------------------------------------- */
-function sanitizeString(text) {
+Sticky.sanitizeString = function(text) {
     // create temporary containing element
     var elm = document.createElement('div');
     elm.innerHTML = text;
     var inputText = $(elm).text(); // retrieve only text and get rid of (most) HTML tags
     inputText = Sanitizer.escape(inputText, function(url) {return url;}); // run through sanitizer to tak ecare of possible XSS injections
-    inputText = URI.withinString(inputText, function(url) {return "<a>" + url + "</a>";}); // make url-s clickable
+    inputText = Sticky.withinString(inputText, function(url) {return "<a>" + url + "</a>";}); // make url-s clickable
     return inputText;
 }
 /* ------------------------------------------
         load saved state from DB
 ------------------------------------------- */
-function loadSavedState() {
-    var notes = new Firebase(fireBaseUrl+'/notes');
+Sticky.loadSavedState = function() {
+    var notes = new Firebase(Sticky.fireBaseUrl+'/notes');
 
     notes.once("value", function(snapshot) {
         snapshot.forEach(function(data) {
-            spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
+            if (!data.val().isArchived) {
+                spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
+            }
         });
     });
 }
@@ -32,16 +85,16 @@ function loadSavedState() {
             spawn sticky note
 ------------------------------------------- */
 function spawnNewStickyNote(parentId, isNew, data, key) {
-    var elm = '<div id="note'+globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
+    var elm = '<div id="note'+Sticky.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
                 '<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
-                    '<h2 id="title'+globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
+                    '<h2 id="title'+Sticky.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
                 '</div>'+
-                '<div id="wrapper'+globalStickyNoteCounter+'" class="sticky-content-wrapper">';
+                '<div id="wrapper'+Sticky.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
     var c = 2;
     for(item in data.items) {
         var key = "";
         if (item != 0) {key = 'data-item-key="'+item+'"';}
-        elm += '<div id="n'+globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+data.items[item].text+'</div>';
+        elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+data.items[item].text+'</div>';
         c++;
     }
     elm += '</div>'+
@@ -49,6 +102,9 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
             '<div class="sticky-footer-drawer mdl-color--amber">'+
                 '<button class="sticky-delete mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
                     '<i class="material-icons">delete</i>'+
+                '</button>'+
+                '<button class="sticky-archive mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
+                    '<i class="material-icons">archive</i>'+
                 '</button>'+
             '</div>'+
         '</div>';
@@ -61,20 +117,21 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
     
     // needs to be saved if triggered by user
     if (isNew) {
-        var notes = new Firebase(fireBaseUrl+'/notes');
+        var notes = new Firebase(Sticky.fireBaseUrl+'/notes');
         var push = notes.push({
             title: "New Note",
             column: 0,
             row: 0,
+            isArchived: false,
             timestamp: Firebase.ServerValue.TIMESTAMP,
         }, function(error) {
             if (error) {
                 console.log("Data could not be saved." + error);
             }
         });
-        $("#note"+globalStickyNoteCounter).attr("data-note-key", push.key());
+        $("#note"+Sticky.globalStickyNoteCounter).attr("data-note-key", push.key());
     } 
-    globalStickyNoteCounter++;
+    Sticky.globalStickyNoteCounter++;
 }
 /* ------------------------------------------
             spawn editable field
@@ -102,10 +159,10 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
     $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
     $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
         if (type == "input") {
-            var inputText = sanitizeString($(this).val());
+            var inputText = Sticky.sanitizeString($(this).val());
             $("#"+parentId).html(inputText); // write to DOM
             if ($("#"+parentId).hasClass("sticky-title")) {
-                var note = new Firebase(fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key"));
+                var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key"));
                 note.update({
                     title: inputText,
                 }, function(error) {
@@ -114,7 +171,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
                     }
                 });
             } else if ($("#"+parentId).attr("data-item-key")) {
-                var items = new Firebase(fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key"));
+                var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key"));
                 items.set({
                     text: inputText,
                     timestamp: Firebase.ServerValue.TIMESTAMP,
@@ -124,7 +181,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
                     }
                 });
             } else {
-                var items = new Firebase(fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+'/items');
+                var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+'/items');
                 var push = items.push({
                     text: inputText,
                     timestamp: Firebase.ServerValue.TIMESTAMP,
@@ -156,7 +213,7 @@ function returnTextField(value, stickyNoteId, stickyItemId) {
 function returnCheckbox(value, stickyNoteId, stickyItemId) {
     var elm = '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
                     '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
-                    '<span id="cb900'+stickyItemId+'" class="mdl-checkbox__label can-edit" data-sticky-id="'+globalStickyNoteCounter+'" data-item-id="900'+stickyItemId+'">'+value+'</span>'+
+                    '<span id="cb900'+stickyItemId+'" class="mdl-checkbox__label can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="900'+stickyItemId+'">'+value+'</span>'+
                 '</label>';
     return elm;
 }
@@ -194,7 +251,7 @@ $(function() {
     }).on('out', function (el, container) {
         container.className = container.className.replace(' drop-target', '');
     }).on('drop', function (el, container) {
-        var note = new Firebase(fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
+        var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
         note.update({
             column: $(container).attr("data-column")
         }, function(error) {
@@ -209,28 +266,37 @@ $(function() {
     /* ------------------------------------------
                Load saved state from DB
     ------------------------------------------- */
-    loadSavedState();
+    Sticky.loadSavedState();
     /* ------------------------------------------
                MANIPULATE STICKY NOTES
     ------------------------------------------- */
     // spawn new sticky note
     $("#add-note").click(function(event) {
-        spawnNewStickyNote("dz"+noteDefaults.column, true, noteDefaults, "new");
+        spawnNewStickyNote("dz"+Sticky.noteDefaults.column, true, Sticky.noteDefaults, "new");
     });
     // delete sticky note
     $('body').on('click', '.sticky-delete', function() {
-        var note = new Firebase(fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
+        var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
         note.set(null, function(error) {
             if (error) {
                 console.log("Data could not be saved." + error);
             }
         });
+        $(this).closest(".sticky-note").toggleClass('delete');
         $(this).closest(".sticky-note").remove();
     });
     // archive sticky note
     $('body').on('click', '.sticky-archive', function() {
-        // TO DO
-        $(this).closest(".sticky-note").detach();
+        var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
+        note.update({
+            isArchived: true
+        }, function(error) {
+            if (error) {
+                console.log("Data could not be saved." + error);
+            }
+        });
+        $(this).closest(".sticky-note").toggleClass('archive');
+        $(this).closest(".sticky-note").remove();
     });
     /* ------------------------------------------
              interactions with content
@@ -270,7 +336,7 @@ $(function() {
             $(this).blur();
         }
         if (event.keyCode === 46) { // delete line item
-            var items = new Firebase(fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
+            var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
             items.set(null, function(error) {
                 if (error) {
                     console.log("Data could not be saved." + error);
