@@ -1615,10 +1615,11 @@ Sticky.getPage = function() {
 /* ------------------------------------------
             sanitize String
 ------------------------------------------- */
-Sticky.sanitizeString = function(text) {
+Sticky.sanitizeString = function(text, isFormatted) {
+    isFormatted = typeof isFormatted !== 'undefined' ? isFormatted : false;
     var inputText = $(Sticky.prepareHtmlElement(text)).text(); // retrieve only text and get rid of (most) HTML tags
-    inputText = Sanitizer.escape(inputText, function(url) {return url;}); // run through sanitizer to tak ecare of possible XSS injections
-    inputText = Sticky.withinString(inputText, function(url) {return "<a>" + url + "</a>";}); // make url-s clickable
+    inputText = Sanitizer.escape(inputText, function(url) {return url;}); // run through sanitizer to take care of possible XSS injections
+    if (isFormatted) {inputText = Sticky.withinString(inputText, function(url) {return '<a href='+url+' target=_blank>'+url+'</a>';});}
     return inputText;
 }
 /* ------------------------------------------
@@ -1664,7 +1665,7 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
         if (data.items[item].type == "checkbox") {           
             var newElm = Sticky.prepareHtmlElement(returnCheckbox(data.items[item].text, Sticky.globalStickyNoteCounter, c, key), true, true, true);
             
-            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+newElm.innerHTML+'</div>';
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" data-dirty="true">'+newElm.innerHTML+'</div>';
         
         } else {
             elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+data.items[item].text+'</div>';
@@ -1712,7 +1713,7 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
 function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
     var valueText = "", elm = null, newElm;
     if (value.length > 0) {
-        valueText = ' value="'+value+'"';
+        valueText = ' value="'+Sticky.sanitizeString(value)+'"';
     }
     if (type == "input") { 
         elm = returnTextField(valueText, stickyNoteId, stickyItemId);
@@ -1731,7 +1732,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
         $("#"+parentId).addClass("sticky-editing");
         $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
         $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
-            var inputText = Sticky.sanitizeString($(this).val());
+            var inputText = Sticky.sanitizeString($(this).val(), true);
             var fieldType = "input";
             if ($("#"+parentId).hasClass("checkbox-content")) {var fieldType = "checkbox";}
             
@@ -1789,7 +1790,7 @@ function returnCheckbox(value, stickyNoteId, stickyItemId, keyId) {
                 '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
                     '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
                 '</label>'+
-                '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" '+keyId+' data-dirty="true">'+value+'</div>'+
+                '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" data-dirty="true" '+keyId+'>'+value+'</div>'+
             '</div>';
     return elm;
 }
@@ -1889,7 +1890,7 @@ $(function() {
              interactions with content
     ------------------------------------------- */
     // INVOKE EDITABLE LINE
-    $('body').on('click', '.can-edit', function(event) {
+    $('body').on('click', '.can-edit:not(a)', function(event) {
         if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
             var type = "input";
             if (event.ctrlKey) { // if ctrl is pressed, toggle checkbox input
