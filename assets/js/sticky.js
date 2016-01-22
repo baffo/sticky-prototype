@@ -1662,9 +1662,9 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
         var key = "";
         if (item != 0) {key = 'data-item-key="'+item+'"';}
         if (data.items[item].type == "checkbox") {           
-            var newElm = Sticky.prepareHtmlElement(returnCheckbox(data.items[item].text, Sticky.globalStickyNoteCounter, c), true, true, true);
+            var newElm = Sticky.prepareHtmlElement(returnCheckbox(data.items[item].text, Sticky.globalStickyNoteCounter, c, key), true, true, true);
             
-            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+newElm.innerHTML+'</div>';
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+newElm.innerHTML+'</div>';
         
         } else {
             elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+data.items[item].text+'</div>';
@@ -1718,7 +1718,7 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
         elm = returnTextField(valueText, stickyNoteId, stickyItemId);
         newElm = Sticky.prepareHtmlElement(elm, true);
     } else if (type == "checkbox") {
-        elm = returnCheckbox(value, stickyNoteId, stickyItemId);
+        elm = returnCheckbox(value, stickyNoteId, stickyItemId, '');
         newElm = Sticky.prepareHtmlElement(elm, true, true);
         $("#"+parentId).removeClass("can-edit");
     } else {
@@ -1784,12 +1784,12 @@ function returnTextField(value, stickyNoteId, stickyItemId) {
                 '</div>';
     return elm;
 }
-function returnCheckbox(value, stickyNoteId, stickyItemId) {
+function returnCheckbox(value, stickyNoteId, stickyItemId, keyId) {
     var elm = '<div class="checkbox-item">'+
                 '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
                     '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
                 '</label>'+
-                '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" data-dirty="true">'+value+'</div>'+
+                '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" '+keyId+' data-dirty="true">'+value+'</div>'+
             '</div>';
     return elm;
 }
