@@ -1,3 +1,19 @@
+/* ------------------------------------------
+        Object.keys polyfill
+------------------------------------------- */
+if (!Object.keys) {
+    Object.keys = function (obj) {
+        var arr = [],
+            key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                arr.push(key);
+            }
+        }
+        return arr;
+    };
+}
+
 /* *******************************************
               sticky notes
 ******************************************* */
@@ -57,7 +73,7 @@ Sticky.withinString = function(string, callback, options) {
 
     _start.lastIndex = 0;
     return string;
-};
+}
 /* ------------------------------------------
         prepare HTML element
         construct DOM tree from string
@@ -93,7 +109,7 @@ Sticky.getPage = function() {
 	}
     $('body').addClass(Sticky.page[0]); 
     return Sticky.page[0];
-};
+}
 /* ------------------------------------------
             sanitize String
 ------------------------------------------- */
@@ -146,13 +162,16 @@ function spawnNewStickyNote(parentId, isNew, data, key) {
         if (data.items[item].type == "checkbox") {           
             var newElm = Sticky.prepareHtmlElement(returnCheckbox(data.items[item].text, Sticky.globalStickyNoteCounter, c), true, true, true);
             
-            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+newElm.innerHTML+'</div>';
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+newElm.innerHTML+'</div>';
         
         } else {
-            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+'>'+data.items[item].text+'</div>';
+            elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+data.items[item].text+'</div>';
         }
         c++;
     }
+    // add last empty line
+    elm += '<div id="n'+Sticky.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+Sticky.globalStickyNoteCounter+'" data-item-id="'+c+'"></div>';
+    // close off sticky note
     elm += '</div>'+
             '<div class="spacer"></div>'+
             '<div class="sticky-footer-drawer mdl-color--amber">'+
@@ -205,8 +224,9 @@ function spawnEditableField(type, parentId, value, stickyNoteId, stickyItemId) {
     }
 
     $("#"+parentId).html(newElm);
-    $("#"+parentId).addClass("sticky-editing");
+    
     if (type == "input") { 
+        $("#"+parentId).addClass("sticky-editing");
         $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
         $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
             var inputText = Sticky.sanitizeString($(this).val());
