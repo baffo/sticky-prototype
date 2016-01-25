@@ -131,14 +131,14 @@ var Sticky = (function (s) {
 
         notes.once("value", function(snapshot) {
             snapshot.forEach(function(data) {
-                if (!data.val().isArchived && page == "home") {
+                if (!data.val().archived && page == "home") {
                     s.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
                     s.homeCount++;
-                } else if (data.val().isArchived && page == "archive") {
+                } else if (data.val().archived && page == "archive") {
                     s.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
                     s.archivedCount++;
                 } else {
-                    if(!data.val().isArchived) { // TO-DO implement pageDisplay (String type) property to notes
+                    if(!data.val().archived) { // TO-DO implement pageDisplay (String type) property to notes
                         s.homeCount++;
                     } else if(data.val().isArchived) {
                         s.archivedCount++; 
@@ -165,8 +165,8 @@ var Sticky = (function (s) {
             var key = "";
             if (item != 0) {key = 'data-item-key="'+item+'"';}
             if (data.items[item].type == "checkbox") {           
-                var newElm = s.prepareHtmlElement(s.returnCheckbox(data.items[item].text, s.globalStickyNoteCounter, c, key), true, true, true);
-
+                var newElm = s.prepareHtmlElement(s.returnCheckbox(data.items[item].text, s.globalStickyNoteCounter, c, data.items[item].checked, key), true, true, true);
+                if (data.items[item].checked) {newElm.querySelector('.mdl-js-checkbox').MaterialCheckbox.check();}
                 elm += '<div id="n'+s.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+s.globalStickyNoteCounter+'" data-item-id="'+c+'" data-dirty="true">'+newElm.innerHTML+'</div>';
 
             } else {
@@ -198,8 +198,9 @@ var Sticky = (function (s) {
                 title: "New Note",
                 column: 0,
                 row: 0,
-                isArchived: false,
-                timestamp: Firebase.ServerValue.TIMESTAMP,
+                archived: false,
+                created_at: Firebase.ServerValue.TIMESTAMP,
+                changed_at: Firebase.ServerValue.TIMESTAMP,
             }, function(error) {
                 if (error) {
                     console.log("Data could not be saved." + error);
@@ -243,6 +244,7 @@ var Sticky = (function (s) {
                     var note = new Firebase(s.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key"));
                     note.update({
                         title: inputText,
+                        changed_at: Firebase.ServerValue.TIMESTAMP,
                     }, function(error) {
                         if (error) {
                             console.log("Data could not be saved." + error);
@@ -250,10 +252,10 @@ var Sticky = (function (s) {
                     });
                 } else if ($("#"+parentId).attr("data-item-key")) {
                     var items = new Firebase(s.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key"));
-                    items.set({
+                    items.update({
                         type: fieldType,
                         text: inputText,
-                        timestamp: Firebase.ServerValue.TIMESTAMP,
+                        changed_at: Firebase.ServerValue.TIMESTAMP,
                     }, function(error) {
                         if (error) {
                             console.log("Data could not be saved." + error);
@@ -264,7 +266,8 @@ var Sticky = (function (s) {
                     var push = items.push({
                         type: fieldType,
                         text: inputText,
-                        timestamp: Firebase.ServerValue.TIMESTAMP,
+                        created_at: Firebase.ServerValue.TIMESTAMP,
+                        changed_at: Firebase.ServerValue.TIMESTAMP,
                     }, function(error) {
                         if (error) {
                             console.log("Data could not be saved." + error);
@@ -287,9 +290,10 @@ var Sticky = (function (s) {
                     '</div>';
         return elm;
     };
-    s.returnCheckbox = function(value, stickyNoteId, stickyItemId, keyId) {
-        var elm = '<div class="checkbox-item">'+
-                    '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
+    s.returnCheckbox = function(value, stickyNoteId, stickyItemId, isChecked, keyId) {
+        var checked = ""; if (typeof isChecked != 'undefined' && isChecked == true) {checked = "is-checked";}
+        var elm = '<div class="checkbox-item '+checked+'">'+
+                    '<label class="'+checked+' mdl-checkbox mdl-js-checkbox" for="note'+stickyNoteId+'-item'+stickyItemId+'">'+
                         '<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">'+
                     '</label>'+
                     '<div id="cbn'+stickyNoteId+'i'+stickyItemId+'" class="sticky-note-content checkbox-content can-edit is-checkbox" data-sticky-id="'+stickyNoteId+'" data-item-id="900'+stickyItemId+'" data-dirty="true" '+keyId+'>'+value+'</div>'+
@@ -338,7 +342,8 @@ $(function() {
     }).on('drop', function (el, container) {
         var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
         note.update({
-            column: $(container).attr("data-column")
+            column: $(container).attr("data-column"),
+            changed_at: Firebase.ServerValue.TIMESTAMP,
         }, function(error) {
             if (error) {
                 console.log("Data could not be saved." + error);
@@ -382,7 +387,8 @@ $(function() {
     $('body').on('click', '.sticky-archive', function() {
         var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
         note.update({
-            isArchived: true
+            archived: true,
+            changed_at: Firebase.ServerValue.TIMESTAMP,
         }, function(error) {
             if (error) {
                 console.log("Data could not be saved." + error);
@@ -416,6 +422,21 @@ $(function() {
             }
         }
     });
+    $('body').on('click', '.mdl-checkbox__tick-outline', function(event) {
+        $(this).closest('.mdl-checkbox').toggleClass('is-checked');
+        $(this).closest('.checkbox-item').toggleClass('is-checked');
+        var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
+        
+        var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key"));
+        items.update({
+            checked: isChecked,
+            changed_at: Firebase.ServerValue.TIMESTAMP,
+        }, function(error) {
+            if (error) {
+                console.log("Data could not be saved." + error);
+            }
+        });
+    });
     // key events on editable content
     $('body').on('keydown', '.mdl-textfield__input', function (event) {
         if (event.keyCode === 13) {
@@ -435,10 +456,15 @@ $(function() {
             var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
             items.set(null, function(error) {
                 if (error) {
-                    console.log("Data could not be saved." + error);
+                    console.log("Data could not be deleted." + error);
                 }
             });
-            $(this).closest(".can-edit").remove();
+            if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
+                $(this).closest(".checkbox-item").parent().remove();
+            } else {
+                $(this).closest(".can-edit").remove();
+            }
+            
         }
     });
 });

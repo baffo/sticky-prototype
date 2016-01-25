@@ -91,6 +91,10 @@
   padding-left: 24px;
   width: 100%;
 }
+.sticky-note .checkbox-item.is-checked .sticky-note-content {
+  color: #36B7C7;
+  text-decoration: line-through;
+}
 .dropzone {
   min-height: 200px;
 }
