@@ -1529,7 +1529,7 @@ var Sticky = (function (s) {
     s.page = ['home', 'archive'];
     s.fireBaseUrl = "https://boiling-torch-8284.firebaseio.com";
     s.noteDefaults = {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}};
-    
+
     /* ------------------------------------------
             detect URL within string
     ------------------------------------------- */
@@ -1592,7 +1592,7 @@ var Sticky = (function (s) {
         div.innerHTML = elm;
         var newElm = div.firstChild;
         if (upgrade) {
-            if (child) {componentHandler.upgradeElement(newElm.firstChild);} 
+            if (child) {componentHandler.upgradeElement(newElm.firstChild);}
                 else {componentHandler.upgradeElement(newElm);}
         }
         if (withWrapper) {return div;}
@@ -1606,13 +1606,13 @@ var Sticky = (function (s) {
         var results = regex.exec(window.location.href);
         if (results) {
             if (s.page.indexOf(results[0].substring(1, results[0].length))) {
-                $('body').addClass(results[0].substring(1, results[0].length)); 
+                $('body').addClass(results[0].substring(1, results[0].length));
                 return results[0].substring(1, results[0].length);
             }
-            $('body').addClass(s.page[0]); 
+            $('body').addClass(s.page[0]);
             return s.page[0];
         }
-        $('body').addClass(s.page[0]); 
+        $('body').addClass(s.page[0]);
         return s.page[0];
     };
     /* ------------------------------------------
@@ -1642,16 +1642,16 @@ var Sticky = (function (s) {
                 } else {
                     if(!data.val().archived) { // TO-DO implement pageDisplay (String type) property to notes
                         s.homeCount++;
-                    } else if(data.val().isArchived) {
-                        s.archivedCount++; 
-                    }    
+                    } else if(data.val().archived) {
+                        s.archivedCount++;
+                    }
                 }
             });
             $("#home .mdl-badge").attr("data-badge", s.homeCount);
             $("#archive .mdl-badge").attr("data-badge", s.archivedCount);
         });
     };
-    
+
     /* ------------------------------------------
                 spawn sticky note
     ------------------------------------------- */
@@ -1666,7 +1666,7 @@ var Sticky = (function (s) {
         for(item in data.items) {
             var key = "";
             if (item != 0) {key = 'data-item-key="'+item+'"';}
-            if (data.items[item].type == "checkbox") {           
+            if (data.items[item].type == "checkbox") {
                 var newElm = s.prepareHtmlElement(s.returnCheckbox(data.items[item].text, s.globalStickyNoteCounter, c, data.items[item].checked, key), true, true, true);
                 if (data.items[item].checked) {newElm.querySelector('.mdl-js-checkbox').MaterialCheckbox.check();}
                 elm += '<div id="n'+s.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+s.globalStickyNoteCounter+'" data-item-id="'+c+'" data-dirty="true">'+newElm.innerHTML+'</div>';
@@ -1709,7 +1709,7 @@ var Sticky = (function (s) {
                 }
             });
             $("#note"+s.globalStickyNoteCounter).attr("data-note-key", push.key());
-        } 
+        }
         s.globalStickyNoteCounter++;
     };
     /* ------------------------------------------
@@ -1720,7 +1720,7 @@ var Sticky = (function (s) {
         if (value.length > 0) {
             valueText = ' value="'+s.sanitizeString(value)+'"';
         }
-        if (type == "input") { 
+        if (type == "input") {
             elm = s.returnTextField(valueText, stickyNoteId, stickyItemId);
             newElm = s.prepareHtmlElement(elm, true);
         } else if (type == "checkbox") {
@@ -1733,7 +1733,7 @@ var Sticky = (function (s) {
 
         $("#"+parentId).html(newElm);
 
-        if (type == "input") { 
+        if (type == "input") {
             $("#"+parentId).addClass("sticky-editing");
             $("#note"+stickyNoteId+"-item"+stickyItemId).focus(); // set focus to new input
             $("#note"+stickyNoteId+"-item"+stickyItemId).blur(function(){ // on lose focus move content to DOM out of input
@@ -1802,7 +1802,7 @@ var Sticky = (function (s) {
                 '</div>';
         return elm;
     };
-    
+
 	return s;
 }(Sticky || {}));
 
@@ -1868,11 +1868,11 @@ $(function() {
     });
     // GO-TO home
     $("#home").click(function(event) {
-        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname; 
+        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname;
     });
     // GO-TO archive
     $("#archive").click(function(event) {
-        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive"; 
+        window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive";
     });
     // delete sticky note
     $('body').on('click', '.sticky-delete', function() {
@@ -1915,8 +1915,8 @@ $(function() {
             try {
                 Sticky.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
             } catch(error) {console.log(error);}
-            
-            if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)   
+
+            if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
                 var itemId = parseInt($(this).attr("data-item-id")) + 1;
                 // INSERT NEW EMPTY LINE
                 $(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
@@ -1928,7 +1928,7 @@ $(function() {
         $(this).closest('.mdl-checkbox').toggleClass('is-checked');
         $(this).closest('.checkbox-item').toggleClass('is-checked');
         var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
-        
+
         var items = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key"));
         items.update({
             checked: isChecked,
@@ -1966,7 +1966,7 @@ $(function() {
             } else {
                 $(this).closest(".can-edit").remove();
             }
-            
+
         }
     });
 });
