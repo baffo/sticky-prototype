@@ -1,3 +1,4 @@
+var sticky = sticky || {};
 /* *******************************************
              INITIATE STICKY NOTES APP
 ******************************************* */
@@ -35,7 +36,7 @@ $(function() {
       }).on('out', function (el, container) {
           container.className = container.className.replace(' drop-target', '');
       }).on('drop', function (el, container) {
-          var note = new Firebase(Sticky.fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
+          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
           note.update({
               column: $(container).attr("data-column"),
               changed_at: Firebase.ServerValue.TIMESTAMP,
@@ -52,8 +53,7 @@ $(function() {
       /* ------------------------------------------
               Init & Load saved state for current page
       ------------------------------------------- */
-      var stickyapp = Sticky();
-      stickyapp.loadSavedState(stickyapp.getPage());
+      sticky.utils.loadSavedState(sticky.utils.getPage());
 
       // set up listeners for Sticky
       this.setUpListeners();
@@ -64,7 +64,7 @@ $(function() {
       ------------------------------------------- */
       // spawn new sticky note
       $("#add-note").click(function(event) {
-          stickyapp.spawnNewStickyNote("dz"+stickyapp.noteDefaults.column, true, stickyapp.noteDefaults, "new");
+          sticky.utils.spawnNewStickyNote("dz"+sticky.vars.noteDefaults.column, true, sticky.vars.noteDefaults, "new");
       });
       // GO-TO home
       $("#home").click(function(event) {
@@ -76,7 +76,7 @@ $(function() {
       });
       // delete sticky note
       $('body').on('click', '.sticky-delete', function() {
-          var note = new Firebase(stickyapp.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
+          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
           note.set(null, function(error) {
               if (error) {
                   console.log("Data could not be saved." + error);
@@ -87,7 +87,7 @@ $(function() {
       });
       // archive sticky note
       $('body').on('click', '.sticky-archive', function() {
-          var note = new Firebase(stickyapp.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
+          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
           note.update({
               archived: true,
               changed_at: Firebase.ServerValue.TIMESTAMP,
@@ -99,8 +99,8 @@ $(function() {
           // update UI
           $(this).closest(".sticky-note").toggleClass('archive');
           setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
-          stickyapp.archivedCount++;
-          $("#archive .mdl-badge").attr("data-badge", stickyapp.archivedCount);
+          sticky.vars.archivedCount++;
+          $("#archive .mdl-badge").attr("data-badge", sticky.vars.archivedCount);
       });
       /* ------------------------------------------
                interactions with content
@@ -113,7 +113,7 @@ $(function() {
                   type = "checkbox";
               }
               try {
-                  stickyapp.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
+                  sticky.utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
               } catch(error) {console.log(error);}
 
               if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
@@ -129,7 +129,7 @@ $(function() {
           $(this).closest('.checkbox-item').toggleClass('is-checked');
           var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
 
-          var items = new Firebase(stickyapp.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key"));
+          var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key"));
           items.update({
               checked: isChecked,
               changed_at: Firebase.ServerValue.TIMESTAMP,
@@ -155,7 +155,7 @@ $(function() {
               $(this).blur();
           }
           if (event.keyCode === 46) { // delete line item
-              var items = new Firebase(stickyapp.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
+              var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
               items.set(null, function(error) {
                   if (error) {
                       console.log("Data could not be deleted." + error);

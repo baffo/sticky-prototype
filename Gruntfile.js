@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 			separator: ';',
 		},
 		dist: {
-			src: ['assets/js/material.min.js', 'assets/js/dragula.min.js', 'assets/js/sanitizer.js', 'assets/lib/config.js', 'assets/lib/firebase.js', 'assets/lib/utils.js', 'assets/lib/sticky.js', 'assets/lib/init.js'],
+			src: ['assets/js/material.min.js', 'assets/js/dragula.min.js', 'assets/js/sanitizer.js', 'assets/lib/config.js', 'assets/lib/firebase.js', 'assets/lib/utils.js', 'assets/lib/init.js'],
 			dest: 'assets/js/sticky.js',
 		},
 	},
