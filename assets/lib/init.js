@@ -3,6 +3,15 @@ var sticky = sticky || {};
              INITIATE STICKY NOTES APP
 ******************************************* */
 $(function() {
+  /*
+  * SET UP INTERFACE
+  */
+  if (!sticky.FirebaseAdapter.loggedIn()) {
+    $("#login").show();
+  } else {
+    sticky.utils.displayProfile();
+  }
+
 
   var StickyStart = {
     init: function() {
@@ -63,6 +72,10 @@ $(function() {
       /* ------------------------------------------
                  MANIPULATE STICKY NOTES
       ------------------------------------------- */
+      // GO-TO home
+      $("#login").click(function(event) {
+          fb.login();
+      });
       // spawn new sticky note
       $("#add-note").click(function(event) {
           sticky.utils.spawnNewStickyNote("dz"+sticky.vars.noteDefaults.column, true, sticky.vars.noteDefaults, "new");

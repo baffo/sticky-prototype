@@ -5,14 +5,24 @@
     <meta name="viewport"
           content="width=device-width,target-densitydpi=device-dpi,user-scalable=yes,minimum-scale=1,maximum-scale=1"/>
     <title>Sticky Prototype</title>
-    <!-- IMPORT CSS DEPENDENCIES --> 
+    <!-- IMPORT CSS DEPENDENCIES -->
     <link rel="stylesheet" href="assets/css/material.cyan-amber.min.css" />
     <link href="assets/css/style.css" rel="stylesheet">
-    
+
     <!-- INCLUDE FONTS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body class="mdl-color--cyan-300">
+<button id="login" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect">
+  LOG IN
+</button>
+<div id="profile">
+  <div class="line">
+    <div id="profile_icon" class="material-icons mdl-badge mdl-badge--overlap" data-badge="♥">account_box</div>
+    <div id="profile_image"></div>
+    <div id="profile_text"><span id="profile_greeting">Hello,</span> <span id="profile_name"></span>!</div>
+  </div>
+</div>
 <button id="home" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
     <span class="material-icons">home</span>
     <span class="mdl-badge" data-badge="0"></span>
@@ -28,7 +38,7 @@
     <div id="dz0" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="0"></div>
     <div id="dz1" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="1"></div>
     <div id="dz2" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="2"></div>
-</div> 
+</div>
 <!-- IMPORT JS DEPENDENCIES -->
 <script src="assets/js/firebase.js"></script>
 <script src="assets/js/jquery-1.12.0.min.js"></script>

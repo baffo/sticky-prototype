@@ -107,6 +107,61 @@
   -ms-moz-border-radius: 4px;
   border-radius: 4px;
 }
+#login {
+  position: absolute;
+  right: 145px;
+  top: 22px;
+  z-index: 100;
+  overflow: visible;
+  display: none;
+}
+#profile {
+  position: absolute;
+  right: 145px;
+  top: 18px;
+  z-index: 100;
+  width: auto;
+  overflow: visible;
+  display: none;
+}
+#profile .line {
+  height: 25px;
+}
+#profile .line #profile_icon {
+  float: left;
+  margin-top: 8px;
+}
+#profile .line #profile_image {
+  float: left;
+  display: none;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -o-moz-border-radius: 50%;
+  -ms-moz-border-radius: 50%;
+  border-radius: 50%;
+}
+#profile .line #profile_text {
+  float: right;
+  padding-top: 10px;
+}
+#profile .line #profile_text #profile_name {
+  font-weight: bold;
+}
+#profile .line #profile_info {
+  float: left;
+  padding-left: 34px;
+}
+#profile .line #profile_info span {
+  font-size: 12px;
+  line-height: 25px;
+  vertical-align: middle;
+}
+#profile .line::after {
+  clear: both;
+}
 #archive,
 #home {
   position: absolute;

@@ -20,7 +20,7 @@
             font-size: 20px;
             line-height: 22px;
             font-weight: bold;
-            
+
             .mdl-textfield__input {
                 font-size: 22px;
             }
@@ -45,15 +45,15 @@
     .spacer {
         height: 10px;
     }
-    .sticky-note-content, .sticky-header-drawer { 
+    .sticky-note-content, .sticky-header-drawer {
         width: 100%;
         box-sizing: border-box;
-        
+
         .mdl-textfield {
             width: 100%;
             padding: 0;
             .mdl-textfield__input {
-                border-bottom: none;    
+                border-bottom: none;
             }
             .mdl-textfield__label {
                 top: 2px;
@@ -88,7 +88,7 @@
                 color: #36B7C7;
                 text-decoration: line-through;
             }
-            
+
         }
     }
 }
@@ -99,6 +99,58 @@
         border: 1px #cccccc dashed;
         .border-radius(4px);
     }
+}
+#login {
+  position: absolute;
+  right: 145px;
+  top: 22px;
+  z-index: 100;
+  overflow: visible;
+  display: none;
+}
+#profile {
+  position: absolute;
+  right: 145px;
+  top: 18px;
+  z-index: 100;
+  width: auto;
+  overflow: visible;
+  display: none;
+  .line {
+    height: 25px;
+
+    #profile_icon {
+      float: left;
+      margin-top: 8px;
+    }
+    #profile_image {
+      float: left;
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      .border-radius(50%);
+    }
+    #profile_text {
+      float: right;
+      padding-top: 10px;
+      #profile_name {
+        font-weight: bold;
+      }
+    }
+    #profile_info {
+      float: left;
+      padding-left: 34px;
+      span {
+        font-size: 12px;
+        line-height: 25px;
+        vertical-align: middle;
+      }
+    }
+    &::after {
+      clear: both;
+    }
+  }
 }
 #archive, #home {
     position: absolute;
@@ -204,4 +256,3 @@
     filter: alpha(opacity=20);
 }
 /* END DRAGULA LIBRARY */
-

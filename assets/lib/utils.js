@@ -278,5 +278,21 @@ sticky.utils = (function (global) {
       return elm;
   };
 
+ var getGreeting = function() {
+   return vars.greetings[Math.floor((Math.random() * vars.greetings.length))];
+ };
+
+ _self.displayProfile = function() {
+   if (global.user.picture) {
+     $("#profile_image").css("background-image", "url("+global.user.picture+")");
+     $("#profile_image").css("background-size", "contain");
+     $("#profile_icon").hide();
+     $("#profile_image").show();
+   }
+   $("#profile_greeting").html(getGreeting());
+   $("#profile_name").html(global.user.name);
+   $("#profile").show();
+ };
+
   return _self;
 })(sticky);

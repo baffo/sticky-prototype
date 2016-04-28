@@ -1,4 +1,4 @@
-Sticky Prototype v0.3
+Sticky Prototype v0.3.5
 ================
 
 Sticky notes web app, client based, works in offline mode thanks to Firebase.
@@ -19,6 +19,9 @@ KNOWN BUGS:
 
 CHANGELOG:
 --------------------
+__v0.3.5__
+
+_major refactoring_
 __v0.3__
 
 _refactored into module with own variable scope; multiple bugfixes; to-do's are now almost usable_
