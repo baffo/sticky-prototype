@@ -6,6 +6,7 @@ $(function() {
 
   var StickyStart = {
     init: function() {
+      var fb = sticky.FirebaseAdapter;
       /* *******************************************
                dragula.js DRAG & DROP
       ******************************************* */
@@ -36,15 +37,14 @@ $(function() {
       }).on('out', function (el, container) {
           container.className = container.className.replace(' drop-target', '');
       }).on('drop', function (el, container) {
-          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(el).attr("data-note-key"));
-          note.update({
-              column: $(container).attr("data-column"),
-              changed_at: Firebase.ServerValue.TIMESTAMP,
-          }, function(error) {
-              if (error) {
-                  console.log("Data could not be saved." + error);
-              }
-          });
+        var update = fb.update(fb._notes.child($(el).attr("data-note-key")),
+        {
+          column: $(container).attr("data-column"),
+          changed_at: Firebase.ServerValue.TIMESTAMP,
+        },
+        function() {
+          console.log("Data could not be saved." + error);
+        }, function() {});
       });
 
       /* *******************************************
@@ -56,9 +56,10 @@ $(function() {
       sticky.utils.loadSavedState(sticky.utils.getPage());
 
       // set up listeners for Sticky
-      this.setUpListeners();
+      this.setUpListeners(fb);
     },
-    setUpListeners: function() {
+    setUpListeners: function(fb) {
+
       /* ------------------------------------------
                  MANIPULATE STICKY NOTES
       ------------------------------------------- */
@@ -76,31 +77,29 @@ $(function() {
       });
       // delete sticky note
       $('body').on('click', '.sticky-delete', function() {
-          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
-          note.set(null, function(error) {
-              if (error) {
-                  console.log("Data could not be saved." + error);
-              }
-          });
-          $(this).closest(".sticky-note").toggleClass('delete');
-          setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
+        var set = fb.set(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")),
+        null,
+        function() {
+          console.log("Data could not be deleted." + error);
+        }, function() {});
+        $(this).closest(".sticky-note").toggleClass('delete');
+        setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
       });
       // archive sticky note
       $('body').on('click', '.sticky-archive', function() {
-          var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key"));
-          note.update({
-              archived: true,
-              changed_at: Firebase.ServerValue.TIMESTAMP,
-          }, function(error) {
-              if (error) {
-                  console.log("Data could not be saved." + error);
-              }
-          });
-          // update UI
-          $(this).closest(".sticky-note").toggleClass('archive');
-          setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
-          sticky.vars.archivedCount++;
-          $("#archive .mdl-badge").attr("data-badge", sticky.vars.archivedCount);
+        var update = fb.update(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")),
+        {
+          archived: true,
+          changed_at: Firebase.ServerValue.TIMESTAMP,
+        },
+        function() {
+          console.log("Data could not be saved." + error);
+        }, function() {});
+        // update UI
+        $(this).closest(".sticky-note").toggleClass('archive');
+        setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
+        sticky.vars.archivedCount++;
+        $("#archive .mdl-badge").attr("data-badge", sticky.vars.archivedCount);
       });
       /* ------------------------------------------
                interactions with content
@@ -129,15 +128,14 @@ $(function() {
           $(this).closest('.checkbox-item').toggleClass('is-checked');
           var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
 
-          var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key"));
-          items.update({
-              checked: isChecked,
-              changed_at: Firebase.ServerValue.TIMESTAMP,
-          }, function(error) {
-              if (error) {
-                  console.log("Data could not be saved." + error);
-              }
-          });
+          var update = fb.update(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")),
+          {
+            checked: isChecked,
+            changed_at: Firebase.ServerValue.TIMESTAMP,
+          },
+          function() {
+            console.log("Data could not be saved." + error);
+          }, function() {});
       });
       // key events on editable content
       $('body').on('keydown', '.mdl-textfield__input', function (event) {
@@ -155,18 +153,16 @@ $(function() {
               $(this).blur();
           }
           if (event.keyCode === 46) { // delete line item
-              var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key"));
-              items.set(null, function(error) {
-                  if (error) {
-                      console.log("Data could not be deleted." + error);
-                  }
-              });
-              if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
-                  $(this).closest(".checkbox-item").parent().remove();
-              } else {
-                  $(this).closest(".can-edit").remove();
-              }
-
+            var set = fb.set(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")),
+            null,
+            function() {
+              console.log("Data could not be deleted." + error);
+            }, function() {});
+            if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
+                $(this).closest(".checkbox-item").parent().remove();
+            } else {
+                $(this).closest(".can-edit").remove();
+            }
           }
       });
     }

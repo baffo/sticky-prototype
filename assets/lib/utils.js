@@ -2,6 +2,8 @@ var sticky = sticky || {};
 
 sticky.utils = (function (global) {
   var _self = {};
+  var vars = global.vars;
+  var fb = global.FirebaseAdapter;
 
   var findUrl = {
       // valid "scheme://" or "www."
@@ -89,68 +91,67 @@ sticky.utils = (function (global) {
       var regex = new RegExp("[\\?&][a-z]+");
       var results = regex.exec(window.location.href);
       if (results) {
-          if (sticky.vars.page.indexOf(results[0].substring(1, results[0].length))) {
+          if (vars.page.indexOf(results[0].substring(1, results[0].length))) {
               $('body').addClass(results[0].substring(1, results[0].length));
               return results[0].substring(1, results[0].length);
           }
-          $('body').addClass(sticky.vars.page[0]);
-          return sticky.vars.page[0];
+          $('body').addClass(vars.page[0]);
+          return vars.page[0];
       }
-      $('body').addClass(sticky.vars.page[0]);
-      return sticky.vars.page[0];
+      $('body').addClass(vars.page[0]);
+      return vars.page[0];
   };
   /* ------------------------------------------
           load saved state from DB
   ------------------------------------------- */
   _self.loadSavedState = function(page) {
-      var notes = new Firebase(sticky.vars.fireBaseUrl+'/notes');
-
-      notes.once("value", function(snapshot) {
-          snapshot.forEach(function(data) {
-              if (!data.val().archived && page == "home") {
-                  _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
-                  sticky.vars.homeCount++;
-              } else if (data.val().archived && page == "archive") {
-                  _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
-                  sticky.vars.archivedCount++;
-              } else {
-                  if(!data.val().archived) { // TO-DO implement pageDisplay (String type) property to notes
-                      sticky.vars.homeCount++;
-                  } else if(data.val().archived) {
-                      sticky.vars.archivedCount++;
-                  }
+    fb.once(fb._notes, "value",
+      function(snapshot) {
+        snapshot.forEach(function(data) {
+          if (!data.val().archived && page == "home") {
+              _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
+              vars.homeCount++;
+          } else if (data.val().archived && page == "archive") {
+              _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
+              vars.archivedCount++;
+          } else {
+              if(!data.val().archived) { // TO-DO implement pageDisplay (String type) property to notes
+                  vars.homeCount++;
+              } else if(data.val().archived) {
+                  vars.archivedCount++;
               }
-          });
-          $("#home .mdl-badge").attr("data-badge", sticky.vars.homeCount);
-          $("#archive .mdl-badge").attr("data-badge", sticky.vars.archivedCount);
+          }
+        });
+        $("#home .mdl-badge").attr("data-badge", vars.homeCount);
+        $("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
       });
   };
   /* ------------------------------------------
               spawn sticky note
   ------------------------------------------- */
   _self.spawnNewStickyNote = function(parentId, isNew, data, key) {
-      var elm = '<div id="note'+sticky.vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
+      var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
                   '<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
-                      '<h2 id="title'+sticky.vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+sticky.vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
+                      '<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
                   '</div>'+
-                  '<div id="wrapper'+sticky.vars.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
+                  '<div id="wrapper'+vars.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
       var c = 2;
-      if (!data.items) {data.items = sticky.vars.noteDefaults.items;}
+      if (!data.items) {data.items = vars.noteDefaults.items;}
       for(item in data.items) {
           var key = "";
           if (item != 0) {key = 'data-item-key="'+item+'"';}
           if (data.items[item].type == "checkbox") {
-              var newElm = prepareHtmlElement(returnCheckbox(data.items[item].text, sticky.vars.globalStickyNoteCounter, c, data.items[item].checked, key), true, true, true);
+              var newElm = prepareHtmlElement(returnCheckbox(data.items[item].text, vars.globalStickyNoteCounter, c, data.items[item].checked, key), true, true, true);
               if (data.items[item].checked) {newElm.querySelector('.mdl-js-checkbox').MaterialCheckbox.check();}
-              elm += '<div id="n'+sticky.vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+sticky.vars.globalStickyNoteCounter+'" data-item-id="'+c+'" data-dirty="true">'+newElm.innerHTML+'</div>';
+              elm += '<div id="n'+vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="'+c+'" data-dirty="true">'+newElm.innerHTML+'</div>';
 
           } else {
-              elm += '<div id="n'+sticky.vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+sticky.vars.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+data.items[item].text+'</div>';
+              elm += '<div id="n'+vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="'+c+'" '+key+' data-dirty="true">'+data.items[item].text+'</div>';
           }
           c++;
       }
       // add last empty line
-      elm += '<div id="n'+sticky.vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+sticky.vars.globalStickyNoteCounter+'" data-item-id="'+c+'"></div>';
+      elm += '<div id="n'+vars.globalStickyNoteCounter+'i'+c+'" class="sticky-note-content can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="'+c+'"></div>';
       // close off sticky note
       elm += '</div>'+
               '<div class="spacer"></div>'+
@@ -168,22 +169,20 @@ sticky.utils = (function (global) {
 
       // needs to be saved if triggered by user
       if (isNew) {
-          var notes = new Firebase(sticky.vars.fireBaseUrl+'/notes');
-          var push = notes.push({
-              title: "New Note",
-              column: 0,
-              row: 0,
-              archived: false,
-              created_at: Firebase.ServerValue.TIMESTAMP,
-              changed_at: Firebase.ServerValue.TIMESTAMP,
-          }, function(error) {
-              if (error) {
-                  console.log("Data could not be saved." + error);
-              }
-          });
-          $("#note"+sticky.vars.globalStickyNoteCounter).attr("data-note-key", push.key());
+        var push = fb.push(fb._notes, {
+            title: "New Note",
+            column: 0,
+            row: 0,
+            archived: false,
+            created_at: Firebase.ServerValue.TIMESTAMP,
+            changed_at: Firebase.ServerValue.TIMESTAMP,
+        },
+        function() {
+          console.log("Data could not be saved." + error);
+        }, function() {});
+        $("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key());
       }
-      sticky.vars.globalStickyNoteCounter++;
+      vars.globalStickyNoteCounter++;
   };
   /* ------------------------------------------
               spawn editable field
@@ -216,39 +215,36 @@ sticky.utils = (function (global) {
 
               $("#"+parentId).html(inputText); // write to DOM
               if ($("#"+parentId).hasClass("sticky-title")) {
-                  var note = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key"));
-                  note.update({
-                      title: inputText,
-                      changed_at: Firebase.ServerValue.TIMESTAMP,
-                  }, function(error) {
-                      if (error) {
-                          console.log("Data could not be saved." + error);
-                      }
-                  });
+                var update = fb.update(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")),
+                {
+                  title: inputText,
+                  changed_at: Firebase.ServerValue.TIMESTAMP,
+                },
+                function() {
+                  console.log("Data could not be saved." + error);
+                }, function() {});
               } else if ($("#"+parentId).attr("data-item-key")) {
-                  var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key"));
-                  items.update({
-                      type: fieldType,
-                      text: inputText,
-                      changed_at: Firebase.ServerValue.TIMESTAMP,
-                  }, function(error) {
-                      if (error) {
-                          console.log("Data could not be saved." + error);
-                      }
-                  });
+                var update = fb.update(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")),
+                {
+                  type: fieldType,
+                  text: inputText,
+                  changed_at: Firebase.ServerValue.TIMESTAMP,
+                },
+                function() {
+                  console.log("Data could not be saved." + error);
+                }, function() {});
               } else {
-                  var items = new Firebase(sticky.vars.fireBaseUrl+'/notes/'+$("#note"+stickyNoteId).attr("data-note-key")+'/items');
-                  var push = items.push({
-                      type: fieldType,
-                      text: inputText,
-                      created_at: Firebase.ServerValue.TIMESTAMP,
-                      changed_at: Firebase.ServerValue.TIMESTAMP,
-                  }, function(error) {
-                      if (error) {
-                          console.log("Data could not be saved." + error);
-                      }
-                  });
-                  $("#"+parentId).attr("data-item-key", push.key());
+                var push = fb.push(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items'),
+                {
+                  type: fieldType,
+                  text: inputText,
+                  created_at: Firebase.ServerValue.TIMESTAMP,
+                  changed_at: Firebase.ServerValue.TIMESTAMP,
+                },
+                function() {
+                  console.log("Data could not be saved." + error);
+                }, function() {});
+                $("#"+parentId).attr("data-item-key", push.key());
               }
               $("#"+parentId).removeClass("sticky-editing");
           });
