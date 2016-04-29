@@ -30,61 +30,68 @@ sticky.FirebaseAdapter = (function (global) {
 			var push = node.push(
 				data,
 				function(error) {response(error);});
-				return push;
-			};
+			return push;
+		};
 
-			/*
-			* UPDATE existing data
-			*/
-			_self.update = function(node, data, response) {
-				var update = node.update(
-					data,
-					function(error) {response(error);});
-					return update;
-				};
+		/*
+		* UPDATE existing data
+		*/
+		_self.update = function(node, data, response) {
+			var update = node.update(
+				data,
+				function(error) {response(error);});
+			return update;
+		};
 
-				/*
-				* LISTENER/GETTER: Listen ONCE
-				*/
-				_self.once = function(node, value, result) {
-					node.once(value, function(snapshot) {
-						result(snapshot);
-					});
-				};
-				/*
-				* LISTENER/GETTER: Listen ON
-				*/
-				_self.on = function(node, value, result) {
-					node.on(value, function(snapshot) {
-						result(snapshot);
-					});
-				};
+		/*
+		* LISTENER/GETTER: Listen ONCE
+		*/
+		_self.once = function(node, value, result) {
+			node.once(value, function(snapshot) {
+				result(snapshot);
+			});
+		};
+		/*
+		* LISTENER/GETTER: Listen ON
+		*/
+		_self.on = function(node, value, result) {
+			node.on(value, function(snapshot) {
+				result(snapshot);
+			});
+		};
 
-				/*
-				* AUTHENTIFICATION
-				*/
-				_self.login = function() {
-					_self._firebase.authWithOAuthPopup("google", function(error, authData) {
-						if (!error) {
-							_self.once(_self._users.child(authData.uid), "value", function(snapshot) {
-								if (snapshot.val() !== null) { // update user TIMESTAMP
-									_self.update(_self._users.child(authData.uid),
-										{
-											last_login_at: Firebase.ServerValue.TIMESTAMP
-										},
-										function(error) {log.output(2, error);});
-									);
-								} else { // set up new user
-									_self.set(_self._users.child(authData.uid),
-										{
-											name: authData.google.displayName,
-											email: authData.google.email,
-											picture: authData.google.profileImageURL,
-											created_at: Firebase.ServerValue.TIMESTAMP,
-											last_login_at: Firebase.ServerValue.TIMESTAMP
-										},
-										function(error) {log.output(2, error);});
-								);
+		/*
+		* AUTHENTIFICATION
+		*/
+		_self.login = function() {
+			_self._firebase.authWithOAuthPopup("google", function(error, authData) {
+				if (!error) {
+					_self.once(_self._users.child(authData.uid), "value", function(snapshot) {
+						if (snapshot.val() !== null) { // update user TIMESTAMP
+							_self.update(_self._users.child(authData.uid),
+								{
+									last_login_at: Firebase.ServerValue.TIMESTAMP
+								},
+								function(error) {log.output(2, error);});
+						} else { // set up new user
+							var setUser = _self.set(_self._users.child(authData.uid),
+								{
+									name: authData.google.displayName,
+									email: authData.google.email,
+									picture: authData.google.profileImageURL,
+									created_at: Firebase.ServerValue.TIMESTAMP,
+									last_login_at: Firebase.ServerValue.TIMESTAMP
+								},
+								function(error) {log.output(2, error);});
+							// set up entry into user_index (used for looking up users)
+							var setUserIndex = _self.set(_self._user_index.child(sticky.utils.emailToKey(authData.google.email)),
+								{
+									name: authData.google.displayName,
+									uid: authData.uid,
+									picture: authData.google.profileImageURL,
+									created_at: Firebase.ServerValue.TIMESTAMP,
+								},
+								function(error) {log.output(2, error);});
 						}
 						log.output(1, error);
 					});
@@ -102,6 +109,7 @@ sticky.FirebaseAdapter = (function (global) {
 				scope: "profile,email"
 			});
 		};
+		
 		_self.logout = function() {
 			_self._firebase.unauth();
 		};

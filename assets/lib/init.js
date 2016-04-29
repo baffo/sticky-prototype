@@ -120,63 +120,61 @@ $(function() {
 			// INVOKE EDITABLE LINE
 			$('body').on('click', '.can-edit:not(a)', function(event) {
 				if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
-				var type = "input";
-				if (event.ctrlKey && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
-					type = "checkbox";
+					var type = "input";
+					if (event.ctrlKey && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
+						type = "checkbox";
+					}
+					try {
+						sticky.utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
+					} catch(error) {console.log(error);}
+
+					if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
+						var itemId = parseInt($(this).attr("data-item-id")) + 1;
+						// INSERT NEW EMPTY LINE
+						$(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
+						$(this).attr("data-dirty", "true"); // mark as dirty
+					}
 				}
-				try {
-					sticky.utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
-				} catch(error) {console.log(error);}
+			});
+			$('body').on('click', '.mdl-checkbox__tick-outline', function(event) {
+				$(this).closest('.mdl-checkbox').toggleClass('is-checked');
+				$(this).closest('.checkbox-item').toggleClass('is-checked');
+				var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
 
-				if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
-				var itemId = parseInt($(this).attr("data-item-id")) + 1;
-				// INSERT NEW EMPTY LINE
-				$(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
-				$(this).attr("data-dirty", "true"); // mark as dirty
-			}
+				var update = fb.update(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")),
+					{
+						checked: isChecked,
+						changed_at: Firebase.ServerValue.TIMESTAMP,
+					},
+					function(error) {log.output(0, error);});
+			});
+			// key events on editable content
+			$('body').on('keydown', '.mdl-textfield__input', function (event) {
+				if (event.keyCode === 13) {
+					event.preventDefault(); // prevent ENTER to trigger page reload
+				}
+			});
+			// key events on editable content
+			$('body').on('keyup', '.mdl-textfield__input', function (event) {
+				if (event.keyCode === 27) { // remove focus on ESC (finish editing)
+					$(this).blur();
+				}
+				if (event.keyCode === 13) { // remove focus and start new line on ENTER
+					$(this).closest(".can-edit").next().click();
+					$(this).blur();
+				}
+				if (event.keyCode === 46) { // delete line item
+					var set = fb.set(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")),
+						null,
+						function(error) {log.output(3, error);});
+					if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
+						$(this).closest(".checkbox-item").parent().remove();
+					} else {
+						$(this).closest(".can-edit").remove();
+					}
+				}
+			});
 		}
-	});
-	$('body').on('click', '.mdl-checkbox__tick-outline', function(event) {
-		$(this).closest('.mdl-checkbox').toggleClass('is-checked');
-		$(this).closest('.checkbox-item').toggleClass('is-checked');
-		var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
-
-		var update = fb.update(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")),
-			{
-				checked: isChecked,
-				changed_at: Firebase.ServerValue.TIMESTAMP,
-			},
-			function(error) {log.output(0, error);});
-	});
-	// key events on editable content
-	$('body').on('keydown', '.mdl-textfield__input', function (event) {
-		if (event.keyCode === 13) {
-			event.preventDefault(); // prevent ENTER to trigger page reload
-		}
-	});
-	// key events on editable content
-	$('body').on('keyup', '.mdl-textfield__input', function (event) {
-		if (event.keyCode === 27) { // remove focus on ESC (finish editing)
-			$(this).blur();
-		}
-		if (event.keyCode === 13) { // remove focus and start new line on ENTER
-			$(this).closest(".can-edit").next().click();
-			$(this).blur();
-		}
-		if (event.keyCode === 46) { // delete line item
-			var set = fb.set(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")),
-			null,
-			function() {
-				console.log("Data could not be deleted." + error);
-			}, function() {});
-			if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
-				$(this).closest(".checkbox-item").parent().remove();
-			} else {
-				$(this).closest(".can-edit").remove();
-			}
-		}
-	});
-}
-};
-StickyStart.init();
+	};
+	StickyStart.init();
 });

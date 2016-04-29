@@ -302,10 +302,13 @@ sticky.utils = (function (global) {
 	_self.emailToKey = function(emailAddress) {
 		return emailAddress.replace(/[.]/g, '%20');
 	}
-	_self.getUserIdByEmail = function(emailAddress, callback) {
-		fb._user_index.child(_self.emailToKey(emailAddress)).once('value', function(snap) {
-			callback(snap.val());
+	_self.getUserByEmail = function(emailAddress) {
+		return fb._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
+			return snap.val();
 		});
+	}
+	_self.addFriend = function(emailAddress) {
+		fb._users.child(user.uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
 	}
 	/* ------------------------------------------
 	generate editable text field

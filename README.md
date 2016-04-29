@@ -5,7 +5,6 @@ Sticky notes web app, client based, works in offline mode thanks to Firebase.
 
 TO-DO:
 --------------------
-* authentification & security (will allow each user to have his private sticky notes)
 * sharing of sticky notes among users (add collaborators)
 * date/time detection & smart interaction (inline event creation & seemless integration with Google Calendar; notifications of upcoming tasks; ordering of tasks by due date)
 * sticky note tagging/categorizing/color coding (visually distinguish between different sticky notes)
@@ -19,6 +18,10 @@ KNOWN BUGS:
 
 CHANGELOG:
 --------------------
+__v0.5.0__<br />
+_notes sharing (collaboration)_<br />
+__v0.4.0__<br />
+_authentification & security (notes are private)_<br />
 __v0.3.5__<br />
 _major refactoring_<br />
 __v0.3__<br />
