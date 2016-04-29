@@ -1509,14 +1509,15 @@ sticky.vars = {
   homeCount: 0,
   archivedCount: 0,
   page: ['home', 'archive'],
-  greetings: ['Hello,', 'Wellcome back,', 'Howdy,', 'Nice to see you,', 'Greetings,', 'Good day,'],
+  greetings: ['Hello,', 'Wellcome back,', 'Howdy,', 'Nice to see you,', 'Greetings,', 'Good day,', "What's up,"],
   fireBaseUrl: "https://boiling-torch-8284.firebaseio.com",
   noteDefaults: {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}}
 };
 ;var sticky = sticky || {};
+sticky.model = sticky.model || {};
 
 /* USER MODEL */
-sticky.user = (function (global) {
+sticky.model.user = (function (global) {
   _self = {};
 
   _self.uid = null;
@@ -1547,39 +1548,30 @@ sticky.FirebaseAdapter = (function (global) {
   /*
   * SET new data (used also for deleting: set NULL)
   */
-  _self.set = function(node, data, onError, onSuccess) {
+  _self.set = function(node, data, response) {
     var set = node.set(
       data,
-      function(error) {
-        if (error) { onError(error); }
-        else { onSuccess(); }
-      });
+      function(error) {response(error);});
     return set;
   };
 
   /*
   * PUSH new data, added to existing list
   */
-  _self.push = function(node, data, onError, onSuccess) {
+  _self.push = function(node, data, response) {
     var push = node.push(
       data,
-      function(error) {
-        if (error) { onError(error); }
-        else { onSuccess(); }
-      });
+      function(error) {response(error);});
     return push;
   };
 
   /*
   * UPDATE existing data
   */
-  _self.update = function(node, data, onError, onSuccess) {
+  _self.update = function(node, data, response) {
     var update = node.update(
       data,
-      function(error) {
-        if (error) { onError(error); }
-        else { onSuccess();}
-      });
+      function(error) {response(error);});
     return update;
   };
 
@@ -1588,6 +1580,14 @@ sticky.FirebaseAdapter = (function (global) {
   */
   _self.once = function(node, value, result) {
     node.once(value, function(snapshot) {
+      result(snapshot);
+    });
+  };
+  /*
+  * LISTENER/GETTER: Listen ON
+  */
+  _self.on = function(node, value, result) {
+    node.on(value, function(snapshot) {
       result(snapshot);
     });
   };
@@ -1606,8 +1606,10 @@ sticky.FirebaseAdapter = (function (global) {
               {
                 last_login_at: Firebase.ServerValue.TIMESTAMP
               },
-              function(error) { console.log("Account update failed!", error); },
-              function() {}
+              function(error) {
+                if(error)
+                  console.log("Account creation failed!", error);
+              }
             );
           } else { // set up new user
             _self.set(_self._users.child(authData.uid),
@@ -1618,14 +1620,19 @@ sticky.FirebaseAdapter = (function (global) {
                 created_at: Firebase.ServerValue.TIMESTAMP,
                 last_login_at: Firebase.ServerValue.TIMESTAMP
               },
-              function(error) { console.log("Account creation failed!", error); },
-              function() {}
+              function(error) {
+                if(error)
+                  console.log("Account creation failed!", error);
+              }
             );
           }
         });
-        global.user.setUser(authData.uid, authData.google.displayName, authData.google.profileImageURL, authData.google.email);
+        global.model.user.setUser(authData.uid, authData.google.displayName, authData.google.profileImageURL, authData.google.email); // save local instance of user
+        // display interface
         $("#login").hide();
         global.utils.displayProfile();
+        global.utils.loadSavedState(global.utils.getPage()); // load data
+
         console.log("Authenticated successfully with payload:", authData);
       }
     },
@@ -1643,9 +1650,9 @@ sticky.FirebaseAdapter = (function (global) {
   };
 
   _self.loggedIn = function() {
-    if (_self.loggedUser()) {
-      if (global.user.uid == null) { // set local instance
-        global.user.setUser(_self.loggedUser().uid, _self.loggedUser().google.displayName, _self.loggedUser().google.profileImageURL, _self.loggedUser().google.email);
+    if (_self.loggedUser() != null) {
+      if (global.model.user.uid == null) { // set local instance
+        global.model.user.setUser(_self.loggedUser().uid, _self.loggedUser().google.displayName, _self.loggedUser().google.profileImageURL, _self.loggedUser().google.email);
       }
       return true;
     }
@@ -1659,6 +1666,7 @@ sticky.FirebaseAdapter = (function (global) {
 sticky.utils = (function (global) {
   var _self = {};
   var vars = global.vars;
+  var user = global.model.user;
   var fb = global.FirebaseAdapter;
 
   var findUrl = {
@@ -1760,27 +1768,71 @@ sticky.utils = (function (global) {
   /* ------------------------------------------
           load saved state from DB
   ------------------------------------------- */
+  _self.getNote = function(noteId, page) {
+    return fb._notes.child(noteId).once("value").then(function(data) {
+      var n = data.val();
+      if (n != null) {
+        if (!n.archived && page == "home") {
+           _self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+           vars.homeCount++;
+        } else if (n.archived && page == "archive") {
+           _self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+           vars.archivedCount++;
+        } else {
+           if(!n.archived) { // TO-DO implement pageDisplay (String type) property to notes
+               vars.homeCount++;
+           } else if(n.archived) {
+               vars.archivedCount++;
+           }
+        }
+      }
+    });
+  };
   _self.loadSavedState = function(page) {
-    fb.once(fb._notes, "value",
-      function(snapshot) {
-        snapshot.forEach(function(data) {
-          if (!data.val().archived && page == "home") {
-              _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
-              vars.homeCount++;
-          } else if (data.val().archived && page == "archive") {
-              _self.spawnNewStickyNote("dz"+data.val().column, false, data.val(), data.key());
-              vars.archivedCount++;
-          } else {
-              if(!data.val().archived) { // TO-DO implement pageDisplay (String type) property to notes
-                  vars.homeCount++;
-              } else if(data.val().archived) {
-                  vars.archivedCount++;
-              }
-          }
-        });
+    // start listener (for each added child this will update - allows for collaboration)
+    fb.once(fb._users.child(user.uid).child('notes'), "value", function(snapshot) {
+      var promisedNotes = [];
+      snapshot.forEach(function(child){
+        var noteId = child.key();
+        var promise = _self.getNote(noteId, page);
+        promisedNotes.push(promise);
+      });
+      Promise.all(promisedNotes).then(function(results) {
         $("#home .mdl-badge").attr("data-badge", vars.homeCount);
         $("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
       });
+    });
+  };
+  /* ------------------------------------------
+          update screen on change (used for collaboration)
+  ------------------------------------------- */
+  _self.updateState = function(page) {
+    // start listener (for each added child this will update - allows for collaboration)
+    fb.on(fb._users.child(user.uid).child('notes'), "child_added", function(snapshot) { // this is going to update all content only if new note is added. NOT LIVE UPDATING CONTENT OF OLD NOTES!!!
+      snapshot.forEach(function(child){
+        var noteId = child.key();
+        var note = fb.on(fb._notes.child(noteId), "value", function(data) {
+          var n = data.val();
+          if (n != null) {
+            if (!n.archived && page == "home") {
+               _self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+               vars.homeCount++;
+            } else if (n.archived && page == "archive") {
+               _self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+               vars.archivedCount++;
+            } else {
+               if(!n.archived) { // TO-DO implement pageDisplay (String type) property to notes
+                   vars.homeCount++;
+               } else if(n.archived) {
+                   vars.archivedCount++;
+               }
+            }
+          }
+        });
+      });
+      $("#home .mdl-badge").attr("data-badge", vars.homeCount);
+      $("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
+    });
   };
   /* ------------------------------------------
               spawn sticky note
@@ -1830,12 +1882,20 @@ sticky.utils = (function (global) {
             column: 0,
             row: 0,
             archived: false,
+            owner: user.uid,
             created_at: Firebase.ServerValue.TIMESTAMP,
             changed_at: Firebase.ServerValue.TIMESTAMP,
         },
-        function() {
-          console.log("Data could not be saved." + error);
-        }, function() {});
+        function(error) {
+          if(error)
+            console.log("Data could not be saved." + error);
+        });
+        var set = fb.set(fb._users.child(user.uid+'/notes/'+push.key()), true,
+          function(error) {
+            if(error)
+              console.log("Data could not be saved." + error);
+          });
+
         $("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key());
       }
       vars.globalStickyNoteCounter++;
@@ -1876,9 +1936,10 @@ sticky.utils = (function (global) {
                   title: inputText,
                   changed_at: Firebase.ServerValue.TIMESTAMP,
                 },
-                function() {
-                  console.log("Data could not be saved." + error);
-                }, function() {});
+                function(error) {
+                  if(error)
+                    console.log("Data could not be saved." + error);
+                });
               } else if ($("#"+parentId).attr("data-item-key")) {
                 var update = fb.update(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")),
                 {
@@ -1886,9 +1947,10 @@ sticky.utils = (function (global) {
                   text: inputText,
                   changed_at: Firebase.ServerValue.TIMESTAMP,
                 },
-                function() {
-                  console.log("Data could not be saved." + error);
-                }, function() {});
+                function(error) {
+                  if(error)
+                    console.log("Data could not be saved." + error);
+                });
               } else {
                 var push = fb.push(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items'),
                 {
@@ -1897,9 +1959,10 @@ sticky.utils = (function (global) {
                   created_at: Firebase.ServerValue.TIMESTAMP,
                   changed_at: Firebase.ServerValue.TIMESTAMP,
                 },
-                function() {
-                  console.log("Data could not be saved." + error);
-                }, function() {});
+                function(error) {
+                  if(error)
+                    console.log("Data could not be saved." + error);
+                });
                 $("#"+parentId).attr("data-item-key", push.key());
               }
               $("#"+parentId).removeClass("sticky-editing");
@@ -1939,15 +2002,16 @@ sticky.utils = (function (global) {
  };
 
  _self.displayProfile = function() {
-   if (global.user.picture) {
-     $("#profile_image").css("background-image", "url("+global.user.picture+")");
+   if (user.picture) {
+     $("#profile_image").css("background-image", "url("+user.picture+")");
      $("#profile_image").css("background-size", "contain");
      $("#profile_icon").hide();
      $("#profile_image").show();
    }
    $("#profile_greeting").html(getGreeting());
-   $("#profile_name").html(global.user.name);
+   $("#profile_name").html(user.name);
    $("#profile").show();
+   $("#controls").show();
  };
 
   return _self;
@@ -1970,6 +2034,7 @@ $(function() {
   var StickyStart = {
     init: function() {
       var fb = sticky.FirebaseAdapter;
+      var user = sticky.model.user;
       /* *******************************************
                dragula.js DRAG & DROP
       ******************************************* */
@@ -2001,13 +2066,14 @@ $(function() {
           container.className = container.className.replace(' drop-target', '');
       }).on('drop', function (el, container) {
         var update = fb.update(fb._notes.child($(el).attr("data-note-key")),
-        {
-          column: $(container).attr("data-column"),
-          changed_at: Firebase.ServerValue.TIMESTAMP,
-        },
-        function() {
-          console.log("Data could not be saved." + error);
-        }, function() {});
+          {
+            column: $(container).attr("data-column"),
+            changed_at: Firebase.ServerValue.TIMESTAMP,
+          },
+          function(error) {
+            if (error)
+              console.log("Data could not be saved." + error);
+          });
       });
 
       /* *******************************************
@@ -2016,12 +2082,14 @@ $(function() {
       /* ------------------------------------------
               Init & Load saved state for current page
       ------------------------------------------- */
-      sticky.utils.loadSavedState(sticky.utils.getPage());
+      if (fb.loggedIn()) {
+        sticky.utils.loadSavedState(sticky.utils.getPage());
+      }
 
       // set up listeners for Sticky
-      this.setUpListeners(fb);
+      this.setUpListeners(fb, user);
     },
-    setUpListeners: function(fb) {
+    setUpListeners: function(fb, user) {
 
       /* ------------------------------------------
                  MANIPULATE STICKY NOTES
@@ -2042,13 +2110,20 @@ $(function() {
       $("#archive").click(function(event) {
           window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive";
       });
-      // delete sticky note
+      // delete sticky note & associated list in users list of notes
       $('body').on('click', '.sticky-delete', function() {
         var set = fb.set(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")),
-        null,
-        function() {
-          console.log("Data could not be deleted." + error);
-        }, function() {});
+          null,
+          function(error) {
+            if (error)
+              console.log("Data could not be deleted." + error);
+          });
+        var set = fb.set(fb._users.child(user.uid+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")),
+          null,
+          function(error) {
+            if (error)
+              console.log("Data could not be deleted." + error);
+          });
         $(this).closest(".sticky-note").toggleClass('delete');
         setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
       });
@@ -2059,9 +2134,10 @@ $(function() {
           archived: true,
           changed_at: Firebase.ServerValue.TIMESTAMP,
         },
-        function() {
-          console.log("Data could not be saved." + error);
-        }, function() {});
+          function(error) {
+            if (error)
+              console.log("Data could not be saved." + error);
+          });
         // update UI
         $(this).closest(".sticky-note").toggleClass('archive');
         setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
@@ -2096,13 +2172,14 @@ $(function() {
           var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
 
           var update = fb.update(fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")),
-          {
-            checked: isChecked,
-            changed_at: Firebase.ServerValue.TIMESTAMP,
-          },
-          function() {
-            console.log("Data could not be saved." + error);
-          }, function() {});
+            {
+              checked: isChecked,
+              changed_at: Firebase.ServerValue.TIMESTAMP,
+            },
+            function(error) {
+              if (error)
+                console.log("Data could not be saved." + error);
+            });
       });
       // key events on editable content
       $('body').on('keydown', '.mdl-textfield__input', function (event) {

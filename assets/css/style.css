@@ -176,6 +176,9 @@
   top: 10px;
   z-index: 100;
 }
+#controls {
+  display: none;
+}
 /* ANIMATIONS */
 .sticky-note.delete {
   -webkit-animation: stickyDelete 0.5s forwards;
