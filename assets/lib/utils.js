@@ -127,8 +127,8 @@ sticky.utils = (function (global) {
 		});
 	};
 	_self.loadSavedState = function(page) {
-		// start listener (for each added child this will update - allows for collaboration)
-		fb.once(fb._users.child(user.uid).child('notes'), "value", function(snapshot) {
+		// get personal notes
+		fb._users.child(user.uid).child('notes').once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key();
@@ -140,36 +140,18 @@ sticky.utils = (function (global) {
 				$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
 			});
 		});
-	};
-	/* ------------------------------------------
-	update screen on change (used for collaboration)
-	------------------------------------------- */
-	_self.updateState = function(page) {
-		// start listener (for each added child this will update - allows for collaboration)
-		fb.on(fb._users.child(user.uid).child('notes'), "child_added", function(snapshot) { // this is going to update all content only if new note is added. NOT LIVE UPDATING CONTENT OF OLD NOTES!!!
+		// get shared notes
+		fb._shared.child(user.uid).once("value", function(snapshot) {
+			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key();
-				var note = fb.on(fb._notes.child(noteId), "value", function(data) {
-					var n = data.val();
-					if (n != null) {
-						if (!n.archived && page == "home") {
-							_self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
-							vars.homeCount++;
-						} else if (n.archived && page == "archive") {
-							_self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
-							vars.archivedCount++;
-						} else {
-							if(!n.archived) { // TO-DO implement pageDisplay (String type) property to notes
-								vars.homeCount++;
-							} else if(n.archived) {
-								vars.archivedCount++;
-							}
-						}
-					}
-				});
+				var promise = _self.getNote(noteId, page);
+				promisedNotes.push(promise);
 			});
-			$("#home .mdl-badge").attr("data-badge", vars.homeCount);
-			$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
+			Promise.all(promisedNotes).then(function(results) {
+				$("#home .mdl-badge").attr("data-badge", vars.homeCount);
+				$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
+			});
 		});
 	};
 	/* ------------------------------------------
@@ -215,7 +197,7 @@ sticky.utils = (function (global) {
 
 		// needs to be saved if triggered by user
 		if (isNew) {
-			var push = fb.push(fb._notes, {
+			var push = fb._notes.push({
 					title: "New Note",
 					column: 0,
 					row: 0,
@@ -226,7 +208,7 @@ sticky.utils = (function (global) {
 				},
 				function(error) {log.output(0, error);});
 
-			var set = fb.set(fb._users.child(user.uid+'/notes/'+push.key()), true,
+			var set = fb._users.child(user.uid+'/notes/'+push.key()).set(true,
 				function(error) {log.output(0, error);});
 
 			$("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key());
@@ -264,14 +246,14 @@ sticky.utils = (function (global) {
 
 				$("#"+parentId).html(inputText); // write to DOM
 				if ($("#"+parentId).hasClass("sticky-title")) {
-					var update = fb.update(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")),
+					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")).update(
 						{
 							title: inputText,
 							changed_at: Firebase.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 				} else if ($("#"+parentId).attr("data-item-key")) {
-					var update = fb.update(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")),
+					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")).update(
 						{
 							type: fieldType,
 							text: inputText,
@@ -279,7 +261,7 @@ sticky.utils = (function (global) {
 						},
 						function(error) {log.output(0, error);});
 				} else {
-					var push = fb.push(fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items'),
+					var push = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items').push(
 						{
 							type: fieldType,
 							text: inputText,
@@ -309,6 +291,19 @@ sticky.utils = (function (global) {
 	}
 	_self.addFriend = function(emailAddress) {
 		fb._users.child(user.uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
+	}
+	_self.addCollaborator = function(noteKey, friendEmail) {
+		_self.getUserByEmail(friendEmail).then(function(collaborator) {
+			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
+			fb._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
+		});
+
+	}
+	_self.deleteCollaborator = function(noteKey, friendEmail) {
+		_self.getUserByEmail(friendEmail).then(function(collaborator) {
+			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
+			fb._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
+		});
 	}
 	/* ------------------------------------------
 	generate editable text field

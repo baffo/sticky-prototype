@@ -9,12 +9,19 @@ sticky.model.user = (function (global) {
 	_self.name = null;
 	_self.picture = null;
 	_self.email = null;
-	
-	_self.setUser = function (uid, name, picture, email) {
+
+	_self.userFromData = function (uid, name, picture, email) {
 		_self.uid = uid;
 		_self.name = name;
 		_self.picture = picture;
 		_self.email = email;
+	};
+
+	_self.userFromObj = function (obj) {
+		_self.uid = obj.uid;
+		_self.name = obj.name;
+		_self.picture = obj.picture;
+		_self.email = obj.email;
 	};
 
 	return _self;

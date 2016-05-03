@@ -6,8 +6,11 @@ Sticky notes web app, client based, works in offline mode thanks to Firebase.
 TO-DO:
 --------------------
 * sharing of sticky notes among users (add collaborators)
+* deleting shared notes (delete only collaborator entry & from shared index) Notes can be deleted only by owner!
+* shared notes can have different position in each users grid (make grid coordinates for notes user based, not note based)
+* collaborator UI (display collaborators, create UI for adding/removing/finding collaborators & adding friends)
 * date/time detection & smart interaction (inline event creation & seemless integration with Google Calendar; notifications of upcoming tasks; ordering of tasks by due date)
-* sticky note tagging/categorizing/color coding (visually distinguish between different sticky notes)
+* sticky note tagging/categorizing/color coding (visually distinguish between different sticky notes - identify shared notes)
 * optimize FireBase connection & offline mode (persistent local storage in case of dropped connection; startup without internet connection)
 * polishing of existing features (ctrl+enter should produce new to-do line;)
 * color theme selection (choose different color combinations & save settings to profile)

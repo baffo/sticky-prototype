@@ -9,5 +9,6 @@ sticky.vars = {
 	page: ['home', 'archive'],
 	greetings: ['Hello,', 'Wellcome back,', 'Howdy,', 'Nice to see you,', 'Greetings,', 'Good day,', "What's up,"],
 	fireBaseUrl: "https://boiling-torch-8284.firebaseio.com",
-	noteDefaults: {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}}
+	noteDefaults: {title: "New Note", column: 0, row: 0, items : {0: {text: "New Item"}}},
+	loggedUser: {}
 };
