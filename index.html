@@ -7,6 +7,7 @@
 	<title>Sticky Prototype</title>
 	<!-- IMPORT CSS DEPENDENCIES -->
 	<link rel="stylesheet" href="assets/css/material.cyan-amber.min.css" />
+	<link rel="stylesheet" href="assets/css/dialog-polyfill.css" />
 	<link href="assets/css/style.css" rel="stylesheet">
 
 	<!-- INCLUDE FONTS -->
@@ -41,6 +42,22 @@
 		<div id="dz1" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="1"></div>
 		<div id="dz2" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="2"></div>
 	</div>
+	<!-- DIALOGS -->
+	<dialog id="add-collaborator" class="mdl-dialog mdl-shadow--2dp">
+		<form action="#">
+			<h4 class="mdl-dialog__title">Add Collaborator</h4>
+			<div class="mdl-dialog__content">
+				<div class="mdl-textfield mdl-js-textfield">
+					<input class="mdl-textfield__input" type="text" id="coll_email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}">
+					<label class="mdl-textfield__label" for="coll_email">Email address</label>
+					<span class="mdl-textfield__error">This is not a valid email address</span>
+				</div>
+			</div>
+			<div class="mdl-dialog__actions">
+			  <button type="button" class="mdl-button close">Done</button>
+			</div>
+		</form>
+	</dialog>
 	<!-- IMPORT JS DEPENDENCIES -->
 	<script src="assets/js/firebase.js"></script>
 	<script src="assets/js/jquery-1.12.0.min.js"></script>

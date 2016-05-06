@@ -161,6 +161,8 @@ sticky.utils = (function (global) {
 		var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
 		'<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
 		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
+		'<div id="n_s_'+vars.globalStickyNoteCounter+'" class="material-icons note_shared">people</div>'+
+		'<div class="mdl-tooltip" for="n_s_'+vars.globalStickyNoteCounter+'">Shared with 1 collaborator</div>'+
 		'</div>'+
 		'<div id="wrapper'+vars.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
 		var c = 2;
@@ -189,6 +191,9 @@ sticky.utils = (function (global) {
 		'</button>'+
 		'<button class="sticky-archive mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
 		'<i class="material-icons">archive</i>'+
+		'</button>'+
+		'<button class="sticky-add-collaborator mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
+		'<i class="material-icons">person_add</i>'+
 		'</button>'+
 		'</div>'+
 		'</div>';

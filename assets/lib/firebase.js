@@ -46,7 +46,6 @@ sticky.FirebaseAdapter = (function (global) {
 					}
 					log.output(1, error);
 				});
-				log.output(1, "errorrrrrr");
 				global.model.user.userFromData(authData.uid, authData.google.displayName, authData.google.profileImageURL, authData.google.email); // save local instance of user
 				// display interface
 				$("#login").hide();

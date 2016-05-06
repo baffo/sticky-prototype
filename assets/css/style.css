@@ -12,6 +12,10 @@
   width: 95%;
   margin: 10px auto 20px auto;
 }
+.sticky-note .note_shared {
+  position: absolute;
+  right: 16px;
+}
 .sticky-note .sticky-header-drawer {
   width: 100%;
   margin-bottom: 5px;

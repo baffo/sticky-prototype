@@ -19,7 +19,7 @@ $(function() {
 			var fb = sticky.FirebaseAdapter;
 			var user = sticky.model.user;
 			var log = sticky.model.log;
-			
+
 			/* *******************************************
 			dragula.js DRAG & DROP
 			******************************************* */
@@ -70,6 +70,7 @@ $(function() {
 
 			// set up listeners for Sticky
 			this.setUpListeners(fb, user, log);
+			this.setUpDialogs();
 		},
 		setUpListeners: function(fb, user, log) {
 
@@ -177,6 +178,18 @@ $(function() {
 					}
 				}
 			});
+		},
+		setUpDialogs: function() {
+			var dialogAddColl = document.getElementById('add-collaborator');
+		    if (!dialogAddColl.showModal) {
+		    	dialogPolyfill.registerDialog(dialogAddColl);
+		    }
+			$('body').on('click', '.sticky-add-collaborator', function() {
+		    	dialogAddColl.showModal();
+		    });
+			$('body').on('click', '#add-collaborator .close', function() {
+		    	dialogAddColl.close();
+		    });
 		}
 	};
 	StickyStart.init();
