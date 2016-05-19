@@ -111,10 +111,10 @@ sticky.utils = (function (global) {
 			var n = data.val();
 			if (n != null) {
 				if (!n.archived && page == "home") {
-					_self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+					_self.spawnNewStickyNote("dz"+n.column, false, n, data.key);
 					vars.homeCount++;
 				} else if (n.archived && page == "archive") {
-					_self.spawnNewStickyNote("dz"+n.column, false, n, data.key());
+					_self.spawnNewStickyNote("dz"+n.column, false, n, data.key);
 					vars.archivedCount++;
 				} else {
 					if(!n.archived) { // TO-DO implement pageDisplay (String type) property to notes
@@ -131,7 +131,7 @@ sticky.utils = (function (global) {
 		fb._users.child(user.uid).child('notes').once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
-				var noteId = child.key();
+				var noteId = child.key;
 				var promise = _self.getNote(noteId, page);
 				promisedNotes.push(promise);
 			});
@@ -144,7 +144,7 @@ sticky.utils = (function (global) {
 		fb._shared.child(user.uid).once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
-				var noteId = child.key();
+				var noteId = child.key;
 				var promise = _self.getNote(noteId, page);
 				promisedNotes.push(promise);
 			});
@@ -213,10 +213,10 @@ sticky.utils = (function (global) {
 				},
 				function(error) {log.output(0, error);});
 
-			var set = fb._users.child(user.uid+'/notes/'+push.key()).set(true,
+			var set = fb._users.child(user.uid+'/notes/'+push.key).set(true,
 				function(error) {log.output(0, error);});
 
-			$("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key());
+			$("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key);
 		}
 		vars.globalStickyNoteCounter++;
 	};
@@ -274,7 +274,7 @@ sticky.utils = (function (global) {
 							changed_at: Firebase.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
-					$("#"+parentId).attr("data-item-key", push.key());
+					$("#"+parentId).attr("data-item-key", push.key);
 				}
 				$("#"+parentId).removeClass("sticky-editing");
 			});

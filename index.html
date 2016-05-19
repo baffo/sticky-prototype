@@ -46,20 +46,34 @@
 	<dialog id="add-collaborator" class="mdl-dialog mdl-shadow--2dp">
 		<form action="#">
 			<h4 class="mdl-dialog__title">Add Collaborator</h4>
+			<div id="ac_friendslist" class="mdl-dialog__content">
+				<div class="ac_fl_line">
+					<div class="checkbox-item '+checked+'">
+					<label class="mdl-checkbox mdl-js-checkbox" for="note'+stickyNoteId+'-item'+stickyItemId+'">
+						<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">
+					</label>
+					<div id="" class="">primoz.bevk@gmail.com</div>
+					</div>
+				</div>
+			</div>
 			<div class="mdl-dialog__content">
 				<div class="mdl-textfield mdl-js-textfield">
 					<input class="mdl-textfield__input" type="text" id="coll_email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}">
 					<label class="mdl-textfield__label" for="coll_email">Email address</label>
 					<span class="mdl-textfield__error">This is not a valid email address</span>
 				</div>
+				<button type="button" class="mdl-button mdl-button--colored close">Add New</button>
 			</div>
 			<div class="mdl-dialog__actions">
-			  <button type="button" class="mdl-button close">Done</button>
+			  <button type="button" class="mdl-button mdl-button--colored close">Done</button>
 			</div>
 		</form>
 	</dialog>
 	<!-- IMPORT JS DEPENDENCIES -->
-	<script src="assets/js/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+	<script>
+	
+	</script>
 	<script src="assets/js/jquery-1.12.0.min.js"></script>
 	<script src="assets/js/sticky.js"></script>
 </body>
