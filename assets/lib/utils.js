@@ -5,7 +5,6 @@ sticky.utils = (function (global) {
 	var vars = global.vars;
 	var log = global.model.log;
 	var user = global.model.user;
-	var fb = global.FirebaseAdapter;
 
 	var findUrl = {
 		// valid "scheme://" or "www."
@@ -107,7 +106,7 @@ sticky.utils = (function (global) {
 	load saved state from DB
 	------------------------------------------- */
 	_self.getNote = function(noteId, page) {
-		return fb._notes.child(noteId).once("value").then(function(data) {
+		return global.core._notes.child(noteId).once("value").then(function(data) {
 			var n = data.val();
 			if (n != null) {
 				if (!n.archived && page == "home") {
@@ -128,7 +127,7 @@ sticky.utils = (function (global) {
 	};
 	_self.loadSavedState = function(page) {
 		// get personal notes
-		fb._users.child(user.uid).child('notes').once("value", function(snapshot) {
+		global.core._users.child(global.core.getUser().uid).child('notes').once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key;
@@ -141,7 +140,7 @@ sticky.utils = (function (global) {
 			});
 		});
 		// get shared notes
-		fb._shared.child(user.uid).once("value", function(snapshot) {
+		global.core._shared.child(global.core.getUser().uid).once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key;
@@ -202,18 +201,18 @@ sticky.utils = (function (global) {
 
 		// needs to be saved if triggered by user
 		if (isNew) {
-			var push = fb._notes.push({
+			var push = global.core._notes.push({
 					title: "New Note",
 					column: 0,
 					row: 0,
 					archived: false,
-					owner: user.uid,
-					created_at: Firebase.ServerValue.TIMESTAMP,
-					changed_at: Firebase.ServerValue.TIMESTAMP,
+					owner: global.core.getUser().uid,
+					created_at: firebase.database.ServerValue.TIMESTAMP,
+					changed_at: firebase.database.ServerValue.TIMESTAMP,
 				},
 				function(error) {log.output(0, error);});
 
-			var set = fb._users.child(user.uid+'/notes/'+push.key).set(true,
+			var set = global.core._users.child(global.core.getUser().uid+'/notes/'+push.key).set(true,
 				function(error) {log.output(0, error);});
 
 			$("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key);
@@ -251,27 +250,27 @@ sticky.utils = (function (global) {
 
 				$("#"+parentId).html(inputText); // write to DOM
 				if ($("#"+parentId).hasClass("sticky-title")) {
-					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")).update(
+					var update = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")).update(
 						{
 							title: inputText,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 				} else if ($("#"+parentId).attr("data-item-key")) {
-					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")).update(
+					var update = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")).update(
 						{
 							type: fieldType,
 							text: inputText,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 				} else {
-					var push = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items').push(
+					var push = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items').push(
 						{
 							type: fieldType,
 							text: inputText,
-							created_at: Firebase.ServerValue.TIMESTAMP,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							created_at: firebase.database.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 					$("#"+parentId).attr("data-item-key", push.key);
@@ -290,24 +289,24 @@ sticky.utils = (function (global) {
 		return emailAddress.replace(/[.]/g, '%20');
 	}
 	_self.getUserByEmail = function(emailAddress) {
-		return fb._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
+		return global.core._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
 			return snap.val();
 		});
 	}
 	_self.addFriend = function(emailAddress) {
-		fb._users.child(user.uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
+		global.core._users.child(global.core.getUser().uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
 	}
 	_self.addCollaborator = function(noteKey, friendEmail) {
 		_self.getUserByEmail(friendEmail).then(function(collaborator) {
-			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
-			fb._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
+			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
+			global.core._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
 		});
 
 	}
 	_self.deleteCollaborator = function(noteKey, friendEmail) {
 		_self.getUserByEmail(friendEmail).then(function(collaborator) {
-			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
-			fb._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
+			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
+			global.core._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
 		});
 	}
 	/* ------------------------------------------
@@ -339,14 +338,14 @@ sticky.utils = (function (global) {
 	};
 
 	_self.displayProfile = function() {
-		if (user.picture) {
-			$("#profile_image").css("background-image", "url("+user.picture+")");
+		if (global.core.getUser().picture) {
+			$("#profile_image").css("background-image", "url("+global.core.getUser().picture+")");
 			$("#profile_image").css("background-size", "contain");
 			$("#profile_icon").hide();
 			$("#profile_image").show();
 		}
 		$("#profile_greeting").html(getGreeting());
-		$("#profile_name").html(user.name);
+		$("#profile_name").html(global.core.getUser().name);
 		$("#profile").show();
 		$("#controls").show();
 	};

@@ -2073,119 +2073,11 @@ sticky.model.user = (function (global) {
 })(sticky);
 ;var sticky = sticky || {};
 
-sticky.FirebaseAdapter = (function (global, firebase) {
-	var _self = {};
-	var vars = global.vars;
-	var log = global.model.log;
-
-	// Initialize Firebase
-	var config = {
-		apiKey: "AIzaSyAv7-HAOAE72ig6Tle2G0Q4PWxufGqWJq0",
-		authDomain: "boiling-torch-8284.firebaseapp.com",
-		databaseURL: "https://boiling-torch-8284.firebaseio.com",
-		storageBucket: "boiling-torch-8284.appspot.com",
-	};
-	firebase.initializeApp(config);
-
-	_self._firebase = firebase.database().ref();
-	_self._notes = _self._firebase.child('notes');
-	_self._users = _self._firebase.child('users');
-	_self._user_index = _self._firebase.child('user_index');
-	_self._shared = _self._firebase.child('shared');
-
-	/*
-	* AUTHENTIFICATION
-	*/
-	_self.login = function() {
-		var auth = firebase.auth();
-		var provider = new firebase.auth.GoogleAuthProvider();
-		provider.addScope('https://www.googleapis.com/auth/userinfo.email');
-		provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-
-		auth.signInWithPopup(provider).then(function(result) {
-			// This gives you a Google Access Token. You can use it to access the Google API.
-			var token = result.credential.accessToken;
-			// The signed-in user info.
-			var authData = result.user;
-			_self._users.child(authData.uid).once("value", function(snapshot) {
-				if (snapshot.val() !== null) { // update user TIMESTAMP
-					_self._users.child(authData.uid).update(
-						{
-							last_login_at: Firebase.ServerValue.TIMESTAMP
-						},
-						function(error) {log.output(2, error);});
-				} else { // set up new user
-					var setUser = _self._users.child(authData.uid).set(
-						{
-							name: authData.displayName,
-							email: authData.email,
-							picture: authData.photoURL,
-							created_at: Firebase.ServerValue.TIMESTAMP,
-							last_login_at: Firebase.ServerValue.TIMESTAMP
-						},
-						function(error) {log.output(2, error);});
-					// set up entry into user_index (used for looking up users)
-					var setUserIndex = _self._user_index.child(sticky.utils.emailToKey(authData.email)).set(
-						{
-							name: authData.displayName,
-							uid: authData.uid,
-							picture: authData.photoURL,
-							created_at: Firebase.ServerValue.TIMESTAMP,
-						},
-						function(error) {log.output(2, error);});
-				}
-				log.output(1, error);
-			});
-			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
-			// display interface
-			$("#login").hide();
-			global.utils.displayProfile();
-			global.utils.loadSavedState(global.utils.getPage()); // load data
-
-			log.output(4, error);
-		}).catch(function(error) {
-			// Handle Errors here.
-			var errorCode = error.code;
-			var errorMessage = error.message;
-			// The email of the user's account used.
-			var email = error.email;
-			// The firebase.auth.AuthCredential type that was used.
-			var credential = error.credential;
-		});
-	};
-
-	_self.logout = function() {
-		firebase.auth().signOut().then(function() {
-			// Sign-out successful.
-		}, function(error) {
-			// An error happened.
-		});
-	};
-
-	_self.loggedUser = function() {
-		return firebase.auth().currentUser;
-	};
-
-	_self.loggedIn = function() {
-		if (_self.loggedUser() != null) {
-			if (global.model.user.uid == null) { // set local instance
-				global.model.user.userFromData(_self.loggedUser().uid, _self.loggedUser().displayName, _self.loggedUser().photoURL, _self.loggedUser().email);
-			}
-			return true;
-		}
-		return false;
-	};
-
-	return _self;
-})(sticky, firebase);
-;var sticky = sticky || {};
-
 sticky.utils = (function (global) {
 	var _self = {};
 	var vars = global.vars;
 	var log = global.model.log;
 	var user = global.model.user;
-	var fb = global.FirebaseAdapter;
 
 	var findUrl = {
 		// valid "scheme://" or "www."
@@ -2287,7 +2179,7 @@ sticky.utils = (function (global) {
 	load saved state from DB
 	------------------------------------------- */
 	_self.getNote = function(noteId, page) {
-		return fb._notes.child(noteId).once("value").then(function(data) {
+		return global.core._notes.child(noteId).once("value").then(function(data) {
 			var n = data.val();
 			if (n != null) {
 				if (!n.archived && page == "home") {
@@ -2308,7 +2200,7 @@ sticky.utils = (function (global) {
 	};
 	_self.loadSavedState = function(page) {
 		// get personal notes
-		fb._users.child(user.uid).child('notes').once("value", function(snapshot) {
+		global.core._users.child(global.core.getUser().uid).child('notes').once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key;
@@ -2321,7 +2213,7 @@ sticky.utils = (function (global) {
 			});
 		});
 		// get shared notes
-		fb._shared.child(user.uid).once("value", function(snapshot) {
+		global.core._shared.child(global.core.getUser().uid).once("value", function(snapshot) {
 			var promisedNotes = [];
 			snapshot.forEach(function(child){
 				var noteId = child.key;
@@ -2382,18 +2274,18 @@ sticky.utils = (function (global) {
 
 		// needs to be saved if triggered by user
 		if (isNew) {
-			var push = fb._notes.push({
+			var push = global.core._notes.push({
 					title: "New Note",
 					column: 0,
 					row: 0,
 					archived: false,
-					owner: user.uid,
-					created_at: Firebase.ServerValue.TIMESTAMP,
-					changed_at: Firebase.ServerValue.TIMESTAMP,
+					owner: global.core.getUser().uid,
+					created_at: firebase.database.ServerValue.TIMESTAMP,
+					changed_at: firebase.database.ServerValue.TIMESTAMP,
 				},
 				function(error) {log.output(0, error);});
 
-			var set = fb._users.child(user.uid+'/notes/'+push.key).set(true,
+			var set = global.core._users.child(global.core.getUser().uid+'/notes/'+push.key).set(true,
 				function(error) {log.output(0, error);});
 
 			$("#note"+vars.globalStickyNoteCounter).attr("data-note-key", push.key);
@@ -2431,27 +2323,27 @@ sticky.utils = (function (global) {
 
 				$("#"+parentId).html(inputText); // write to DOM
 				if ($("#"+parentId).hasClass("sticky-title")) {
-					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")).update(
+					var update = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")).update(
 						{
 							title: inputText,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 				} else if ($("#"+parentId).attr("data-item-key")) {
-					var update = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")).update(
+					var update = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")+"/items/"+$("#"+parentId).attr("data-item-key")).update(
 						{
 							type: fieldType,
 							text: inputText,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 				} else {
-					var push = fb._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items').push(
+					var push = global.core._notes.child($("#note"+stickyNoteId).attr("data-note-key")+'/items').push(
 						{
 							type: fieldType,
 							text: inputText,
-							created_at: Firebase.ServerValue.TIMESTAMP,
-							changed_at: Firebase.ServerValue.TIMESTAMP,
+							created_at: firebase.database.ServerValue.TIMESTAMP,
+							changed_at: firebase.database.ServerValue.TIMESTAMP,
 						},
 						function(error) {log.output(0, error);});
 					$("#"+parentId).attr("data-item-key", push.key);
@@ -2470,24 +2362,24 @@ sticky.utils = (function (global) {
 		return emailAddress.replace(/[.]/g, '%20');
 	}
 	_self.getUserByEmail = function(emailAddress) {
-		return fb._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
+		return global.core._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
 			return snap.val();
 		});
 	}
 	_self.addFriend = function(emailAddress) {
-		fb._users.child(user.uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
+		global.core._users.child(global.core.getUser().uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
 	}
 	_self.addCollaborator = function(noteKey, friendEmail) {
 		_self.getUserByEmail(friendEmail).then(function(collaborator) {
-			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
-			fb._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
+			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
+			global.core._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
 		});
 
 	}
 	_self.deleteCollaborator = function(noteKey, friendEmail) {
 		_self.getUserByEmail(friendEmail).then(function(collaborator) {
-			fb._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
-			fb._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
+			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
+			global.core._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
 		});
 	}
 	/* ------------------------------------------
@@ -2519,14 +2411,14 @@ sticky.utils = (function (global) {
 	};
 
 	_self.displayProfile = function() {
-		if (user.picture) {
-			$("#profile_image").css("background-image", "url("+user.picture+")");
+		if (global.core.getUser().picture) {
+			$("#profile_image").css("background-image", "url("+global.core.getUser().picture+")");
 			$("#profile_image").css("background-size", "contain");
 			$("#profile_icon").hide();
 			$("#profile_image").show();
 		}
 		$("#profile_greeting").html(getGreeting());
-		$("#profile_name").html(user.name);
+		$("#profile_name").html(global.core.getUser().name);
 		$("#profile").show();
 		$("#controls").show();
 	};
@@ -2534,198 +2426,285 @@ sticky.utils = (function (global) {
 	return _self;
 })(sticky);
 ;var sticky = sticky || {};
-var loggedUser;
+/* ------------------------------------------
+initialize variables
+------------------------------------------- */
+sticky.core = (function (global) {
+	var _self = {};
+	var vars = global.vars;
+	var log = global.model.log;
+	var utils = global.utils;
+
+	_self.constr = function() {
+		// Initialize firebase
+		console.log("cc");
+		var config = {
+			apiKey: "AIzaSyAv7-HAOAE72ig6Tle2G0Q4PWxufGqWJq0",
+			authDomain: "boiling-torch-8284.firebaseapp.com",
+			databaseURL: "https://boiling-torch-8284.firebaseio.com",
+			storageBucket: "boiling-torch-8284.appspot.com",
+		};
+		firebase.initializeApp(config);
+
+		_self._firebase = firebase.database().ref();
+		_self._notes = _self._firebase.child('notes');
+		_self._users = _self._firebase.child('users');
+		_self._user_index = _self._firebase.child('user_index');
+		_self._shared = _self._firebase.child('shared');
+
+		interface(); // load interface dependencies & event handlers
+	}
+
+	var interface = function() {
+		/* *******************************************
+		dragula.js DRAG & DROP
+		******************************************* */
+		// sticky-note drag & drop
+		// var containers = $('.dropzone').toArray();
+		dragula($('.dropzone').toArray(), {
+			isContainer: function (el) {
+				return false; // only elements in drake.containers will be taken into account
+			},
+			moves: function (el, source, handle, sibling) {
+				return true; // elements are always draggable by default
+			},
+			accepts: function (el, target, source, sibling) {
+				return true; // elements can be dropped in any of the `containers` by default
+			},
+			invalid: function (el, target) {
+				return false; // don't prevent any drags from initiating by default
+			},
+			direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
+			copy: false,                       // elements are moved by default, not copied
+			copySortSource: false,             // elements in copy-source containers can be reordered
+			revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
+			removeOnSpill: false,              // spilling will `.remove` the element, if this is true
+			mirrorContainer: document.body,    // set the element that gets mirror elements appended
+			ignoreInputTextSelection: true     // allows users to select input text, see details below
+		}).on('over', function (el, container) {
+			container.className += ' drop-target';
+		}).on('out', function (el, container) {
+			container.className = container.className.replace(' drop-target', '');
+		}).on('drop', function (el, container) {
+			var update = _self._notes.child($(el).attr("data-note-key")).update(
+				{
+					column: $(container).attr("data-column"),
+					changed_at: firebase.database.ServerValue.TIMESTAMP,
+				},
+				function(error) {log.output(0, error);});
+		});
+
+		/* ------------------------------------------
+		MANIPULATE STICKY NOTES - LISTENERS
+		------------------------------------------- */
+		// GO-TO home
+		$("#login").click(function(event) {
+			_self.login();
+		});
+		// spawn new sticky note
+		$("#add-note").click(function(event) {
+			utils.spawnNewStickyNote("dz"+vars.noteDefaults.column, true, vars.noteDefaults, "new");
+		});
+		// GO-TO home
+		$("#home").click(function(event) {
+			window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname;
+		});
+		// GO-TO archive
+		$("#archive").click(function(event) {
+			window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive";
+		});
+		// delete sticky note & associated list in users list of notes
+		$('body').on('click', '.sticky-delete', function() {
+			var set = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")).set(
+				null,
+				function(error) {log.output(3, error);});
+			var set = _self._users.child(global.core.getUser().uid+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")).set(
+				null,
+				function(error) {log.output(3, error);});
+			$(this).closest(".sticky-note").toggleClass('delete');
+			setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
+		});
+		// archive sticky note
+		$('body').on('click', '.sticky-archive', function() {
+			var update = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")).update(
+				{
+					archived: true,
+					changed_at: firebase.database.ServerValue.TIMESTAMP,
+				},
+				function(error) {log.output(0, error);});
+			// update UI
+			$(this).closest(".sticky-note").toggleClass('archive');
+			setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
+			vars.archivedCount++;
+			$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
+		});
+		/* ------------------------------------------
+		interactions with content
+		------------------------------------------- */
+		// INVOKE EDITABLE LINE
+		$('body').on('click', '.can-edit:not(a)', function(event) {
+			if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
+				var type = "input";
+				if (event.ctrlKey && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
+					type = "checkbox";
+				}
+				try {
+					utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
+				} catch(error) {console.log(error);}
+
+				if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
+					var itemId = parseInt($(this).attr("data-item-id")) + 1;
+					// INSERT NEW EMPTY LINE
+					$(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
+					$(this).attr("data-dirty", "true"); // mark as dirty
+				}
+			}
+		});
+		$('body').on('click', '.mdl-checkbox__tick-outline', function(event) {
+			$(this).closest('.mdl-checkbox').toggleClass('is-checked');
+			$(this).closest('.checkbox-item').toggleClass('is-checked');
+			var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
+
+			var update = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")).update(
+				{
+					checked: isChecked,
+					changed_at: firebase.database.ServerValue.TIMESTAMP,
+				},
+				function(error) {log.output(0, error);});
+		});
+		// key events on editable content
+		$('body').on('keydown', '.mdl-textfield__input', function (event) {
+			if (event.keyCode === 13) {
+				event.preventDefault(); // prevent ENTER to trigger page reload
+			}
+		});
+		// key events on editable content
+		$('body').on('keyup', '.mdl-textfield__input', function (event) {
+			if (event.keyCode === 27) { // remove focus on ESC (finish editing)
+				$(this).blur();
+			}
+			if (event.keyCode === 13) { // remove focus and start new line on ENTER
+				$(this).closest(".can-edit").next().click();
+				$(this).blur();
+			}
+			if (event.keyCode === 46) { // delete line item
+				var set = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")).set(
+					null,
+					function(error) {log.output(3, error);});
+				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
+					$(this).closest(".checkbox-item").parent().remove();
+				} else {
+					$(this).closest(".can-edit").remove();
+				}
+			}
+		});
+
+		/* ------------------------------------------
+		register dialogs
+		------------------------------------------- */
+		var dialogAddColl = document.getElementById('add-collaborator');
+		if (!dialogAddColl.showModal) {
+			dialogPolyfill.registerDialog(dialogAddColl);
+		}
+		$('body').on('click', '.sticky-add-collaborator', function() {
+			dialogAddColl.showModal();
+		});
+		$('body').on('click', '#add-collaborator .close', function() {
+			dialogAddColl.close();
+		});
+	}
+
+	/*
+	* AUTHENTIFICATION
+	*/
+	_self.login = function() {
+		var auth = firebase.auth();
+		var provider = new firebase.auth.GoogleAuthProvider();
+		provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+		provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+
+		auth.signInWithPopup(provider).then(function(result) {
+			// This gives you a Google Access Token. You can use it to access the Google API.
+			var token = result.credential.accessToken;
+			// The signed-in user info.
+			var authData = result.user;
+			_self._users.child(authData.uid).once("value", function(snapshot) {
+				if (snapshot.val() !== null) { // update user TIMESTAMP
+					_self._users.child(authData.uid).update(
+						{
+							last_login_at: firebase.database.ServerValue.TIMESTAMP
+						},
+						function(error) {log.output(2, error);});
+				} else { // set up new user
+					var setUser = _self._users.child(authData.uid).set(
+						{
+							name: authData.displayName,
+							email: authData.email,
+							picture: authData.photoURL,
+							created_at: firebase.database.ServerValue.TIMESTAMP,
+							last_login_at: firebase.database.ServerValue.TIMESTAMP
+						},
+						function(error) {log.output(2, error);});
+					// set up entry into user_index (used for looking up users)
+					var setUserIndex = _self._user_index.child(sticky.utils.emailToKey(authData.email)).set(
+						{
+							name: authData.displayName,
+							uid: authData.uid,
+							picture: authData.photoURL,
+							created_at: firebase.database.ServerValue.TIMESTAMP,
+						},
+						function(error) {log.output(2, error);});
+				}
+			});
+			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
+			// display interface
+			$("#login").hide();
+			global.utils.displayProfile();
+			global.utils.loadSavedState(global.utils.getPage()); // load data
+
+			log.output(4, error);
+		}).catch(function(error) {
+			// Handle Errors here.
+			var errorCode = error.code;
+			var errorMessage = error.message;
+			// The email of the user's account used.
+			var email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			var credential = error.credential;
+		});
+	};
+
+	_self.logout = function() {
+		firebase.auth().signOut().then(function() {
+			// Sign-out successful.
+		}, function(error) {
+			// An error happened.
+		});
+	};
+
+	_self.getUser = function() {
+		if (global.model.user.uid == null) { // set local instance
+			var user = firebase.auth().currentUser;
+			global.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
+		}
+		return global.model.user;
+	};
+
+	return _self;
+})(sticky);
+;var loggedUser;
 /* *******************************************
 INITIATE STICKY NOTES APP
 ******************************************* */
 $(function() {
-	/*
-	* SET UP INTERFACE
-	*/
-	if (!sticky.FirebaseAdapter.loggedIn()) {
-		$("#login").show();
-	} else {
-		sticky.utils.displayProfile();
-	}
-
-
-	var StickyStart = {
-		init: function() {
-			var fb = sticky.FirebaseAdapter;
-			var user = sticky.model.user;
-			var log = sticky.model.log;
-
-			/* *******************************************
-			dragula.js DRAG & DROP
-			******************************************* */
-			// sticky-note drag & drop
-			// var containers = $('.dropzone').toArray();
-			dragula($('.dropzone').toArray(), {
-				isContainer: function (el) {
-					return false; // only elements in drake.containers will be taken into account
-				},
-				moves: function (el, source, handle, sibling) {
-					return true; // elements are always draggable by default
-				},
-				accepts: function (el, target, source, sibling) {
-					return true; // elements can be dropped in any of the `containers` by default
-				},
-				invalid: function (el, target) {
-					return false; // don't prevent any drags from initiating by default
-				},
-				direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
-				copy: false,                       // elements are moved by default, not copied
-				copySortSource: false,             // elements in copy-source containers can be reordered
-				revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
-				removeOnSpill: false,              // spilling will `.remove` the element, if this is true
-				mirrorContainer: document.body,    // set the element that gets mirror elements appended
-				ignoreInputTextSelection: true     // allows users to select input text, see details below
-			}).on('over', function (el, container) {
-				container.className += ' drop-target';
-			}).on('out', function (el, container) {
-				container.className = container.className.replace(' drop-target', '');
-			}).on('drop', function (el, container) {
-				var update = fb._notes.child($(el).attr("data-note-key")).update(
-					{
-						column: $(container).attr("data-column"),
-						changed_at: Firebase.ServerValue.TIMESTAMP,
-					},
-					function(error) {log.output(0, error);});
-			});
-
-			/* *******************************************
-			sticky-note INTERACTIONS
-			******************************************* */
-			/* ------------------------------------------
-			Init & Load saved state for current page
-			------------------------------------------- */
-			if (fb.loggedIn()) {
-				sticky.utils.loadSavedState(sticky.utils.getPage());
-			}
-
-			// set up listeners for Sticky
-			this.setUpListeners(fb, user, log);
-			this.setUpDialogs();
-		},
-		setUpListeners: function(fb, user, log) {
-
-			/* ------------------------------------------
-			MANIPULATE STICKY NOTES
-			------------------------------------------- */
-			// GO-TO home
-			$("#login").click(function(event) {
-				fb.login();
-			});
-			// spawn new sticky note
-			$("#add-note").click(function(event) {
-				sticky.utils.spawnNewStickyNote("dz"+sticky.vars.noteDefaults.column, true, sticky.vars.noteDefaults, "new");
-			});
-			// GO-TO home
-			$("#home").click(function(event) {
-				window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname;
-			});
-			// GO-TO archive
-			$("#archive").click(function(event) {
-				window.location.href = window.location.protocol+"//"+window.location.hostname+window.location.pathname+"?archive";
-			});
-			// delete sticky note & associated list in users list of notes
-			$('body').on('click', '.sticky-delete', function() {
-				var set = fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")).set(
-					null,
-					function(error) {log.output(3, error);});
-				var set = fb._users.child(user.uid+'/notes/'+$(this).closest(".sticky-note").attr("data-note-key")).set(
-					null,
-					function(error) {log.output(3, error);});
-				$(this).closest(".sticky-note").toggleClass('delete');
-				setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
-			});
-			// archive sticky note
-			$('body').on('click', '.sticky-archive', function() {
-				var update = fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")).update(
-					{
-						archived: true,
-						changed_at: Firebase.ServerValue.TIMESTAMP,
-					},
-					function(error) {log.output(0, error);});
-				// update UI
-				$(this).closest(".sticky-note").toggleClass('archive');
-				setTimeout(function() {$(this).closest(".sticky-note").remove();}, 600);
-				sticky.vars.archivedCount++;
-				$("#archive .mdl-badge").attr("data-badge", sticky.vars.archivedCount);
-			});
-			/* ------------------------------------------
-			interactions with content
-			------------------------------------------- */
-			// INVOKE EDITABLE LINE
-			$('body').on('click', '.can-edit:not(a)', function(event) {
-				if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
-					var type = "input";
-					if (event.ctrlKey && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
-						type = "checkbox";
-					}
-					try {
-						sticky.utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
-					} catch(error) {console.log(error);}
-
-					if (!$(this).attr("data-dirty") && !$(this).is("h2")) { // fire only on last line (add new one) && make sure it's not the title (we need only one)
-						var itemId = parseInt($(this).attr("data-item-id")) + 1;
-						// INSERT NEW EMPTY LINE
-						$(this).parent().append('<div id="n'+$(this).attr("data-sticky-id")+'i'+itemId+'" class="sticky-note-content can-edit" data-sticky-id="'+$(this).attr("data-sticky-id")+'" data-item-id="'+itemId+'"></div>');
-						$(this).attr("data-dirty", "true"); // mark as dirty
-					}
-				}
-			});
-			$('body').on('click', '.mdl-checkbox__tick-outline', function(event) {
-				$(this).closest('.mdl-checkbox').toggleClass('is-checked');
-				$(this).closest('.checkbox-item').toggleClass('is-checked');
-				var isChecked = false; if ($(this).closest('.mdl-checkbox').hasClass('is-checked')) {isChecked = true;}
-
-				var update = fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".checkbox-item").find('.checkbox-content').attr("data-item-key")).update(
-					{
-						checked: isChecked,
-						changed_at: Firebase.ServerValue.TIMESTAMP,
-					},
-					function(error) {log.output(0, error);});
-			});
-			// key events on editable content
-			$('body').on('keydown', '.mdl-textfield__input', function (event) {
-				if (event.keyCode === 13) {
-					event.preventDefault(); // prevent ENTER to trigger page reload
-				}
-			});
-			// key events on editable content
-			$('body').on('keyup', '.mdl-textfield__input', function (event) {
-				if (event.keyCode === 27) { // remove focus on ESC (finish editing)
-					$(this).blur();
-				}
-				if (event.keyCode === 13) { // remove focus and start new line on ENTER
-					$(this).closest(".can-edit").next().click();
-					$(this).blur();
-				}
-				if (event.keyCode === 46) { // delete line item
-					var set = fb._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")).set(
-						null,
-						function(error) {log.output(3, error);});
-					if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
-						$(this).closest(".checkbox-item").parent().remove();
-					} else {
-						$(this).closest(".can-edit").remove();
-					}
-				}
-			});
-		},
-		setUpDialogs: function() {
-			var dialogAddColl = document.getElementById('add-collaborator');
-		    if (!dialogAddColl.showModal) {
-		    	dialogPolyfill.registerDialog(dialogAddColl);
-		    }
-			$('body').on('click', '.sticky-add-collaborator', function() {
-		    	dialogAddColl.showModal();
-		    });
-			$('body').on('click', '#add-collaborator .close', function() {
-		    	dialogAddColl.close();
-		    });
+	// INIT Sticky APP & WAIT TO CHECK FOR USER AUTH
+	sticky.core.constr();
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			sticky.utils.displayProfile();
+			sticky.utils.loadSavedState(sticky.utils.getPage());
+		} else {
+			$("#login").show();
 		}
-	};
-	StickyStart.init();
+	});
 });
