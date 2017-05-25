@@ -2034,7 +2034,7 @@ sticky.model = sticky.model || {};
 /* USER MODEL */
 sticky.model.log = (function (global) {
 	_self = {};
-	var messages = ["Data could not be saved.", "Login Failed!", "Account creation failed!", "Data could not be deleted.", "Authenticated successfully with payload:", "Permisssion denied:"];
+	var messages = ["Data could not be saved.", "Login Failed!", "Account creation failed!", "Data could not be deleted.", "Authenticated successfully with payload:", "Permisssion denied:", "Logout failed: "];
 
 	_self.output = function (msgType, msg) {
 		if (msg)
@@ -2232,7 +2232,7 @@ sticky.utils = (function (global) {
 	_self.spawnNewStickyNote = function(parentId, isNew, data, key) {
 		var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
 		'<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
-		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
+		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--blue can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
 		'<div id="n_s_'+vars.globalStickyNoteCounter+'" class="material-icons note_shared">people</div>'+
 		'<div class="mdl-tooltip" for="n_s_'+vars.globalStickyNoteCounter+'">Shared with 1 collaborator</div>'+
 		'</div>'+
@@ -2257,7 +2257,7 @@ sticky.utils = (function (global) {
 		// close off sticky note
 		elm += '</div>'+
 		'<div class="spacer"></div>'+
-		'<div class="sticky-footer-drawer mdl-color--amber">'+
+		'<div class="sticky-footer-drawer mdl-color--indigo">'+
 		'<button class="sticky-delete mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
 		'<i class="material-icons">delete</i>'+
 		'</button>'+
@@ -2411,16 +2411,20 @@ sticky.utils = (function (global) {
 	};
 
 	_self.displayProfile = function() {
+		$("#login").hide(); // make sure login button is hidden
 		if (global.core.getUser().picture) {
-			$("#profile_image").css("background-image", "url("+global.core.getUser().picture+")");
-			$("#profile_image").css("background-size", "contain");
-			$("#profile_icon").hide();
-			$("#profile_image").show();
+			$(".sticky-avatar").css("background-image", "url("+global.core.getUser().picture+")");
+			$(".sticky-avatar").css("background-size", "contain");
 		}
-		$("#profile_greeting").html(getGreeting());
-		$("#profile_name").html(global.core.getUser().name);
-		$("#profile").show();
+		$(".sticky-username").html(global.core.getUser().name);
+		$("#profile").css('display', 'inline-block');
 		$("#controls").show();
+	};
+
+	_self.hideProfile = function() {
+		$("#profile").hide();
+		$("#controls").hide();
+		$("#login").css('display', 'inline-block');
 	};
 
 	return _self;
@@ -2440,9 +2444,11 @@ sticky.core = (function (global) {
 		console.log("cc");
 		var config = {
 			apiKey: "AIzaSyAv7-HAOAE72ig6Tle2G0Q4PWxufGqWJq0",
-			authDomain: "boiling-torch-8284.firebaseapp.com",
-			databaseURL: "https://boiling-torch-8284.firebaseio.com",
-			storageBucket: "boiling-torch-8284.appspot.com",
+		    authDomain: "boiling-torch-8284.firebaseapp.com",
+		    databaseURL: "https://boiling-torch-8284.firebaseio.com",
+		    projectId: "boiling-torch-8284",
+		    storageBucket: "boiling-torch-8284.appspot.com",
+		    messagingSenderId: "275531933667"
 		};
 		firebase.initializeApp(config);
 
@@ -2500,6 +2506,9 @@ sticky.core = (function (global) {
 		// GO-TO home
 		$("#login").click(function(event) {
 			_self.login();
+		});
+		$("#logout").click(function(event) {
+			_self.logout();
 		});
 		// spawn new sticky note
 		$("#add-note").click(function(event) {
@@ -2658,7 +2667,6 @@ sticky.core = (function (global) {
 			});
 			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
 			// display interface
-			$("#login").hide();
 			global.utils.displayProfile();
 			global.utils.loadSavedState(global.utils.getPage()); // load data
 
@@ -2672,13 +2680,23 @@ sticky.core = (function (global) {
 			// The firebase.auth.AuthCredential type that was used.
 			var credential = error.credential;
 		});
+		// save logged in user
+		firebase.auth().onAuthStateChanged(function(user) {
+			console.log("auth");
+			console.log(user);
+			if (user) {
+				global.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
+			} else {
+			// No user is signed in.
+			}
+		});
 	};
 
 	_self.logout = function() {
 		firebase.auth().signOut().then(function() {
-			// Sign-out successful.
+			global.utils.hideProfile();
 		}, function(error) {
-			// An error happened.
+			log.output(6, error);
 		});
 	};
 

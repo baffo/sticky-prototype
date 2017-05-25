@@ -1,12 +1,90 @@
 /* produces a square in IE8 and below!! */
-.archive #archive {
-  display: none;
+header .sticky-titlebar {
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+  margin: auto;
+  position: relative;
 }
-.home #home {
-  display: none;
+header .sticky-titlebar .sticky-logo {
+  font-size: 34px;
+  line-height: 40px;
+}
+header .sticky-titlebar .sticky-logo a {
+  color: white;
+  text-decoration: none;
+}
+header .sticky-titlebar .sticky-logo .material-icons {
+  top: 4px;
+  font-size: 32px;
+  margin-right: -2px;
+  position: relative;
+}
+header .sticky-titlebar .sticky-usernamebutton {
+  padding: 0 10px 0 0;
+  border-radius: 19px 5px 5px 19px;
+  text-transform: none;
+  white-space: nowrap;
+}
+header .sticky-titlebar .sticky-usernamebutton .sticky-avatar {
+  height: 32px;
+  width: 32px;
+  display: inline-block;
+  background-size: 32px 32px;
+  border-radius: 32px;
+  border: 2px white solid;
+  margin-right: 10px;
+}
+header .sticky-titlebar .sticky-usernamebutton .sticky-username {
+  display: inline-block;
+  line-height: 38px;
+  vertical-align: top;
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+header .sticky-tab {
+  width: 100%;
+  height: auto;
+  margin: auto;
+  position: relative;
+}
+header .sticky-tab .mdl-tab {
+  width: 100%;
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  margin: auto;
+}
+header .sticky-tab .mdl-tab .mdl-layout__tab {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 24px;
+  color: rgba(255, 255, 255, 0.6);
+}
+header .sticky-tab .mdl-tab .mdl-layout__tab.is_active::after {
+  height: 2px;
+  width: 100%;
+  display: block;
+  content: " ";
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background: #ffca28;
+  -webkit-animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
+  animation: border-expand 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards;
+  transition: all 1s cubic-bezier(0.4, 0, 1, 1);
+}
+header .sticky-tab .mdl-tab #add-note {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  z-index: 998;
 }
 .sticky-grid {
-  margin-top: 50px;
+  margin-top: 18px;
 }
 .sticky-note {
   width: 95%;
@@ -110,78 +188,6 @@
   -o-moz-border-radius: 4px;
   -ms-moz-border-radius: 4px;
   border-radius: 4px;
-}
-#login {
-  position: absolute;
-  right: 145px;
-  top: 22px;
-  z-index: 100;
-  overflow: visible;
-  display: none;
-}
-#profile {
-  position: absolute;
-  right: 145px;
-  top: 18px;
-  z-index: 100;
-  width: auto;
-  overflow: visible;
-  display: none;
-}
-#profile .line {
-  height: 25px;
-}
-#profile .line #profile_icon {
-  float: left;
-  margin-top: 8px;
-}
-#profile .line #profile_image {
-  float: left;
-  display: none;
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -o-moz-border-radius: 50%;
-  -ms-moz-border-radius: 50%;
-  border-radius: 50%;
-}
-#profile .line #profile_text {
-  float: right;
-  padding-top: 10px;
-}
-#profile .line #profile_text #profile_name {
-  font-weight: bold;
-}
-#profile .line #profile_info {
-  float: left;
-  padding-left: 34px;
-}
-#profile .line #profile_info span {
-  font-size: 12px;
-  line-height: 25px;
-  vertical-align: middle;
-}
-#profile .line::after {
-  clear: both;
-}
-#archive,
-#home {
-  position: absolute;
-  right: 76px;
-  top: 10px;
-  z-index: 100;
-  overflow: visible;
-}
-#add-note {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  z-index: 100;
-}
-#controls {
-  display: none;
 }
 /* ANIMATIONS */
 .sticky-note.delete {

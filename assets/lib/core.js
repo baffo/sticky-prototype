@@ -13,9 +13,11 @@ sticky.core = (function (global) {
 		console.log("cc");
 		var config = {
 			apiKey: "AIzaSyAv7-HAOAE72ig6Tle2G0Q4PWxufGqWJq0",
-			authDomain: "boiling-torch-8284.firebaseapp.com",
-			databaseURL: "https://boiling-torch-8284.firebaseio.com",
-			storageBucket: "boiling-torch-8284.appspot.com",
+		    authDomain: "boiling-torch-8284.firebaseapp.com",
+		    databaseURL: "https://boiling-torch-8284.firebaseio.com",
+		    projectId: "boiling-torch-8284",
+		    storageBucket: "boiling-torch-8284.appspot.com",
+		    messagingSenderId: "275531933667"
 		};
 		firebase.initializeApp(config);
 
@@ -73,6 +75,9 @@ sticky.core = (function (global) {
 		// GO-TO home
 		$("#login").click(function(event) {
 			_self.login();
+		});
+		$("#logout").click(function(event) {
+			_self.logout();
 		});
 		// spawn new sticky note
 		$("#add-note").click(function(event) {
@@ -231,7 +236,6 @@ sticky.core = (function (global) {
 			});
 			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
 			// display interface
-			$("#login").hide();
 			global.utils.displayProfile();
 			global.utils.loadSavedState(global.utils.getPage()); // load data
 
@@ -245,13 +249,23 @@ sticky.core = (function (global) {
 			// The firebase.auth.AuthCredential type that was used.
 			var credential = error.credential;
 		});
+		// save logged in user
+		firebase.auth().onAuthStateChanged(function(user) {
+			console.log("auth");
+			console.log(user);
+			if (user) {
+				global.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
+			} else {
+			// No user is signed in.
+			}
+		});
 	};
 
 	_self.logout = function() {
 		firebase.auth().signOut().then(function() {
-			// Sign-out successful.
+			global.utils.hideProfile();
 		}, function(error) {
-			// An error happened.
+			log.output(6, error);
 		});
 	};
 

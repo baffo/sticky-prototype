@@ -159,7 +159,7 @@ sticky.utils = (function (global) {
 	_self.spawnNewStickyNote = function(parentId, isNew, data, key) {
 		var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
 		'<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
-		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--cyan can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
+		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--blue can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
 		'<div id="n_s_'+vars.globalStickyNoteCounter+'" class="material-icons note_shared">people</div>'+
 		'<div class="mdl-tooltip" for="n_s_'+vars.globalStickyNoteCounter+'">Shared with 1 collaborator</div>'+
 		'</div>'+
@@ -184,7 +184,7 @@ sticky.utils = (function (global) {
 		// close off sticky note
 		elm += '</div>'+
 		'<div class="spacer"></div>'+
-		'<div class="sticky-footer-drawer mdl-color--amber">'+
+		'<div class="sticky-footer-drawer mdl-color--indigo">'+
 		'<button class="sticky-delete mdl-button mdl-js-button mdl-button--fab  mdl-button--mini-fab">'+
 		'<i class="material-icons">delete</i>'+
 		'</button>'+
@@ -338,16 +338,20 @@ sticky.utils = (function (global) {
 	};
 
 	_self.displayProfile = function() {
+		$("#login").hide(); // make sure login button is hidden
 		if (global.core.getUser().picture) {
-			$("#profile_image").css("background-image", "url("+global.core.getUser().picture+")");
-			$("#profile_image").css("background-size", "contain");
-			$("#profile_icon").hide();
-			$("#profile_image").show();
+			$(".sticky-avatar").css("background-image", "url("+global.core.getUser().picture+")");
+			$(".sticky-avatar").css("background-size", "contain");
 		}
-		$("#profile_greeting").html(getGreeting());
-		$("#profile_name").html(global.core.getUser().name);
-		$("#profile").show();
+		$(".sticky-username").html(global.core.getUser().name);
+		$("#profile").css('display', 'inline-block');
 		$("#controls").show();
+	};
+
+	_self.hideProfile = function() {
+		$("#profile").hide();
+		$("#controls").hide();
+		$("#login").css('display', 'inline-block');
 	};
 
 	return _self;
