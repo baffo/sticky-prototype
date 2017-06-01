@@ -180,15 +180,21 @@ sticky.core = (function (global) {
 		/* ------------------------------------------
 		register dialogs
 		------------------------------------------- */
-		var dialogAddColl = document.getElementById('add-collaborator');
-		if (!dialogAddColl.showModal) {
-			dialogPolyfill.registerDialog(dialogAddColl);
+		var dialogShowCollab = document.getElementById('show-collaborators');
+		if (!dialogShowCollab.showModal) {
+			dialogPolyfill.registerDialog(dialogShowCollab);
 		}
-		$('body').on('click', '.sticky-add-collaborator', function() {
-			dialogAddColl.showModal();
+		$('body').on('click', '.sticky-show-collaborators', function() {
+			global.utils.displayCollaborators($(this).closest(".sticky-note").attr("data-note-key"));
+			dialogShowCollab.showModal();
 		});
-		$('body').on('click', '#add-collaborator .close', function() {
-			dialogAddColl.close();
+		$('body').on('click', '#show-collaborators .close', function() {
+			dialogShowCollab.close();
+		});
+		$('body').on('click', '.mdl-dialog .add_new', function() {
+			global.utils.addCollaborator($("#show-collaborators").attr("data-rel"), $("#coll_email").val()).then(function(res) {
+				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
+			});
 		});
 	}
 
@@ -234,10 +240,6 @@ sticky.core = (function (global) {
 						function(error) {log.output(2, error);});
 				}
 			});
-			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
-			// display interface
-			global.utils.displayProfile();
-			global.utils.loadSavedState(global.utils.getPage()); // load data
 
 			log.output(4, error);
 		}).catch(function(error) {
@@ -248,16 +250,6 @@ sticky.core = (function (global) {
 			var email = error.email;
 			// The firebase.auth.AuthCredential type that was used.
 			var credential = error.credential;
-		});
-		// save logged in user
-		firebase.auth().onAuthStateChanged(function(user) {
-			console.log("auth");
-			console.log(user);
-			if (user) {
-				global.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
-			} else {
-			// No user is signed in.
-			}
 		});
 	};
 

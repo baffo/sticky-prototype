@@ -6,6 +6,10 @@ header .sticky-titlebar {
   margin: auto;
   position: relative;
 }
+header .sticky-titlebar .mdl-cell--hide-phone .mdl-button {
+  min-width: 30px;
+  padding: 0 7px;
+}
 header .sticky-titlebar .sticky-logo {
   font-size: 34px;
   line-height: 40px;
@@ -19,6 +23,9 @@ header .sticky-titlebar .sticky-logo .material-icons {
   font-size: 32px;
   margin-right: -2px;
   position: relative;
+}
+header .sticky-titlebar .sticky-sign-in-button {
+  color: #fff;
 }
 header .sticky-titlebar .sticky-usernamebutton {
   padding: 0 10px 0 0;
@@ -176,6 +183,50 @@ header .sticky-tab .mdl-tab #add-note {
 .sticky-note .checkbox-item.is-checked .sticky-note-content {
   color: #36B7C7;
   text-decoration: line-through;
+}
+.mdl-dialog {
+  width: 325px;
+}
+.mdl-dialog .mdl-dialog__title {
+  padding: 10px 10px 0;
+  font-size: 18px;
+}
+.mdl-dialog .mdl-dialog__content {
+  padding: 15px 10px 10px;
+}
+.mdl-dialog .mdl-dialog__content .sticky-usernamebutton {
+  padding: 0 10px 0 0;
+  margin: 0 0 10px 0;
+  border-radius: 19px 5px 5px 19px;
+  text-transform: none;
+  white-space: nowrap;
+}
+.mdl-dialog .mdl-dialog__content .sticky-usernamebutton .sticky-avatar {
+  height: 32px;
+  width: 32px;
+  display: inline-block;
+  background-size: 32px 32px;
+  border-radius: 32px;
+  border: 2px #ccc solid;
+  margin-right: 10px;
+}
+.mdl-dialog .mdl-dialog__content .sticky-usernamebutton .sticky-username {
+  display: inline-block;
+  line-height: 38px;
+  vertical-align: top;
+  width: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  color: #000000;
+}
+.mdl-dialog .mdl-textfield {
+  width: 200px;
+  margin: 0 10px;
+}
+.mdl-dialog .add_new {
+  display: inline-block;
 }
 .dropzone {
   min-height: 200px;

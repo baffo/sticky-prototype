@@ -1,21 +1,30 @@
-Sticky Prototype v0.5
+Sticky Prototype v0.5.1
 ================
 
 Sticky notes web app, client based, works in offline mode thanks to Firebase.
 
 TO-DO:
 --------------------
+**User features**
+* user profile settings (change public name, picture)
+* update _user index_ & _user info_ with updated info when logging in with Google (update profile picture, display name, etc.)
+* send verification email
+
+**Social features**
 * sharing of sticky notes among users (add collaborators)
 * deleting shared notes (delete only collaborator entry & from shared index) Notes can be deleted only by owner!
 * shared notes can have different position in each users grid (make grid coordinates for notes user based, not note based)
 * collaborator UI (display collaborators, create UI for adding/removing/finding collaborators & adding friends)
+* Notifications (Friend requests, notes shared, shared notes updated, ...)
+
+**Core features**
 * date/time detection & smart interaction (inline event creation & seemless integration with Google Calendar; notifications of upcoming tasks; ordering of tasks by due date)
-* sticky note tagging/categorizing/color coding (visually distinguish between different sticky notes - identify shared notes)
 * optimize FireBase connection & offline mode (persistent local storage in case of dropped connection; startup without internet connection)
 * polishing of existing features (ctrl+enter should produce new to-do line;)
+
+**Nice to have**
+* sticky note tagging/categorizing/color coding (visually distinguish between different sticky notes - identify shared notes)
 * color theme selection (choose different color combinations & save settings to profile)
-* user profile settings (change public name, picture)
-* send verification email
 
 KNOWN BUGS:
 --------------------
@@ -23,6 +32,8 @@ KNOWN BUGS:
 
 CHANGELOG:
 --------------------
+__v0.5.1__<br />
+_updated TO-DO list_<br />
 __v0.5.0__<br />
 _notes sharing (collaboration)_<br />
 __v0.4.0__<br />

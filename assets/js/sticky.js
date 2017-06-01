@@ -2230,10 +2230,21 @@ sticky.utils = (function (global) {
 	spawn sticky note
 	------------------------------------------- */
 	_self.spawnNewStickyNote = function(parentId, isNew, data, key) {
-		var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'">'+
+		var data_colaborators = "", num_col = 0;
+		if (data.collaborators != null) {
+			collaborators = [];
+			for (collaborator in data.collaborators) {
+				collaborators.push(collaborator);
+				num_col++;
+			}
+			data_colaborators = 'data-collaborators="'+collaborators.toString()+'"';
+		}
+		var coll_button = num_col>0 ? 'people':'group_add';
+
+		var elm = '<div id="note'+vars.globalStickyNoteCounter+'" class="sticky-note mdl-card mdl-shadow--2dp" data-note-key="'+key+'" '+data_colaborators+'>'+
 		'<div class="sticky-header-drawer mdl-card__title mdl-card--border">'+
 		'<h2 id="title'+vars.globalStickyNoteCounter+'" class="sticky-title mdl-color-text--blue can-edit" data-sticky-id="'+vars.globalStickyNoteCounter+'" data-item-id="1">'+data.title+'</h2>'+
-		'<div id="n_s_'+vars.globalStickyNoteCounter+'" class="material-icons note_shared">people</div>'+
+		'<button id="n_s_'+vars.globalStickyNoteCounter+'" class="material-icons note_shared mdl-button mdl-js-button sticky-show-collaborators">'+ coll_button +'</button>'+
 		'<div class="mdl-tooltip" for="n_s_'+vars.globalStickyNoteCounter+'">Shared with 1 collaborator</div>'+
 		'</div>'+
 		'<div id="wrapper'+vars.globalStickyNoteCounter+'" class="sticky-content-wrapper">';
@@ -2356,30 +2367,69 @@ sticky.utils = (function (global) {
 			throw "Invalid type";
 		}
 	};
+	/* ------------------------------------------
+	collaborationfunctions
+	------------------------------------------- */
 	// transform email address to valid index key form (remove .) & retrieve it
 	// source: https://gist.github.com/katowulf/6479129
-	_self.emailToKey = function(emailAddress) {
+	var emailToKey = function(emailAddress) {
 		return emailAddress.replace(/[.]/g, '%20');
 	}
-	_self.getUserByEmail = function(emailAddress) {
-		return global.core._user_index.child(_self.emailToKey(emailAddress)).once('value').then(function(snap) {
+	var getUserByEmail = function(emailAddress) {
+		return global.core._user_index.child(emailToKey(emailAddress)).once('value').then(function(snap) {
 			return snap.val();
 		});
 	}
 	_self.addFriend = function(emailAddress) {
-		global.core._users.child(global.core.getUser().uid+'/friends/'+_self.emailToKey(emailAddress)).set(true, function(error) {log.output(0, error);});
+		global.core._users.child(global.core.getUser().uid+'/friends/'+emailToKey(emailAddress)).set(true, function(error) {
+			if (error) {
+				log.output(0, error);
+			} else {
+				// success
+			}});
+	}
+	var getCollaborators = function(noteKey) {
+		return global.core._notes.child(noteKey+'/collaborators').once('value').then(function(snap) {
+			return snap.val();
+		});
 	}
 	_self.addCollaborator = function(noteKey, friendEmail) {
-		_self.getUserByEmail(friendEmail).then(function(collaborator) {
-			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(true, function(error) {log.output(0, error);});
+		return getUserByEmail(friendEmail).then(function(collaborator) {
+			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set({"email": friendEmail}, function(error) {log.output(0, error);});
 			global.core._shared.child(collaborator.uid+'/'+noteKey).set(true, function(error) {log.output(0, error);});
 		});
-
 	}
 	_self.deleteCollaborator = function(noteKey, friendEmail) {
-		_self.getUserByEmail(friendEmail).then(function(collaborator) {
+		getUserByEmail(friendEmail).then(function(collaborator) {
 			global.core._notes.child(noteKey+'/collaborators/'+collaborator.uid).set(null, function(error) {log.output(0, error);});
 			global.core._shared.child(collaborator.uid+'/'+noteKey).set(null, function(error) {log.output(0, error);});
+		});
+	}
+
+	_self.displayCollaborators = function(noteKey) {
+		// clear contents
+		document.getElementById("collaborators_list").innerHTML = "";
+		$("#show-collaborators").attr("data-rel", noteKey);
+		$("#coll_email").val("");
+
+		// retrieve data
+		getCollaborators(noteKey).then(function(collaborators) {
+			if (collaborators != null) {
+				for (collaborator in collaborators) {
+					getUserByEmail(collaborators[collaborator].email).then(function(user) {
+						elm = '<div class="sticky-signed-in-user-container">'+
+							'<a class="sticky-usernamebutton mdl-button mdl-js-button" href="#">'+
+							'<div class="sticky-avatar" style="background-image: url('+user.picture+');background-size:contain;"></div>'+
+							'<div class="sticky-username">'+user.name+'</div>'+
+							'</a>'+
+							'</div>';
+						document.getElementById("collaborators_list").appendChild(prepareHtmlElement(elm, true));
+					});
+				}
+			} else {
+				elm = '<div>Looks like no-one is here. Wanna add a friend to help you out?</div>';
+				document.getElementById("collaborators_list").appendChild(prepareHtmlElement(elm, false));
+			}
 		});
 	}
 	/* ------------------------------------------
@@ -2417,14 +2467,12 @@ sticky.utils = (function (global) {
 			$(".sticky-avatar").css("background-size", "contain");
 		}
 		$(".sticky-username").html(global.core.getUser().name);
-		$("#profile").css('display', 'inline-block');
-		$("#controls").show();
+		$(".sticky-signed-in-user-container").css('display', 'block');
 	};
 
 	_self.hideProfile = function() {
-		$("#profile").hide();
-		$("#controls").hide();
-		$("#login").css('display', 'inline-block');
+		$(".sticky-signed-in-user-container").hide();
+		$("#login").css('display', 'block');
 	};
 
 	return _self;
@@ -2611,15 +2659,21 @@ sticky.core = (function (global) {
 		/* ------------------------------------------
 		register dialogs
 		------------------------------------------- */
-		var dialogAddColl = document.getElementById('add-collaborator');
-		if (!dialogAddColl.showModal) {
-			dialogPolyfill.registerDialog(dialogAddColl);
+		var dialogShowCollab = document.getElementById('show-collaborators');
+		if (!dialogShowCollab.showModal) {
+			dialogPolyfill.registerDialog(dialogShowCollab);
 		}
-		$('body').on('click', '.sticky-add-collaborator', function() {
-			dialogAddColl.showModal();
+		$('body').on('click', '.sticky-show-collaborators', function() {
+			global.utils.displayCollaborators($(this).closest(".sticky-note").attr("data-note-key"));
+			dialogShowCollab.showModal();
 		});
-		$('body').on('click', '#add-collaborator .close', function() {
-			dialogAddColl.close();
+		$('body').on('click', '#show-collaborators .close', function() {
+			dialogShowCollab.close();
+		});
+		$('body').on('click', '.mdl-dialog .add_new', function() {
+			global.utils.addCollaborator($("#show-collaborators").attr("data-rel"), $("#coll_email").val()).then(function(res) {
+				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
+			});
 		});
 	}
 
@@ -2665,10 +2719,6 @@ sticky.core = (function (global) {
 						function(error) {log.output(2, error);});
 				}
 			});
-			global.model.user.userFromData(authData.uid, authData.displayName, authData.photoURL, authData.google.email); // save local instance of user
-			// display interface
-			global.utils.displayProfile();
-			global.utils.loadSavedState(global.utils.getPage()); // load data
 
 			log.output(4, error);
 		}).catch(function(error) {
@@ -2679,16 +2729,6 @@ sticky.core = (function (global) {
 			var email = error.email;
 			// The firebase.auth.AuthCredential type that was used.
 			var credential = error.credential;
-		});
-		// save logged in user
-		firebase.auth().onAuthStateChanged(function(user) {
-			console.log("auth");
-			console.log(user);
-			if (user) {
-				global.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
-			} else {
-			// No user is signed in.
-			}
 		});
 	};
 
@@ -2715,14 +2755,17 @@ sticky.core = (function (global) {
 INITIATE STICKY NOTES APP
 ******************************************* */
 $(function() {
-	// INIT Sticky APP & WAIT TO CHECK FOR USER AUTH
+	// INIT Sticky APP
 	sticky.core.constr();
+	// WAIT TO CHECK FOR USER AUTH
 	firebase.auth().onAuthStateChanged(function(user) {
 		if (user) {
+			sticky.model.user.userFromData(user.uid, user.displayName, user.photoURL, user.email);
+			// load data
 			sticky.utils.displayProfile();
-			sticky.utils.loadSavedState(sticky.utils.getPage());
+			sticky.utils.loadSavedState(sticky.utils.getPage()); // load data
 		} else {
-			$("#login").show();
+			sticky.utils.hideProfile();
 		}
 	});
 });

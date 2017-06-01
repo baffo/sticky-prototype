@@ -22,41 +22,34 @@
 					<h3 class="sticky-logo"><a href="/" class="is-active"><i class="material-icons">message</i> Sticky App</a></h3>
 					<div class="mdl-layout-spacer"></div>
 
-					<!-- Signed-in User Info -->
+					<!-- USER SETTINGS -->
 					<div class="mdl-cell--hide-phone">
 						<button id="login" class="sticky-sign-in-button sticky-signed-out-only mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">account_circle</i> Sign in</button>
-						<div class="sticky-signed-in-user-container mdl-cell--hide-phone " style="display: block;">
+						<div class="sticky-signed-in-user-container mdl-cell--hide-phone" style="display:none;">
 							<a class="sticky-usernamebutton mdl-button mdl-js-button" href="#">
 								<div class="sticky-avatar"></div>
 								<div class="sticky-username mdl-color-text--white"></div>
 							</a>
 						</div>
 					</div>
-
-					<!-- Drop Down Menu -->
-					<button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-cell--hide-phone" id="sticky-menu"><i class="material-icons">more_vert</i></button>
-					<div class="mdl-menu__container">
-						<div class="mdl-menu__outline mdl-menu--bottom-right"></div>
-						<ul class="sticky-menu-list mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right mdl-js-ripple-effect--ignore-events" for="sticky-menu">
-							<a href="/about">
-								<li class="mdl-menu__item mdl-js-ripple-effect" tabindex="-1" data-upgraded=",MaterialRipple"><i class="material-icons">perm_contact_calendar</i> Help me out!</li>
-							</a>
-							<li id="logout" class="sticky-sign-out mdl-menu__item  mdl-js-ripple-effect" tabindex="-1" style="display: list-item;"><i class="material-icons">exit_to_app</i> Sign out</li>
-						</ul>
+					<div class="mdl-cell--hide-phone">
+						<button id="add-friend" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">person_add</i></button>
+						<button id="help" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">live_help</i></button>
+						<button id="logout" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">exit_to_app</i></button>
 					</div>
 				</div>
 
-				<!-- Navigation Bar -->
+				<!-- NAVIGATION -->
 				<div class="sticky-tab mdl-layout__header-row mdl-cell--hide-phone mdl-color--indigo-600">
 					<div class="mdl-tab">
 						<a href="/" id="sticky-menu-home" class="st-home mdl-layout__tab  mdl-button mdl-js-button mdl-js-ripple-effect is_active"><i class="material-icons">home</i> Home</a>
-						<a href="/?archive" id="sticky-menu-feed" class="st-archive mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">archive</i> Archive</a>
+						<a href="/?archive" id="sticky-menu-archive" class="st-archive mdl-layout__tab mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">archive</i> Archive</a>
 						<button id="add-note" class=" mdl-button mdl-js-button mdl-button--fab mdl-cell--hide-tablet mdl-color--amber-400 mdl-shadow--4dp mdl-js-ripple-effect" ><i class="material-icons">add</i></button>
 					</div>
 				</div>
 			</header>
 
-			<!-- Drawer menu -->
+			<!-- DRAWER -->
 			<div class="mdl-cell--hide-desktop mdl-cell--hide-tablet mdl-layout__drawer" aria-hidden="true">
 				<a href="/" class="sticky-signed-out-only" style="display: none;"><button class="sticky-sign-in-button mdl-button mdl-js-button mdl-js-ripple-effect" ><i class="material-icons">account_circle</i> Sign in</button></a>
 				<div class="sticky-signed-in-user-container mdl-color--indigo-700 " style="display: block;">
@@ -82,29 +75,19 @@
 					<div id="dz2" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="2"></div>
 				</div>
 				<!-- DIALOGS -->
-				<dialog id="add-collaborator" class="mdl-dialog mdl-shadow--2dp">
+				<dialog id="show-collaborators" class="mdl-dialog mdl-shadow--2dp" data-rel="">
 					<form action="#">
-						<h4 class="mdl-dialog__title">Add Collaborator</h4>
-						<div id="ac_friendslist" class="mdl-dialog__content">
-							<div class="ac_fl_line">
-								<div class="checkbox-item '+checked+'">
-								<label class="mdl-checkbox mdl-js-checkbox" for="note'+stickyNoteId+'-item'+stickyItemId+'">
-									<input type="checkbox" id="note'+stickyNoteId+'-item'+stickyItemId+'" class="mdl-checkbox__input">
-								</label>
-								<div id="" class="">primoz.bevk@gmail.com</div>
-								</div>
-							</div>
+						<h4 class="mdl-dialog__title">Collaborators</h4>
+						<div id="collaborators_list" class="mdl-dialog__content">
 						</div>
-						<div class="mdl-dialog__content">
-							<div class="mdl-textfield mdl-js-textfield">
-								<input class="mdl-textfield__input" type="text" id="coll_email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}">
-								<label class="mdl-textfield__label" for="coll_email">Email address</label>
-								<span class="mdl-textfield__error">This is not a valid email address</span>
-							</div>
-							<button type="button" class="mdl-button mdl-button--colored close">Add New</button>
+						<div class="mdl-textfield mdl-js-textfield">
+							<input class="mdl-textfield__input" type="text" id="coll_email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}">
+							<label class="mdl-textfield__label" for="coll_email">Email address</label>
+							<span class="mdl-textfield__error">This is not a valid email address</span>
 						</div>
+						<button type="button" class="mdl-button mdl-color--amber-400 add_new">Add</button>
 						<div class="mdl-dialog__actions">
-						  <button type="button" class="mdl-button mdl-button--colored close">Done</button>
+						  <button type="button" class="mdl-button close">Close</button>
 						</div>
 					</form>
 				</dialog>
