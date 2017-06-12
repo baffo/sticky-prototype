@@ -180,6 +180,23 @@ sticky.core = (function (global) {
 		/* ------------------------------------------
 		register dialogs
 		------------------------------------------- */
+		var dialogShowFriends = document.getElementById('show-friends');
+		if (!dialogShowFriends.showModal) {
+			dialogPolyfill.registerDialog(dialogShowFriends);
+		}
+		$('body').on('click', '#add-friend', function() {
+			global.utils.displayFriends();
+			dialogShowFriends.showModal();
+		});
+		$('body').on('click', '#show-friends .close', function() {
+			dialogShowFriends.close();
+		});
+		$('body').on('click', '.mdl-dialog .add_new_friends', function() {
+			global.utils.addFriend($("#friend_email").val()).then(function(res) {
+				global.utils.displayFriends(); // refresh view
+			});
+		});
+
 		var dialogShowCollab = document.getElementById('show-collaborators');
 		if (!dialogShowCollab.showModal) {
 			dialogPolyfill.registerDialog(dialogShowCollab);
@@ -193,6 +210,11 @@ sticky.core = (function (global) {
 		});
 		$('body').on('click', '.mdl-dialog .add_new', function() {
 			global.utils.addCollaborator($("#show-collaborators").attr("data-rel"), $("#coll_email").val()).then(function(res) {
+				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
+			});
+		});
+		$('body').on('click', '.mdl-dialog .delete', function() {
+			global.utils.deleteCollaborator($(this).closest(".sticky-signed-in-user-container").attr("data-email")).then(function(res) {
 				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
 			});
 		});

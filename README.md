@@ -1,4 +1,4 @@
-Sticky Prototype v0.5.1
+Sticky Prototype v0.5.2
 ================
 
 Sticky notes web app, client based, works in offline mode thanks to Firebase.
@@ -29,9 +29,12 @@ TO-DO:
 KNOWN BUGS:
 --------------------
 * loaded to-do items do not have clickable checkboxes
+* non-owners cannot see note collaborators
 
 CHANGELOG:
 --------------------
+__v0.5.2__<br />
+_Add friends_<br />
 __v0.5.1__<br />
 _updated TO-DO list_<br />
 __v0.5.0__<br />

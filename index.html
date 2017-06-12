@@ -34,7 +34,6 @@
 					</div>
 					<div class="mdl-cell--hide-phone">
 						<button id="add-friend" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">person_add</i></button>
-						<button id="help" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">live_help</i></button>
 						<button id="logout" class="mdl-button mdl-js-button mdl-cell--hide-tablet mdl-js-ripple-effect" ><i class="material-icons mdl-color-text--white">exit_to_app</i></button>
 					</div>
 				</div>
@@ -75,6 +74,22 @@
 					<div id="dz2" class="mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--4-col-phon dropzone" data-column="2"></div>
 				</div>
 				<!-- DIALOGS -->
+				<dialog id="show-friends" class="mdl-dialog mdl-shadow--2dp" data-rel="">
+					<form action="#">
+						<h4 class="mdl-dialog__title">Friends</h4>
+						<div id="friends_list" class="mdl-dialog__content">
+						</div>
+						<div class="mdl-textfield mdl-js-textfield">
+							<input class="mdl-textfield__input" type="text" id="friend_email" pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}">
+							<label class="mdl-textfield__label" for="friend_email">Email address</label>
+							<span class="mdl-textfield__error">This is not a valid email address</span>
+						</div>
+						<button type="button" class="mdl-button mdl-color--amber-400 add_new_friends">Add</button>
+						<div class="mdl-dialog__actions">
+						  <button type="button" class="mdl-button close">Close</button>
+						</div>
+					</form>
+				</dialog>
 				<dialog id="show-collaborators" class="mdl-dialog mdl-shadow--2dp" data-rel="">
 					<form action="#">
 						<h4 class="mdl-dialog__title">Collaborators</h4>

@@ -2375,23 +2375,42 @@ sticky.utils = (function (global) {
 	var emailToKey = function(emailAddress) {
 		return emailAddress.replace(/[.]/g, '%20');
 	}
+	var keyToEmail = function(emailAddress) {
+		return emailAddress.replace(/%20/g, '.');
+	}
 	var getUserByEmail = function(emailAddress) {
 		return global.core._user_index.child(emailToKey(emailAddress)).once('value').then(function(snap) {
+			if (snap.val()) {
+				return snap.val();
+			}
+			return emailAddress;
+		});
+	}
+	var getCollaborators = function(noteKey) {
+		return global.core._notes.child(noteKey+'/collaborators').once('value').then(function(snap) {
+			return snap.val();
+		});
+	}
+	var getFriends = function() {
+		return global.core._users.child(global.core.getUser().uid+'/friends/').once('value').then(function(snap) {
 			return snap.val();
 		});
 	}
 	_self.addFriend = function(emailAddress) {
-		global.core._users.child(global.core.getUser().uid+'/friends/'+emailToKey(emailAddress)).set(true, function(error) {
+		return global.core._users.child(global.core.getUser().uid+'/friends/'+emailToKey(emailAddress)).set(true, function(error) {
 			if (error) {
 				log.output(0, error);
 			} else {
 				// success
 			}});
 	}
-	var getCollaborators = function(noteKey) {
-		return global.core._notes.child(noteKey+'/collaborators').once('value').then(function(snap) {
-			return snap.val();
-		});
+	_self.deleteFriend = function(friendEmail) {
+		global.core._users.child(global.core.getUser().uid+'/friends/'+emailToKey(emailAddress)).set(null, function(error) {
+			if (error) {
+				log.output(0, error);
+			} else {
+				// success
+			}});
 	}
 	_self.addCollaborator = function(noteKey, friendEmail) {
 		return getUserByEmail(friendEmail).then(function(collaborator) {
@@ -2406,6 +2425,7 @@ sticky.utils = (function (global) {
 		});
 	}
 
+	// display Collaborators
 	_self.displayCollaborators = function(noteKey) {
 		// clear contents
 		document.getElementById("collaborators_list").innerHTML = "";
@@ -2417,18 +2437,43 @@ sticky.utils = (function (global) {
 			if (collaborators != null) {
 				for (collaborator in collaborators) {
 					getUserByEmail(collaborators[collaborator].email).then(function(user) {
-						elm = '<div class="sticky-signed-in-user-container">'+
-							'<a class="sticky-usernamebutton mdl-button mdl-js-button" href="#">'+
-							'<div class="sticky-avatar" style="background-image: url('+user.picture+');background-size:contain;"></div>'+
-							'<div class="sticky-username">'+user.name+'</div>'+
-							'</a>'+
-							'</div>';
-						document.getElementById("collaborators_list").appendChild(prepareHtmlElement(elm, true));
+						document.getElementById("collaborators_list").appendChild(prepareHtmlElement(returnSingleUserListItem(user), true));
 					});
 				}
 			} else {
 				elm = '<div>Looks like no-one is here. Wanna add a friend to help you out?</div>';
 				document.getElementById("collaborators_list").appendChild(prepareHtmlElement(elm, false));
+			}
+		});
+	}
+
+	// display Friends
+	_self.displayFriends = function(noteKey) {
+		// clear contents
+		document.getElementById("friends_list").innerHTML = "";
+		$("#show-friends").attr("data-rel", noteKey);
+		$("#friend_email").val("");
+
+		// retrieve data
+		getFriends().then(function(friends) {
+			if (friends != null) {
+				for (friend in friends) {
+					getUserByEmail(friend).then(function(user) {
+						console.log(user);
+						if (user.name) { // friend is already registerd
+							document.getElementById("friends_list").appendChild(prepareHtmlElement(returnSingleUserListItem(user), true));
+						} else { // not registered! TO-DO send invite!
+							var user = {
+								email: keyToEmail(user),
+							}
+							document.getElementById("friends_list").appendChild(prepareHtmlElement(returnSingleUserListItem(user), true));
+						}
+
+					});
+				}
+			} else {
+				elm = '<div>Looks like no-one is here. Want to connect with your friends?</div>';
+				document.getElementById("friends_list").appendChild(prepareHtmlElement(elm, false));
 			}
 		});
 	}
@@ -2456,8 +2501,17 @@ sticky.utils = (function (global) {
 		return elm;
 	};
 
-	var getGreeting = function() {
-		return vars.greetings[Math.floor((Math.random() * vars.greetings.length))];
+	var returnSingleUserListItem = function(user) {
+		var picture = user.picture == null ? "not_registered.png" : user.picture;
+		var name = user.name == null ? user.email : user.name;
+
+		var elm = '<div class="sticky-signed-in-user-container" data-email="'+user.email+'">'+
+			'<a class="sticky-usernamebutton mdl-button mdl-js-button" href="#">'+
+			'<div class="sticky-avatar" style="background-image: url('+picture+');background-size:contain;"></div>'+
+			'<div class="sticky-username">'+name+'</div>'+
+			'</a>'+
+			'</div>';
+		return elm;
 	};
 
 	_self.displayProfile = function() {
@@ -2659,6 +2713,23 @@ sticky.core = (function (global) {
 		/* ------------------------------------------
 		register dialogs
 		------------------------------------------- */
+		var dialogShowFriends = document.getElementById('show-friends');
+		if (!dialogShowFriends.showModal) {
+			dialogPolyfill.registerDialog(dialogShowFriends);
+		}
+		$('body').on('click', '#add-friend', function() {
+			global.utils.displayFriends();
+			dialogShowFriends.showModal();
+		});
+		$('body').on('click', '#show-friends .close', function() {
+			dialogShowFriends.close();
+		});
+		$('body').on('click', '.mdl-dialog .add_new_friends', function() {
+			global.utils.addFriend($("#friend_email").val()).then(function(res) {
+				global.utils.displayFriends(); // refresh view
+			});
+		});
+
 		var dialogShowCollab = document.getElementById('show-collaborators');
 		if (!dialogShowCollab.showModal) {
 			dialogPolyfill.registerDialog(dialogShowCollab);
@@ -2672,6 +2743,11 @@ sticky.core = (function (global) {
 		});
 		$('body').on('click', '.mdl-dialog .add_new', function() {
 			global.utils.addCollaborator($("#show-collaborators").attr("data-rel"), $("#coll_email").val()).then(function(res) {
+				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
+			});
+		});
+		$('body').on('click', '.mdl-dialog .delete', function() {
+			global.utils.deleteCollaborator($(this).closest(".sticky-signed-in-user-container").attr("data-email")).then(function(res) {
 				global.utils.displayCollaborators($("#show-collaborators").attr("data-rel")); // refresh view
 			});
 		});
