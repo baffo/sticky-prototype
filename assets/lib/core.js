@@ -123,7 +123,7 @@ sticky.core = (function (global) {
 		$('body').on('click', '.can-edit:not(a)', function(event) {
 			if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
 				var type = "input";
-				if (event.ctrlKey && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
+				if ((event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
 					type = "checkbox";
 				}
 				try {
@@ -169,11 +169,15 @@ sticky.core = (function (global) {
 				var set = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")).set(
 					null,
 					function(error) {log.output(3, error);});
+
+				var $previous = $(this).closest(".can-edit").prev();
+
 				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
 					$(this).closest(".checkbox-item").parent().remove();
 				} else {
 					$(this).closest(".can-edit").remove();
 				}
+				$previous.click();
 			}
 		});
 
