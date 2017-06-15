@@ -3,6 +3,15 @@ Sticky Prototype v0.5.2
 
 Sticky notes web app, client based, works in offline mode thanks to Firebase.
 
+Features:
+--------------------
+* login with Google & show your Profile
+* create new Notes with text and to-do items
+* archive notes
+* add external links in notes
+* add Friends and share your Notes
+
+
 TO-DO:
 --------------------
 **User features**
@@ -11,7 +20,6 @@ TO-DO:
 * send verification email
 
 **Social features**
-* sharing of sticky notes among users (add collaborators)
 * deleting shared notes (delete only collaborator entry & from shared index) Notes can be deleted only by owner!
 * shared notes can have different position in each users grid (make grid coordinates for notes user based, not note based)
 * collaborator UI (display collaborators, create UI for adding/removing/finding collaborators & adding friends)
@@ -28,11 +36,12 @@ TO-DO:
 
 KNOWN BUGS:
 --------------------
-* loaded to-do items do not have clickable checkboxes
 * non-owners cannot see note collaborators
 
 CHANGELOG:
 --------------------
+__v0.5.3__<br />
+_Fixed toggling to-do items in notes; after deleting lines jump to previous line item_<br />
 __v0.5.2__<br />
 _Add friends_<br />
 __v0.5.1__<br />

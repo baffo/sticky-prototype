@@ -126,6 +126,7 @@ sticky.utils = (function (global) {
 		});
 	};
 	_self.loadSavedState = function(page) {
+		console.log("Retrieving Saved State");
 		// get personal notes
 		global.core._users.child(global.core.getUser().uid).child('notes').once("value", function(snapshot) {
 			var promisedNotes = [];
@@ -135,6 +136,7 @@ sticky.utils = (function (global) {
 				promisedNotes.push(promise);
 			});
 			Promise.all(promisedNotes).then(function(results) {
+				console.log("Loaded Personal Notes");
 				$("#home .mdl-badge").attr("data-badge", vars.homeCount);
 				$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
 			});
@@ -148,6 +150,7 @@ sticky.utils = (function (global) {
 				promisedNotes.push(promise);
 			});
 			Promise.all(promisedNotes).then(function(results) {
+				console.log("Loaded Shared Notes");
 				$("#home .mdl-badge").attr("data-badge", vars.homeCount);
 				$("#archive .mdl-badge").attr("data-badge", vars.archivedCount);
 			});

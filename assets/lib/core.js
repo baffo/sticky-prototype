@@ -3,14 +3,16 @@ var sticky = sticky || {};
 initialize variables
 ------------------------------------------- */
 sticky.core = (function (global) {
+	// GLOBAL variables
 	var _self = {};
 	var vars = global.vars;
 	var log = global.model.log;
 	var utils = global.utils;
+	var newEditableFieldState = "input";
 
 	_self.constr = function() {
 		// Initialize firebase
-		console.log("cc");
+		console.log("Initializing Firebase");
 		var config = {
 			apiKey: "AIzaSyAv7-HAOAE72ig6Tle2G0Q4PWxufGqWJq0",
 		    authDomain: "boiling-torch-8284.firebaseapp.com",
@@ -31,6 +33,7 @@ sticky.core = (function (global) {
 	}
 
 	var interface = function() {
+		console.log("Drawing Interface");
 		/* *******************************************
 		dragula.js DRAG & DROP
 		******************************************* */
@@ -122,9 +125,9 @@ sticky.core = (function (global) {
 		// INVOKE EDITABLE LINE
 		$('body').on('click', '.can-edit:not(a)', function(event) {
 			if (!$(this).hasClass("sticky-editing")) { // check if we're already editing - prevent nesting
-				var type = "input";
-				if ((event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) && !$(this).hasClass('is-checkbox')) { // if ctrl is pressed, toggle checkbox input/ prevent nesting of checkboxes
-					type = "checkbox";
+				var type = newEditableFieldState;
+				if (type == "checkbox" && $(this).hasClass('is-checkbox')) { // prevent checkbox nesting
+					type = "input";
 				}
 				try {
 					utils.spawnEditableField(type, $(this).attr("id"), $(this).html(), $(this).attr("data-sticky-id"),$(this).attr("data-item-id"));
@@ -154,6 +157,8 @@ sticky.core = (function (global) {
 		$('body').on('keydown', '.mdl-textfield__input', function (event) {
 			if (event.keyCode === 13) {
 				event.preventDefault(); // prevent ENTER to trigger page reload
+			} else if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) { // if ctrl is pressed, toggle checkbox input
+				newEditableFieldState = "checkbox";
 			}
 		});
 		// key events on editable content
@@ -161,6 +166,9 @@ sticky.core = (function (global) {
 			if (event.keyCode === 27) { // remove focus on ESC (finish editing)
 				$(this).blur();
 			}
+			if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) { //if ctrl is lifted, toggle classic input
+			   newEditableFieldState = "input";
+		   	}
 			if (event.keyCode === 13) { // remove focus and start new line on ENTER
 				$(this).closest(".can-edit").next().click();
 				$(this).blur();
@@ -170,14 +178,17 @@ sticky.core = (function (global) {
 					null,
 					function(error) {log.output(3, error);});
 
-				var $previous = $(this).closest(".can-edit").prev();
-
+				var $previous = $(this).closest(".can-edit").prev().findBack(".can-edit");
+				var $previousCheckbox = $(this).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
+				console.log($previousCheckbox);
 				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
 					$(this).closest(".checkbox-item").parent().remove();
+					$previousCheckbox.click();
 				} else {
 					$(this).closest(".can-edit").remove();
+					$previous.click();
 				}
-				$previous.click();
+
 			}
 		});
 

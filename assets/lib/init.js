@@ -1,8 +1,16 @@
-var loggedUser;
 /* *******************************************
 INITIATE STICKY NOTES APP
 ******************************************* */
+$.fn.findBack = function(expr) {
+    var r = this.find(expr);
+    if (this.is(expr)) r = r.add(this);
+    return this.pushStack(r);
+};
 $(function() {
+	console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	console.log("Sticky App v"+sticky.vars.version);
+	console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	console.log("Starting Up");
 	// INIT Sticky APP
 	sticky.core.constr();
 	// WAIT TO CHECK FOR USER AUTH
