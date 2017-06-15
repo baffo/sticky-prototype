@@ -3,7 +3,7 @@ var sticky = sticky || {};
 initialize variables
 ------------------------------------------- */
 sticky.vars = {
-	version: '0.5.2',
+	version: '0.5.3',
 	globalStickyNoteCounter: 0,
 	homeCount: 0,
 	archivedCount: 0,

@@ -2019,7 +2019,7 @@ if (typeof exports !== 'undefined') {
 initialize variables
 ------------------------------------------- */
 sticky.vars = {
-	version: '0.5.2',
+	version: '0.5.3',
 	globalStickyNoteCounter: 0,
 	homeCount: 0,
 	archivedCount: 0,
@@ -2692,25 +2692,36 @@ sticky.core = (function (global) {
 		});
 		// key events on editable content
 		$('body').on('keydown', '.mdl-textfield__input', function (event) {
+			// PREVENT ENTER FROM RELOADING PAGE
 			if (event.keyCode === 13) {
-				event.preventDefault(); // prevent ENTER to trigger page reload
-			} else if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) { // if ctrl is pressed, toggle checkbox input
+				event.preventDefault();
+			}
+			// ENABLE CHECKBOX field creation
+			if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) { // if ctrl is pressed, toggle checkbox input
 				newEditableFieldState = "checkbox";
 			}
 		});
 		// key events on editable content
 		$('body').on('keyup', '.mdl-textfield__input', function (event) {
-			if (event.keyCode === 27) { // remove focus on ESC (finish editing)
+			// REMOVE FOCUS ON ESC (finish editing)
+			if (event.keyCode === 27) {
 				$(this).blur();
 			}
-			if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) { //if ctrl is lifted, toggle classic input
+			// CTRL/CMD key LIFTED -> enable input field creation
+			if (event.ctrlKey || event.keyCode === 17 || event.keyCode === 91) {
 			   newEditableFieldState = "input";
 		   	}
-			if (event.keyCode === 13) { // remove focus and start new line on ENTER
-				$(this).closest(".can-edit").next().click();
+			// GO TO NEXT EXISTING/NEW LINE, SWITCH FOCUS
+			if (event.keyCode === 13) {
+				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
+					$(this).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+				} else {
+					$(this).closest(".can-edit").next().findBack(".can-edit").click();
+				}
 				$(this).blur();
 			}
-			if (event.keyCode === 46) { // delete line item
+			// DELETE LINE
+			if (event.keyCode === 46) {
 				var set = _self._notes.child($(this).closest(".sticky-note").attr("data-note-key")+"/items/"+$(this).closest(".can-edit").attr("data-item-key")).set(
 					null,
 					function(error) {log.output(3, error);});
