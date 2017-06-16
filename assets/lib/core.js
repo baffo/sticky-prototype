@@ -153,8 +153,58 @@ sticky.core = (function (global) {
 				},
 				function(error) {log.output(0, error);});
 		});
-		// key events on editable content
-		$('body').on('keydown', '.mdl-textfield__input', function (event) {
+
+		// REGISTER KEY EVENTS WATCHERS
+		var textfield = global.input('mdl-textfield__input');
+
+		// CHECKBOX TOGGLE WATCHER
+		textfield.watch("checkbox_toggle", function(el) {
+			newEditableFieldState = "checkbox";
+		}, function(el) {
+			newEditableFieldState = "input";
+		}, "Meta");
+
+		// NEWLINE WATCHER
+		textfield.watch("ctrlenter", function(el) {
+			newEditableFieldState = "checkbox";
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+			} else {
+				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+			}
+			$(el).blur();
+		}, function(el) {
+			newEditableFieldState = "input";
+		}, "Meta", "Enter");
+
+		// NEWLINE WATCHER
+		textfield.watch("enter", function(el) {}, function(el) {
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+			} else {
+				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+			}
+			$(el).blur();
+		}, "Enter");
+
+		// DELETE WATCHER
+		textfield.watch("delete", function(el) {}, function(el) {
+			var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
+				null,
+				function(error) {log.output(3, error);});
+
+			var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
+			var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".checkbox-item").parent().remove();
+				$previousCheckbox.click();
+			} else {
+				$(el).closest(".can-edit").remove();
+				$previous.click();
+			}
+		}, "Delete");
+
+		/*$('body').on('keydown', '.mdl-textfield__input', function (event) {
 			// PREVENT ENTER FROM RELOADING PAGE
 			if (event.keyCode === 13) {
 				event.preventDefault();
@@ -191,7 +241,6 @@ sticky.core = (function (global) {
 
 				var $previous = $(this).closest(".can-edit").prev().findBack(".can-edit");
 				var $previousCheckbox = $(this).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
-				console.log($previousCheckbox);
 				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
 					$(this).closest(".checkbox-item").parent().remove();
 					$previousCheckbox.click();
@@ -201,7 +250,7 @@ sticky.core = (function (global) {
 				}
 
 			}
-		});
+		});*/
 
 		/* ------------------------------------------
 		register dialogs

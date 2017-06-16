@@ -2073,6 +2073,114 @@ sticky.model.user = (function (global) {
 	return _self;
 })(sticky);
 ;var sticky = sticky || {};
+//
+// Original implementation @Braden Best https://stackoverflow.com/questions/5203407/javascript-multiple-keys-pressed-at-once
+// Modifications @Primoz Bevk
+// modified to apply listeners to dynamically added elements with certain className/tagName
+// has a KeyUp callback in addition to the original KeyDown callback
+// passes event.target to callbacks
+//
+sticky.input = function (el) {
+    var _self = {},
+		keysMap = {},
+		keysMapHistory = {},
+		target = null,
+        intervals = {};
+
+    var ev_kdown = function(event) {
+		if (event.target.className.toLowerCase() === el || event.target.tagName.toLowerCase() === el) {
+			if (event.key == "Enter") {
+				event.preventDefault();
+			}
+	        keysMap[event.key] = true;
+			target = event.target;
+			return;
+		}
+    }
+
+    var ev_kup = function(event) {
+		if (event.target.className.toLowerCase() === el || event.target.tagName.toLowerCase() === el) {
+	        keysMap[event.key] = false;
+			target = event.target;
+			return;
+		}
+    }
+
+    var key_down = function(key) {
+        return keysMap[key];
+    }
+
+    var keys_down_array = function(array) {
+		var keys_down = [];
+        for (var i = 0; i < array.length; i++) {
+            if (!key_down(array[i])) {
+                return false;
+			} else {
+				keys_down.push(array[i]);
+			}
+		}
+		for (var i = 0; i < keys_down.length; i++) {
+			keysMapHistory[keys_down[i]] = true;
+		}
+        return true;
+    }
+
+	var keys_up_array = function(array) {
+        for(var i = 0; i < array.length; i++)
+            if(!keysMapHistory[array[i]]) {
+				keysMapHistory[array[i]] = false;
+                return false;
+			} else {
+				keysMapHistory[array[i]] = false;
+			}
+
+        return true;
+    }
+
+    var keys_down_arguments = function() {
+        return keys_down_array(Array.from(arguments));
+    }
+
+    _self.clear = function() {
+        keysMap = {};
+		keysMapHistory = {};
+    }
+
+    var watch_loop = function(keylist, callbackKeyDown, callbackKeyUp){
+        return function() {
+            if (keys_down_array(keylist)) {
+				callbackKeyDown(target);
+			} else if (keys_up_array(keylist)) {
+				callbackKeyUp(target);
+			}
+        }
+    }
+
+    _self.watch = function(name, callbackKeyDown, callbackKeyUp) {
+        var keylist = Array.from(arguments).splice(3);
+        intervals[name] = setInterval(watch_loop(keylist, callbackKeyDown, callbackKeyUp), 1000/24);
+    }
+
+    _self.unwatch = function(name) {
+        clearInterval(intervals[name]);
+        delete intervals[name];
+    }
+
+    _self.detach = function() {
+        document.querySelector('body').removeEventListener("keydown", ev_kdown);
+        document.querySelector('body').removeEventListener("keyup", ev_kup);
+    }
+
+    var attach = function(el) {
+        document.querySelector('body').addEventListener("keydown", ev_kdown);
+        document.querySelector('body').addEventListener("keyup", ev_kup);
+    }
+
+    attach();
+
+    return _self;
+};
+;var sticky = sticky || {};
 
 sticky.utils = (function (global) {
 	var _self = {};
@@ -2690,8 +2798,58 @@ sticky.core = (function (global) {
 				},
 				function(error) {log.output(0, error);});
 		});
-		// key events on editable content
-		$('body').on('keydown', '.mdl-textfield__input', function (event) {
+
+		// REGISTER KEY EVENTS WATCHERS
+		var textfield = global.input('mdl-textfield__input');
+
+		// CHECKBOX TOGGLE WATCHER
+		textfield.watch("checkbox_toggle", function(el) {
+			newEditableFieldState = "checkbox";
+		}, function(el) {
+			newEditableFieldState = "input";
+		}, "Meta");
+
+		// NEWLINE WATCHER
+		textfield.watch("ctrlenter", function(el) {
+			newEditableFieldState = "checkbox";
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+			} else {
+				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+			}
+			$(el).blur();
+		}, function(el) {
+			newEditableFieldState = "input";
+		}, "Meta", "Enter");
+
+		// NEWLINE WATCHER
+		textfield.watch("enter", function(el) {}, function(el) {
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+			} else {
+				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+			}
+			$(el).blur();
+		}, "Enter");
+
+		// DELETE WATCHER
+		textfield.watch("delete", function(el) {}, function(el) {
+			var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
+				null,
+				function(error) {log.output(3, error);});
+
+			var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
+			var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
+			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+				$(el).closest(".checkbox-item").parent().remove();
+				$previousCheckbox.click();
+			} else {
+				$(el).closest(".can-edit").remove();
+				$previous.click();
+			}
+		}, "Delete");
+
+		/*$('body').on('keydown', '.mdl-textfield__input', function (event) {
 			// PREVENT ENTER FROM RELOADING PAGE
 			if (event.keyCode === 13) {
 				event.preventDefault();
@@ -2728,7 +2886,6 @@ sticky.core = (function (global) {
 
 				var $previous = $(this).closest(".can-edit").prev().findBack(".can-edit");
 				var $previousCheckbox = $(this).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
-				console.log($previousCheckbox);
 				if ($(this).closest(".can-edit").hasClass('checkbox-content')) {
 					$(this).closest(".checkbox-item").parent().remove();
 					$previousCheckbox.click();
@@ -2738,7 +2895,7 @@ sticky.core = (function (global) {
 				}
 
 			}
-		});
+		});*/
 
 		/* ------------------------------------------
 		register dialogs
