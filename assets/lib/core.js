@@ -157,52 +157,51 @@ sticky.core = (function (global) {
 		// REGISTER KEY EVENTS WATCHERS
 		var textfield = global.input('mdl-textfield__input');
 
-		// CHECKBOX TOGGLE WATCHER
-		textfield.watch("checkbox_toggle", function(el) {
-			newEditableFieldState = "checkbox";
-		}, function(el) {
-			newEditableFieldState = "input";
-		}, "Meta");
+		// KEY SHORTCUT WATCHER
+		textfield.watch(function(keycombo, el) { // KEY DOWN
+			console.log(keycombo);
+			if (keycombo == "ctrlenter") {
+				newEditableFieldState = "checkbox";
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+				} else {
+					$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				}
+				$(el).blur();
+			} else if (keycombo == "enter") {
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+				} else {
+					$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				}
+				$(el).blur();
+			} else if (keycombo == "ctrl") {
+				newEditableFieldState = "checkbox";
+			} else if (keycombo == "delete") {
+				var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
+					null,
+					function(error) {log.output(3, error);});
 
-		// NEWLINE WATCHER
-		textfield.watch("ctrlenter", function(el) {
-			newEditableFieldState = "checkbox";
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
-			} else {
-				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
+				var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".checkbox-item").parent().remove();
+					$previousCheckbox.click();
+				} else {
+					$(el).closest(".can-edit").remove();
+					$previous.click();
+				}
 			}
-			$(el).blur();
-		}, function(el) {
-			newEditableFieldState = "input";
-		}, "Meta", "Enter");
 
-		// NEWLINE WATCHER
-		textfield.watch("enter", function(el) {}, function(el) {
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
-			} else {
-				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+		}, function(keycombo, el) { // KEY UP
+			if (keycombo == "ctrlenter") {
+				newEditableFieldState = "input";
+			} else if (keycombo == "enter") {
+
+			} else if (keycombo == "ctrl") {
+				newEditableFieldState = "input";
 			}
-			$(el).blur();
-		}, "Enter");
-
-		// DELETE WATCHER
-		textfield.watch("delete", function(el) {}, function(el) {
-			var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
-				null,
-				function(error) {log.output(3, error);});
-
-			var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
-			var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".checkbox-item").parent().remove();
-				$previousCheckbox.click();
-			} else {
-				$(el).closest(".can-edit").remove();
-				$previous.click();
-			}
-		}, "Delete");
+		});
 
 		/*$('body').on('keydown', '.mdl-textfield__input', function (event) {
 			// PREVENT ENTER FROM RELOADING PAGE

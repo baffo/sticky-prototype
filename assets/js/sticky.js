@@ -2085,10 +2085,10 @@ sticky.input = function (el) {
 		keysMap = {},
 		keysMapHistory = {},
 		target = null,
-        intervals = {};
+        interval = null;
 
-    var ev_kdown = function(event) {
-		if (event.target.className.toLowerCase() === el || event.target.tagName.toLowerCase() === el) {
+    var event_keydown = function(event) {
+		if (event.target.classList.contains(el) || event.target.tagName.toLowerCase() === el) {
 			if (event.key == "Enter") {
 				event.preventDefault();
 			}
@@ -2098,8 +2098,8 @@ sticky.input = function (el) {
 		}
     }
 
-    var ev_kup = function(event) {
-		if (event.target.className.toLowerCase() === el || event.target.tagName.toLowerCase() === el) {
+    var event_keyup = function(event) {
+		if (event.target.classList.contains(el) || event.target.tagName.toLowerCase() === el) {
 	        keysMap[event.key] = false;
 			target = event.target;
 			return;
@@ -2110,37 +2110,6 @@ sticky.input = function (el) {
         return keysMap[key];
     }
 
-    var keys_down_array = function(array) {
-		var keys_down = [];
-        for (var i = 0; i < array.length; i++) {
-            if (!key_down(array[i])) {
-                return false;
-			} else {
-				keys_down.push(array[i]);
-			}
-		}
-		for (var i = 0; i < keys_down.length; i++) {
-			keysMapHistory[keys_down[i]] = true;
-		}
-        return true;
-    }
-
-	var keys_up_array = function(array) {
-        for(var i = 0; i < array.length; i++)
-            if(!keysMapHistory[array[i]]) {
-				keysMapHistory[array[i]] = false;
-                return false;
-			} else {
-				keysMapHistory[array[i]] = false;
-			}
-
-        return true;
-    }
-
-    var keys_down_arguments = function() {
-        return keys_down_array(Array.from(arguments));
-    }
-
     _self.clear = function() {
         keysMap = {};
 		keysMapHistory = {};
@@ -2148,32 +2117,52 @@ sticky.input = function (el) {
 
     var watch_loop = function(keylist, callbackKeyDown, callbackKeyUp){
         return function() {
-            if (keys_down_array(keylist)) {
-				callbackKeyDown(target);
-			} else if (keys_up_array(keylist)) {
-				callbackKeyUp(target);
+            if (key_down('Control') && key_down('Enter') || key_down('Meta') && key_down('Enter')) {
+				keysMapHistory['ctrlenter'] = true;
+				callbackKeyDown('ctrlenter', target);
+			} else if (key_down('Enter')) {
+				keysMapHistory['enter'] = true;
+				callbackKeyDown('enter', target);
+			} else if (key_down('Meta') || key_down('Control')) {
+				keysMapHistory['ctrl'] = true;
+				callbackKeyDown('ctrl', target);
+			} else if (key_down('Delete')) {
+				keysMapHistory['delete'] = true;
+				callbackKeyDown('delete', target);
+			} else if (!key_down('Control') && !key_down('Enter') && keysMapHistory['ctrlenter'] || !key_down('Meta') && !key_down('Enter') && keysMapHistory['ctrlenter']) {
+				keysMapHistory['ctrlenter'] = false;
+				callbackKeyUp('ctrlenter',target);
+			} else if (!key_down('Enter') && keysMapHistory['enter']) {
+				keysMapHistory['enter'] = false;
+				callbackKeyUp('enter',target);
+			} else if ((!key_down('Meta') || !key_down('Control')) && keysMapHistory['ctrl']) {
+				keysMapHistory['ctrl'] = false;
+				callbackKeyUp('ctrl',target);
+			} else if (!key_down('Delete') && keysMapHistory['delete']) {
+				keysMapHistory['delete'] = false;
+				callbackKeyUp('delete',target);
 			}
         }
     }
 
-    _self.watch = function(name, callbackKeyDown, callbackKeyUp) {
+    _self.watch = function(callbackKeyDown, callbackKeyUp) {
         var keylist = Array.from(arguments).splice(3);
-        intervals[name] = setInterval(watch_loop(keylist, callbackKeyDown, callbackKeyUp), 1000/24);
+        interval = setInterval(watch_loop(keylist, callbackKeyDown, callbackKeyUp), 1000/24);
     }
 
-    _self.unwatch = function(name) {
-        clearInterval(intervals[name]);
-        delete intervals[name];
+    _self.unwatch = function() {
+        clearInterval(interval);
+        delete interval;
     }
 
     _self.detach = function() {
-        document.querySelector('body').removeEventListener("keydown", ev_kdown);
-        document.querySelector('body').removeEventListener("keyup", ev_kup);
+        document.querySelector('body').removeEventListener("keydown", event_keydown);
+        document.querySelector('body').removeEventListener("keyup", event_keyup);
     }
 
     var attach = function(el) {
-        document.querySelector('body').addEventListener("keydown", ev_kdown);
-        document.querySelector('body').addEventListener("keyup", ev_kup);
+        document.querySelector('body').addEventListener("keydown", event_keydown);
+        document.querySelector('body').addEventListener("keyup", event_keyup);
     }
 
     attach();
@@ -2802,52 +2791,51 @@ sticky.core = (function (global) {
 		// REGISTER KEY EVENTS WATCHERS
 		var textfield = global.input('mdl-textfield__input');
 
-		// CHECKBOX TOGGLE WATCHER
-		textfield.watch("checkbox_toggle", function(el) {
-			newEditableFieldState = "checkbox";
-		}, function(el) {
-			newEditableFieldState = "input";
-		}, "Meta");
+		// KEY SHORTCUT WATCHER
+		textfield.watch(function(keycombo, el) {
+			console.log(keycombo);
+			if (keycombo == "ctrlenter") {
+				newEditableFieldState = "checkbox";
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+				} else {
+					$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				}
+				$(el).blur();
+			} else if (keycombo == "enter") {
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
+				} else {
+					$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				}
+				$(el).blur();
+			} else if (keycombo == "ctrl") {
+				newEditableFieldState = "checkbox";
+			} else if (keycombo == "delete") {
+				var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
+					null,
+					function(error) {log.output(3, error);});
 
-		// NEWLINE WATCHER
-		textfield.watch("ctrlenter", function(el) {
-			newEditableFieldState = "checkbox";
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
-			} else {
-				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+				var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
+				var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
+				if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
+					$(el).closest(".checkbox-item").parent().remove();
+					$previousCheckbox.click();
+				} else {
+					$(el).closest(".can-edit").remove();
+					$previous.click();
+				}
 			}
-			$(el).blur();
-		}, function(el) {
-			newEditableFieldState = "input";
-		}, "Meta", "Enter");
 
-		// NEWLINE WATCHER
-		textfield.watch("enter", function(el) {}, function(el) {
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".can-edit").parent().closest(".sticky-note-content").next().findBack(".can-edit").click();
-			} else {
-				$(el).closest(".can-edit").next().findBack(".can-edit").click();
+		}, function(keycombo, el) {
+			if (keycombo == "ctrlenter") {
+				newEditableFieldState = "input";
+			} else if (keycombo == "enter") {
+
+			} else if (keycombo == "ctrl") {
+				newEditableFieldState = "input";
 			}
-			$(el).blur();
-		}, "Enter");
-
-		// DELETE WATCHER
-		textfield.watch("delete", function(el) {}, function(el) {
-			var set = _self._notes.child($(el).closest(".sticky-note").attr("data-note-key")+"/items/"+$(el).closest(".can-edit").attr("data-item-key")).set(
-				null,
-				function(error) {log.output(3, error);});
-
-			var $previous = $(el).closest(".can-edit").prev().findBack(".can-edit");
-			var $previousCheckbox = $(el).closest(".can-edit").parent().closest(".sticky-note-content").prev().findBack(".can-edit");
-			if ($(el).closest(".can-edit").hasClass('checkbox-content')) {
-				$(el).closest(".checkbox-item").parent().remove();
-				$previousCheckbox.click();
-			} else {
-				$(el).closest(".can-edit").remove();
-				$previous.click();
-			}
-		}, "Delete");
+		});
 
 		/*$('body').on('keydown', '.mdl-textfield__input', function (event) {
 			// PREVENT ENTER FROM RELOADING PAGE
