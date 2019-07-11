@@ -2792,7 +2792,7 @@ sticky.core = (function (global) {
 		var textfield = global.input('mdl-textfield__input');
 
 		// KEY SHORTCUT WATCHER
-		textfield.watch(function(keycombo, el) {
+		textfield.watch(function(keycombo, el) { // KEY DOWN
 			console.log(keycombo);
 			if (keycombo == "ctrlenter") {
 				newEditableFieldState = "checkbox";
@@ -2827,7 +2827,7 @@ sticky.core = (function (global) {
 				}
 			}
 
-		}, function(keycombo, el) {
+		}, function(keycombo, el) { // KEY UP
 			if (keycombo == "ctrlenter") {
 				newEditableFieldState = "input";
 			} else if (keycombo == "enter") {
